@@ -1,48 +1,18 @@
-import * as A from './array';
-export * from './array';
-
-import * as AS from './async';
-export * from './async';
-
-import * as B from './base';
 export * from './base';
-
-import * as D from './default';
-export * from './default';
-
-import * as E from './enum';
-export * from './enum';
-
-import * as I from './integer';
-export * from './integer';
-
-import * as ISA from './isa';
-export * from './isa';
-
-import * as L from './literal';
-export * from './literal';
-
-import * as N from './number';
-export * from './number';
-
-import * as O from './object';
-export * from './object';
-
-import * as OP from './optional';
-export * from './optional';
-
-import * as SC from './scalar';
 export * from './scalar';
 
-import * as S from './sequence';
-export * from './sequence';
+export * from './combinators/async';
+export * from './combinators/isa';
+export * from './combinators/literal';
+export * from './combinators/sequence';
+export * from './combinators/transform';
+export * from './combinators/union';
 
-import * as transform from './transform';
-export * from './transform';
-
-import * as T from './tuple';
-export * from './tuple';
-
-import * as U from './union';
-export * from './union';
-
+export * from './types/array';
+export * from './types/default';
+export * from './types/enum';
+export * from './types/integer';
+export * from './types/number';
+export * from './types/object';
+export * from './types/optional';
+export * from './types/tuple';

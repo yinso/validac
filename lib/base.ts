@@ -18,11 +18,3 @@ export type IValidationResult<T> = Promise<T>;
 export function isValidationResult<T>(item : any) : item is IValidationResult<T> {
     return !!item && item.onSuccess; 
 }
-
-export interface IValidator<T, TInput = any> {
-    validate(value : TInput, path ?: string) : IValidationResult<T>;
-}
-
-export function isValidator<T, TInput = any>(item : any) : item is IValidator<T, TInput> {
-    return !!item && typeof(item.validate) === 'function'; 
-}

@@ -1,33 +1,165 @@
-import { IValidator , IValidationResult } from './base';
+import * as B from './base';
 
-type ConstraintPredicate<T> = (value : T) => boolean;
+// the key is to determine how to write out constraints.
+export interface ConstraintResult<T> {
+    readonly isValid : boolean;
+    getResult() : T;
+    getErrors() : B.ValidationError[];
+}
 
-// constraint validator doesn't change the type!
-class ConstraintValidator<T> implements IValidator<T, T> {
-    readonly constraint : ConstraintPredicate<T>;
-    constructor(constraint : ConstraintPredicate<T>) {
+export function Success<T>(v : T) {
+    return {
+        isValid : true,
+        getResult: () => v,
+        getErrors: () => []
+    }
+}
+
+export function Failure<T>(error : B.ValidationError | B.ValidationError[]) {
+    return {
+        isValid: false,
+        getResult: () => {
+            throw new Error(`InvalidResult`)
+        },
+        getErrors: () => error instanceof Array ? error : [ error ]
+    }
+}
+
+function reduceSuccess<T>(results : ConstraintResult<T>[]) : ConstraintResult<T> {
+    // what are we returning?
+    // all of them would have the same value if they are the same thing!
+    let isValid : boolean = false;
+    let count : number = -1;
+    let errors : B.ValidationError[] = [];
+    results.forEach((res, i) => {
+        if (res.isValid) {
+            isValid = true;
+            count = i;
+        } else {
+            errors = errors.concat(res.getErrors());
+        }
+    });
+    if (isValid) {
+        return Success(results[count].getResult());
+    } else {
+        return Failure(errors);
+    }
+}
+
+function reduceErrors<T>(results : ConstraintResult<T>[]) : B.ValidationError[] {
+    // all of them would have the same value if they are the same thing!
+    let errors : B.ValidationError[] = [];
+    results.forEach((res) => {
+        if (!res.isValid) {
+            errors = errors.concat(res.getErrors());
+        }
+    });
+    return errors;
+}
+
+export interface Constraint<T> {
+    validate(v : T, path : string) : ConstraintResult<T>;
+    and(constraint : Constraint<T>) : Constraint<T>;
+    or(constraint: Constraint<T>) : Constraint<T>;
+    not() : Constraint<T>;
+}
+
+export abstract class BaseConstraint<T> implements Constraint<T> {
+    abstract validate(v : T, path: string) : ConstraintResult<T>;
+
+    and(constraint : Constraint<T>) : Constraint<T> {
+        return new AndConstraint(this, constraint);
+    }
+    or(constraint : Constraint<T>) : Constraint<T> {
+        return new OrConstraint(this, constraint);
+    }
+    not() : Constraint<T> {
+        return new NotConstraint<T>(this);
+    }
+}
+
+class AndConstraint<T> extends BaseConstraint<T> {
+    readonly constraints : Constraint<T>[];
+    constructor(...constraints : Constraint<T>[]) {
+        super();
+        this.constraints = constraints;
+    }
+
+    validate(v : T, path: string) {
+        let errors = reduceErrors(this.constraints.map((constraint) => constraint.validate(v, path)));
+        if (errors.length > 0) {
+            return Failure(errors);
+        } else {
+            return Success(v);
+        }
+    }
+
+    and(constraint : Constraint<T>) {
+        return new AndConstraint(...this.constraints, constraint);
+    }
+}
+
+class OrConstraint<T> extends BaseConstraint<T> {
+    readonly constraints : Constraint<T>[];
+    constructor(...constraints : Constraint<T>[]) {
+        super();
+        this.constraints = constraints;
+    }
+
+    validate(v : T, path: string) {
+        // in this case - we are trying to capture the fact that there aren't all errors...
+        return reduceSuccess(this.constraints.map((constraint) => constraint.validate(v, path)));
+    }
+
+    or(constraint : Constraint<T>) {
+        return new OrConstraint(...this.constraints, constraint);
+    }
+}
+
+class NotConstraint<T> extends BaseConstraint<T> {
+    readonly constraint : Constraint<T>;
+    constructor(constraint : Constraint<T>) {
+        super();
         this.constraint = constraint;
     }
 
-    validate( value : T , path : string = '$') : IValidationResult<T> {
-        if (this.constraint(value))
-            return Promise.resolve<T>(value);
-        else
-            return Promise.reject<T>([{
-                error: 'ContraintError', // need actual constraint error - to make it customizable.
+    validate(v : T, path : string) {
+        let result = this.constraint.validate(v, path);
+        if (result.isValid) {
+            return Failure({
+                error: 'NotConstraint',
+                constraint: {
+                    inner: this.constraint
+                },
                 path: path,
-                actual: value
-            }]);
+                actual: v
+            } as any as B.ValidationError);
+        } else {
+            return Success(v);
+        }
+    }
+
+    not() : Constraint<T> {
+        return this.constraint;
     }
 }
 
-class PatternConstraintValidator extends ConstraintValidator<string> {
-    readonly pattern : RegExp;
-    constructor(pattern : RegExp) {
-        super((value : string) => pattern.test(value));
-    }
+export function not<T>(constraint : Constraint<T>) : Constraint<T> {
+    return new NotConstraint(constraint);
 }
 
-function withPattern(pattern : RegExp) {
-    return new PatternConstraintValidator(pattern);
+class ConstraintValidator<T> {
+    readonly constraint: Constraint<T>;
+    constructor(constraint : Constraint<T>) {
+        this.constraint = constraint;
+    }
+
+    validate(v : T, path : string = '$') : Promise<T> {
+        let result = this.constraint.validate(v, path);
+        if (result.isValid) {
+            return Promise.resolve<T>(result.getResult())
+        } else {
+            return Promise.reject<T>(result.getErrors());
+        }
+    }
 }
