@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var S = require("../../lib/types/string");
+var V = require("../../lib/validator");
 var test_util_1 = require("../../lib/util/test-util");
 var StringTest = /** @class */ (function () {
     function StringTest() {
@@ -21,10 +22,10 @@ var StringTest = /** @class */ (function () {
         return test_util_1.expectError(S.isString.validate(true));
     };
     StringTest.prototype.isStringLiteral = function () {
-        return S.isStringLiteral('test').validate('test');
+        return V.isLiteral('test').validate('test');
     };
     StringTest.prototype.isInvalidStringLiteral = function () {
-        return test_util_1.expectError(S.isStringLiteral('test').validate('wrong'));
+        return test_util_1.expectError(V.isLiteral('test').validate('wrong'));
     };
     __decorate([
         test_util_1.test,

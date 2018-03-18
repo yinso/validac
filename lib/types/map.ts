@@ -1,13 +1,12 @@
-import { IValidator, IValidationResult , ValidationError } from '../base';
-import { isString } from './string';
-import { isNumber } from '..';
-import { Constraint } from '../constraint';
+import { IValidationResult , ValidationError } from '../base';
+import { Validator , BaseValidator } from '../validator';
 
 type _MapType<T> = Map<string, T>;
 
-class MapValidator<T, TInput = any> implements IValidator<_MapType<T>, TInput> {
-    innerValidator : IValidator<T, TInput>;
-    constructor(innerValidator : IValidator<T, TInput>) {
+class MapValidator<T, TInput = any> extends BaseValidator<_MapType<T>, TInput> {
+    innerValidator : Validator<T, TInput>;
+    constructor(innerValidator : Validator<T, TInput>) {
+        super();
         this.innerValidator = innerValidator;
     }
 
@@ -44,6 +43,6 @@ class MapValidator<T, TInput = any> implements IValidator<_MapType<T>, TInput> {
     }
 }
 
-export function isMap<T, TInput = any>(innerValidator : IValidator<T, TInput>) {
+export function isMap<T, TInput = any>(innerValidator : Validator<T, TInput>) {
     return new MapValidator<T, TInput>(innerValidator);
 }

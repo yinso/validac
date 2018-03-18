@@ -1,8 +1,10 @@
-import { IValidator, IValidationResult } from '../base';
+import { IValidationResult } from '../base';
+import { Validator, BaseValidator } from '../validator';
 
-export class OptionalValidator<T, TInput = any> implements IValidator<T | undefined, TInput> {
-    inner : IValidator<T, TInput>;
-    constructor(inner : IValidator<T, TInput>) {
+export class OptionalValidator<T, TInput = any> extends BaseValidator<T | undefined, TInput> {
+    inner : Validator<T, TInput>;
+    constructor(inner : Validator<T, TInput>) {
+        super();
         this.inner = inner;
     }
     validate(value : TInput, path : string = '$') : IValidationResult<T | undefined> {
@@ -14,6 +16,6 @@ export class OptionalValidator<T, TInput = any> implements IValidator<T | undefi
     }
 }
 
-export function isOptional<T, TInput = any>(inner : IValidator<T, TInput>) {
+export function isOptional<T, TInput = any>(inner : Validator<T, TInput>) {
     return new OptionalValidator(inner);
 }

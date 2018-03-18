@@ -1,9 +1,11 @@
-import { IValidator , IValidationResult } from '../base';
+import { IValidationResult } from '../base';
+import { Validator, BaseValidator } from '../validator';
 
-export class DefaultValidator<T, TInput = any> implements IValidator<T, TInput> {
-    inner : IValidator<T, TInput>;
+export class DefaultValidator<T, TInput = any> extends BaseValidator<T, TInput> {
+    inner : Validator<T, TInput>;
     defaultProc : () => T;
-    constructor(inner : IValidator<T, TInput>, defaultProc : () => T) {
+    constructor(inner : Validator<T, TInput>, defaultProc : () => T) {
+        super();
         this.inner = inner;
         this.defaultProc = defaultProc;
     }
@@ -16,7 +18,7 @@ export class DefaultValidator<T, TInput = any> implements IValidator<T, TInput> 
     }
 }
 
-export function withDefault<T, TInput = any>(inner : IValidator<T, TInput>, defaultProc : () => T) {
+export function withDefault<T, TInput = any>(inner : Validator<T, TInput>, defaultProc : () => T) {
     return new DefaultValidator(inner, defaultProc);
 }
 

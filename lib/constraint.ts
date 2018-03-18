@@ -7,7 +7,7 @@ export interface ConstraintResult<T> {
     getErrors() : B.ValidationError[];
 }
 
-export function Success<T>(v : T) {
+export function Success<T>(v : T) : ConstraintResult<T> {
     return {
         isValid : true,
         getResult: () => v,
@@ -15,7 +15,7 @@ export function Success<T>(v : T) {
     }
 }
 
-export function Failure<T>(error : B.ValidationError | B.ValidationError[]) {
+export function Failure<T>(error : B.ValidationError | B.ValidationError[]) : ConstraintResult<T> {
     return {
         isValid: false,
         getResult: () => {
@@ -85,7 +85,7 @@ class AndConstraint<T> extends BaseConstraint<T> {
         this.constraints = constraints;
     }
 
-    validate(v : T, path: string) {
+    validate(v : T, path: string) : ConstraintResult<T> {
         let errors = reduceErrors(this.constraints.map((constraint) => constraint.validate(v, path)));
         if (errors.length > 0) {
             return Failure(errors);
@@ -106,7 +106,7 @@ class OrConstraint<T> extends BaseConstraint<T> {
         this.constraints = constraints;
     }
 
-    validate(v : T, path: string) {
+    validate(v : T, path: string) : ConstraintResult<T> {
         // in this case - we are trying to capture the fact that there aren't all errors...
         return reduceSuccess(this.constraints.map((constraint) => constraint.validate(v, path)));
     }
@@ -123,7 +123,7 @@ class NotConstraint<T> extends BaseConstraint<T> {
         this.constraint = constraint;
     }
 
-    validate(v : T, path : string) {
+    validate(v : T, path : string) : ConstraintResult<T> {
         let result = this.constraint.validate(v, path);
         if (result.isValid) {
             return Failure({
@@ -148,18 +148,31 @@ export function not<T>(constraint : Constraint<T>) : Constraint<T> {
     return new NotConstraint(constraint);
 }
 
-class ConstraintValidator<T> {
-    readonly constraint: Constraint<T>;
-    constructor(constraint : Constraint<T>) {
-        this.constraint = constraint;
+export type ConstraintPredicate<T> = (v : T) => boolean;
+
+class PredicateConstraint<T> extends BaseConstraint<T> {
+    readonly predicate : ConstraintPredicate<T>;
+    constructor(predicate : ConstraintPredicate<T>) {
+        super();
+        this.predicate = predicate;
     }
 
-    validate(v : T, path : string = '$') : Promise<T> {
-        let result = this.constraint.validate(v, path);
-        if (result.isValid) {
-            return Promise.resolve<T>(result.getResult())
+    validate(v : T, path : string) : ConstraintResult<T> {
+        if (this.predicate(v)) {
+            return Success(v);
         } else {
-            return Promise.reject<T>(result.getErrors());
+            return Failure({
+                error: 'PredicateError',
+                constraint: {
+                    predicate: this.predicate
+                },
+                path: path,
+                actual: v
+            } as any as B.ValidationError);
         }
     }
+}
+
+export function pass<T>(predicate : ConstraintPredicate<T>) : Constraint<T> {
+    return new PredicateConstraint<T>(predicate);
 }

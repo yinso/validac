@@ -1,13 +1,8 @@
-import { isa } from '../combinators/isa';
-import { isLiteral } from '../combinators/literal';
 import { ValidationError } from '../base';
-import { BaseConstraint , Success, Failure } from '../constraint';
+import { BaseConstraint , Success, Failure, ConstraintResult } from '../constraint';
+import { isa , isLiteral } from '../validator';
 
 export let isString = isa((value : any) : value is string => typeof(value) === 'string', 'string');
-
-export function isStringLiteral<T extends string>(value : T) {
-    return isLiteral<string, T>(value);
-}
 
 class MatchConstraint extends BaseConstraint<string> {
     readonly pattern : RegExp;
@@ -16,7 +11,7 @@ class MatchConstraint extends BaseConstraint<string> {
         this.pattern = pattern;
     }
 
-    validate(v : string, path : string) {
+    validate(v : string, path : string) : ConstraintResult<string> {
         if (this.pattern.test(v)) {
             return Success(v);
         } else {
@@ -49,7 +44,7 @@ class MinLengthConstraint extends BaseConstraint<string> {
         return this.inclusive ? v.length >= this.minLength : v.length > this.minLength;
     }
 
-    validate(v : string, path : string) {
+    validate(v : string, path : string) : ConstraintResult<string> {
         if (this.satisfy(v)) {
             return Success(v);
         } else {
@@ -83,7 +78,7 @@ class MaxLengthConstraint extends BaseConstraint<string> {
         return this.inclusive ? v.length <= this.maxLength : v.length < this.maxLength;
     }
 
-    validate(v : string, path : string) {
+    validate(v : string, path : string) : ConstraintResult<string> {
         if (this.satisfy(v)) {
             return Success(v);
         } else {

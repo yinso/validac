@@ -1,6 +1,7 @@
-import { IValidator, IValidationResult , ValidationError } from '../base';
+import { IValidationResult , ValidationError } from '../base';
+import { BaseValidator , Validator } from '../validator';
 
-class ArrayValidator<T, TInput = any> implements IValidator<T[], TInput> {
+class ArrayValidator<T, TInput = any> extends BaseValidator<T[], TInput> {
     validate(value : TInput, path : string = '$') : IValidationResult<T[]> {
         if (value instanceof Array) {
             return Promise.resolve(value as any as T[]);
@@ -14,14 +15,15 @@ class ArrayValidator<T, TInput = any> implements IValidator<T[], TInput> {
         }
     }
 
-    map<U>(itemValidator : IValidator<U, T>) : MapValidator<T, U> {
+    map<U>(itemValidator : Validator<U, T>) : MapValidator<T, U> {
         return new MapValidator(itemValidator);        
     }
 }
 
-class MapValidator<T, U> implements IValidator<U[], T[]> {
-    itemValidator : IValidator<U, T>;
-    constructor(itemValidator : IValidator<U, T>) {
+class MapValidator<T, U> extends BaseValidator<U[], T[]> {
+    itemValidator : Validator<U, T>;
+    constructor(itemValidator : Validator<U, T>) {
+        super();
         this.itemValidator = itemValidator;
     }
     // what we need is the following th
@@ -48,11 +50,11 @@ class MapValidator<T, U> implements IValidator<U[], T[]> {
         });
     }
 
-    map<V>(itemValidator : IValidator<V, U>) :  MapValidator<U, V> {
+    map<V>(itemValidator : Validator<V, U>) :  MapValidator<U, V> {
         return new MapValidator<U, V>(itemValidator);
     }
 }
 
-export function isArray<U, TInput = any>(item : IValidator<U, TInput>) {
+export function isArray<U, TInput = any>(item : Validator<U, TInput>) {
     return new ArrayValidator<TInput>().map(item);
 }
