@@ -3,6 +3,7 @@ import * as V from '../lib/validator';
 import * as S from '../lib/types/string';
 import * as N from '../lib/types/number';
 import { suite, test, slow, timeout , expectError } from '../lib/util/test-util';
+import { ValidationResult } from '../lib';
 
 @suite class BaseTest {
     @test isa() {
@@ -39,11 +40,12 @@ import { suite, test, slow, timeout , expectError } from '../lib/util/test-util'
     }
 
     @test isEnum() {
-        return Promise.all([
+        ValidationResult.allOf([
             'hello',
             'world',
             'foo'
         ].map((item) => V.isEnum('hello', 'world', 'foo').validate(item)))
+            .cata(() => { })
     }
 
     @test isUndefined() {
@@ -85,12 +87,14 @@ import { suite, test, slow, timeout , expectError } from '../lib/util/test-util'
 
     @test or() {
         let validator = S.isString.or(N.isNumber).or(V.isNull)
-        return Promise.all(['hello', 5].map((item) => validator.validate(item)));
+        return ValidationResult.allOf(['hello', 5].map((item) => validator.validate(item)))
+            .cata(() => {})
     }
 
     @test isOptional() {
         let validator = S.isString.isOptional();
-        return Promise.all([undefined, 'test'].map((item) => validator.validate(item)))
+        return ValidationResult.allOf([undefined, 'test'].map((item) => validator.validate(item)))
+            .cata(() => {})
     }
 
     @test defaultTo() {

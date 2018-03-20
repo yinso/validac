@@ -9,26 +9,9 @@ class MapValidator<T, U> extends BaseValidator<U[], T[]> {
     }
     // what we need is the following th
     validate(value : T[], path : string = '$') : ValidationResult<U[]> {
-        return new Promise<U[]>((resolve, reject) => {
-            let results : U[] = [];
-            let errors : ValidationError[] = [];
-            Promise.all(value.map((item, i) => {
-                return this.itemValidator.validate(item, `${path}[${i}]`)
-                    .then((res) => {
-                        results[i] = res;
-                    })
-                    .catch((errs) => {
-                        errors = errors.concat(errs);
-                    })
-            }))
-            .then((_) => {
-                if (errors.length > 0) {
-                    reject(errors);
-                } else {
-                    resolve(results);
-                }
-            })
-        });
+        let results = value.map((item, i) => this.itemValidator.validate(item, `${path}[${i}]`));
+        // what do I do with the results? I want to flatten the results?
+        return ValidationResult.allOf<U>(results);
     }
 
     map<V>(itemValidator : Validator<V, U>) :  MapValidator<U, V> {

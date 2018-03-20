@@ -14,6 +14,7 @@ var V = require("../lib/validator");
 var S = require("../lib/types/string");
 var N = require("../lib/types/number");
 var test_util_1 = require("../lib/util/test-util");
+var lib_1 = require("../lib");
 var BaseTest = /** @class */ (function () {
     function BaseTest() {
     }
@@ -46,11 +47,12 @@ var BaseTest = /** @class */ (function () {
         return test_util_1.expectError(V.isLiteral('test').validate('test1'));
     };
     BaseTest.prototype.isEnum = function () {
-        return Promise.all([
+        lib_1.ValidationResult.allOf([
             'hello',
             'world',
             'foo'
-        ].map(function (item) { return V.isEnum('hello', 'world', 'foo').validate(item); }));
+        ].map(function (item) { return V.isEnum('hello', 'world', 'foo').validate(item); }))
+            .cata(function () { });
     };
     BaseTest.prototype.isUndefined = function () {
         return V.isUndefined.validate(undefined);
@@ -84,11 +86,13 @@ var BaseTest = /** @class */ (function () {
     };
     BaseTest.prototype.or = function () {
         var validator = S.isString.or(N.isNumber).or(V.isNull);
-        return Promise.all(['hello', 5].map(function (item) { return validator.validate(item); }));
+        return lib_1.ValidationResult.allOf(['hello', 5].map(function (item) { return validator.validate(item); }))
+            .cata(function () { });
     };
     BaseTest.prototype.isOptional = function () {
         var validator = S.isString.isOptional();
-        return Promise.all([undefined, 'test'].map(function (item) { return validator.validate(item); }));
+        return lib_1.ValidationResult.allOf([undefined, 'test'].map(function (item) { return validator.validate(item); }))
+            .cata(function () { });
     };
     BaseTest.prototype.defaultTo = function () {
         var validator = S.isString.defaultTo(function () { return 'hello world'; });

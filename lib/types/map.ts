@@ -12,34 +12,32 @@ class MapValidator<T, TInput = any> extends BaseValidator<_MapType<T>, TInput> {
 
     validate(arg : TInput, path : string = '$') : ValidationResult<_MapType<T>> {
         if (!(arg instanceof Object)) {
-            return Promise.reject<_MapType<T>>([{
+            return ValidationResult.reject([{
                 error: 'TypeError',
                 path: path,
                 expected: 'map',
                 actual: arg
             }])
         }
-        return new Promise<_MapType<T>>((resolve, reject) => {
-            let errors : ValidationError[] = [];
-            let result = new Map<string, T>();
-            let input : {[key: string]: any} = arg;
-            return Promise.all(Object.keys(input).map((key) => {
-                return this.innerValidator.validate(input[key] as any, `${path}.${key}`)
-                    .then((res) => {
+        let errors : ValidationError[] = [];
+        let result = new Map<string, T>();
+        let input : {[key: string]: any} = arg;
+        Object.keys(input).map((key) => {
+            this.innerValidator.validate(input[key] as any, `${path}.${key}`)
+                .cata(
+                    (res) => {
                         result.set(key, res);
-                    })
-                    .catch((errs) => {
+                    },
+                    (errs) => {
                         errors = errors.concat(errs)
-                    })
-            }))
-            .then((_) => {
-                if (errors.length > 0) {
-                    reject(errors);
-                } else {
-                    resolve(result);
-                }
-            })
-        })
+                    }
+                )
+        });
+        if (errors.length > 0) {
+            return ValidationResult.reject(errors);
+        } else {
+            return ValidationResult.resolve(result);
+        }
     }
 }
 

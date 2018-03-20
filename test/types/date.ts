@@ -1,5 +1,5 @@
 import * as D from '../../lib/types/date';
-import { suite, test, slow, timeout , expectError } from '../../lib/util/test-util';
+import { suite, test, slow, timeout , expectErrorAsync } from '../../lib/util/test-util';
 
 @suite class DateTest {
     @test isDate () {
