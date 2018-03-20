@@ -73,7 +73,7 @@ import { ValidationResult } from '../lib';
     @test transform() {
         return S.isString
             .where(S.match(/^[+-]?\d+(\.\d+)?$/))
-            .to(parseFloat)
+            .transform(parseFloat)
             .validate('1234')
             .then((v) => {
                 assert.equal(v, 1234)

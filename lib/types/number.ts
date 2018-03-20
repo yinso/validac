@@ -5,5 +5,5 @@ export let isNumber = isa((value : any) : value is number => typeof(value) === '
 
 export let parseNumber = isString
     .where(match(/^[+-]?\d+(\.\d+)$/))
-    .to((v: string) => parseFloat(v));
+    .transform((v: string) => parseFloat(v));
     

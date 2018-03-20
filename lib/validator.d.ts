@@ -8,7 +8,7 @@ export type DefaultProc<T> = () => T;
 export interface Validator<T, TInput = any> {
     validate(v : TInput, path ?: string) : ValidationResult<T>;
     where(constraint : Constraint<T> | ConstraintPredicate<T>) : Validator<T, TInput>;
-    to<U>(transform : TransformProc<T, U>) : Validator<U, TInput>;
+    transform<U>(transform : TransformProc<T, U>) : Validator<U, TInput>;
     and<U>(validator : Validator<U, TInput>) : Validator<T & U, TInput>;
     or<U>(validator : Validator<U, TInput>) : Validator<T | U, TInput>;
     then<U>(validator : Validator<U, T>) : Validator<U, TInput>;
@@ -20,7 +20,7 @@ export interface Validator<T, TInput = any> {
 export abstract class BaseValidator<T, TInput = any> implements Validator<T, TInput> {
     abstract validate(v : TInput) : ValidationResult<T>;
     where(constraint : Constraint<T>) : Validator<T, TInput>;
-    to<U>(transform : TransformProc<T, U>) : Validator<U, TInput>;
+    transform<U>(transform : TransformProc<T, U>) : Validator<U, TInput>;
     and<U>(validator : Validator<U, TInput>) : Validator<T & U, TInput>;
     or<U>(validator : Validator<U, TInput>) : Validator<T | U, TInput>;
     then<U>(validator : Validator<U, T>) : Validator<U, TInput>;

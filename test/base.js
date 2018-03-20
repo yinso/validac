@@ -74,7 +74,7 @@ var BaseTest = /** @class */ (function () {
     BaseTest.prototype.transform = function () {
         return S.isString
             .where(S.match(/^[+-]?\d+(\.\d+)?$/))
-            .to(parseFloat)
+            .transform(parseFloat)
             .validate('1234')
             .then(function (v) {
             assert.equal(v, 1234);
