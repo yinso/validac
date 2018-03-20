@@ -1,24 +1,5 @@
-import { IValidationResult , ValidationError } from '../base';
-import { BaseValidator , Validator } from '../validator';
-
-class ArrayValidator<T, TInput = any> extends BaseValidator<T[], TInput> {
-    validate(value : TInput, path : string = '$') : IValidationResult<T[]> {
-        if (value instanceof Array) {
-            return Promise.resolve(value as any as T[]);
-        } else {
-            return Promise.reject<T[]>([{
-                error: 'TypeError',
-                path: path,
-                expected: 'array',
-                actual: value
-            }]);
-        }
-    }
-
-    map<U>(itemValidator : Validator<U, T>) : MapValidator<T, U> {
-        return new MapValidator(itemValidator);        
-    }
-}
+import { ValidationResult , ValidationError } from '../base';
+import { BaseValidator , Validator, isa } from '../validator';
 
 class MapValidator<T, U> extends BaseValidator<U[], T[]> {
     itemValidator : Validator<U, T>;
@@ -27,7 +8,7 @@ class MapValidator<T, U> extends BaseValidator<U[], T[]> {
         this.itemValidator = itemValidator;
     }
     // what we need is the following th
-    validate(value : T[], path : string = '$') : IValidationResult<U[]> {
+    validate(value : T[], path : string = '$') : ValidationResult<U[]> {
         return new Promise<U[]>((resolve, reject) => {
             let results : U[] = [];
             let errors : ValidationError[] = [];
@@ -56,5 +37,6 @@ class MapValidator<T, U> extends BaseValidator<U[], T[]> {
 }
 
 export function isArray<U, TInput = any>(item : Validator<U, TInput>) {
-    return new ArrayValidator<TInput>().map(item);
+    return isa((v : any) : v is any[] => v instanceof Array, 'array')
+        .then(new MapValidator<TInput, U>(item));
 }

@@ -9,32 +9,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var U = require("../../lib/types/undefined");
+var D = require("../../lib/types/date");
 var test_util_1 = require("../../lib/util/test-util");
-var UndefinedTest = /** @class */ (function () {
-    function UndefinedTest() {
+var DateTest = /** @class */ (function () {
+    function DateTest() {
     }
-    UndefinedTest.prototype.isUndefined = function () {
-        return U.isUndefined.validate(undefined);
-    };
-    UndefinedTest.prototype.isInvalidUndefined = function () {
-        return test_util_1.expectError(U.isUndefined.validate('test'));
+    DateTest.prototype.isDate = function () {
+        return D.isDate.validate(new Date());
     };
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], UndefinedTest.prototype, "isUndefined", null);
-    __decorate([
-        test_util_1.test,
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", void 0)
-    ], UndefinedTest.prototype, "isInvalidUndefined", null);
-    UndefinedTest = __decorate([
+    ], DateTest.prototype, "isDate", null);
+    DateTest = __decorate([
         test_util_1.suite
-    ], UndefinedTest);
-    return UndefinedTest;
+    ], DateTest);
+    return DateTest;
 }());
-//# sourceMappingURL=undefined.js.map
+//# sourceMappingURL=date.js.map

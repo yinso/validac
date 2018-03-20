@@ -1,24 +1,32 @@
-import { IValidationResult } from './base';
+import { ValidationResult } from './base';
 import { Constraint , ConstraintPredicate } from './constraint';
 
-export type Transform<T, U> = (v : T) => U;
+export type TransformProc<T, U> = (v : T) => U;
+
+export type DefaultProc<T> = () => T;
 
 export interface Validator<T, TInput = any> {
-    validate(v : TInput, path ?: string) : IValidationResult<T>;
+    validate(v : TInput, path ?: string) : ValidationResult<T>;
     where(constraint : Constraint<T> | ConstraintPredicate<T>) : Validator<T, TInput>;
-    to<U>(transform : Transform<T, U>) : Validator<U, TInput>;
+    to<U>(transform : TransformProc<T, U>) : Validator<U, TInput>;
     and<U>(validator : Validator<U, TInput>) : Validator<T & U, TInput>;
     or<U>(validator : Validator<U, TInput>) : Validator<T | U, TInput>;
     then<U>(validator : Validator<U, T>) : Validator<U, TInput>;
+    isOptional() : Validator<T | undefined, TInput>;
+    defaultTo(defaultProc : DefaultProc<T>) : Validator<T, TInput>;
+    thenAsync<U>(validator : Validator<U, T> | AsyncValidator<U, T>) : AsyncValidator<U, T>;
 }
 
 export abstract class BaseValidator<T, TInput = any> implements Validator<T, TInput> {
-    abstract validate(v : TInput) : IValidationResult<T>;
+    abstract validate(v : TInput) : ValidationResult<T>;
     where(constraint : Constraint<T>) : Validator<T, TInput>;
-    to<U>(transform : Transform<T, U>) : Validator<U, TInput>;
+    to<U>(transform : TransformProc<T, U>) : Validator<U, TInput>;
     and<U>(validator : Validator<U, TInput>) : Validator<T & U, TInput>;
     or<U>(validator : Validator<U, TInput>) : Validator<T | U, TInput>;
     then<U>(validator : Validator<U, T>) : Validator<U, TInput>;
+    isOptional() : Validator<undefined | T, TInput>;
+    defaultTo(defaultProc : DefaultProc<T>) : Validator<T, TInput>;
+    thenAsync<U>(validator : Validator<U, T> | AsyncValidator<U, T>) : AsyncValidator<U, T>;
 }
 
 export let isAny : Validator<any, any>;
@@ -106,6 +114,16 @@ export function isEnum<T1 extends string,
     (v1 : T1, v2 : T2, v3 : T3, v4 : T4, v5 : T5, v6 : T6, v7 : T7, v8 : T8, v9 : T9, v10: T10) : 
         Validator<T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 | T9 | T10, TInput>;
 
-export type AsyncCall<T, TInput = any> = (value : TInput) => IValidationResult<T>;
+export let isUndefined : Validator<undefined, any>;
+
+export let isNull : Validator<null, any>;
+
+export type AsyncValidationResult<T> = Promise<T>;
+
+export interface AsyncValidator<T, TInput = any> {
+    validateAsync(v : TInput) : AsyncValidationResult<T>;
+}
+
+export type AsyncCall<T, TInput = any> = (value : TInput) => ValidationResult<T>;
 
 export function byAsync<T, TInput = any>(asyncCall : AsyncCall<T, TInput>) : Validator<T, TInput>;

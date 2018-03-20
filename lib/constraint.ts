@@ -1,71 +1,55 @@
-import * as B from './base';
+import { ValidationError } from './base';
 
-// the key is to determine how to write out constraints.
-export interface ConstraintResult<T> {
-    readonly isValid : boolean;
-    getResult() : T;
-    getErrors() : B.ValidationError[];
-}
+/**
+ * Constraint is a limited type of validation that basically deal with the following question.
+ * 
+ * Does the value sastifies the constraint?
+ * 
+ * i.e. The main signature for constraint is as follows:
+ * 
+ * (v : T) => boolean;
+ * 
+ * Unlike the general validation, constraints cannot be used to perform transformtion (use the transform vaildator for that purpose).
+ * 
+ * 
+ */
 
-export function Success<T>(v : T) : ConstraintResult<T> {
-    return {
-        isValid : true,
-        getResult: () => v,
-        getErrors: () => []
-    }
-}
-
-export function Failure<T>(error : B.ValidationError | B.ValidationError[]) : ConstraintResult<T> {
-    return {
-        isValid: false,
-        getResult: () => {
-            throw new Error(`InvalidResult`)
-        },
-        getErrors: () => error instanceof Array ? error : [ error ]
-    }
-}
-
-function reduceSuccess<T>(results : ConstraintResult<T>[]) : ConstraintResult<T> {
+function reduceSuccess<T>(results : ValidationError[][]) : ValidationError[] {
     // what are we returning?
     // all of them would have the same value if they are the same thing!
     let isValid : boolean = false;
     let count : number = -1;
-    let errors : B.ValidationError[] = [];
+    let errors : ValidationError[] = [];
     results.forEach((res, i) => {
-        if (res.isValid) {
+        if (res.length == 0) {
             isValid = true;
             count = i;
         } else {
-            errors = errors.concat(res.getErrors());
+            errors = errors.concat(res);
         }
     });
     if (isValid) {
-        return Success(results[count].getResult());
+        return [];
     } else {
-        return Failure(errors);
+        return errors;
     }
 }
 
-function reduceErrors<T>(results : ConstraintResult<T>[]) : B.ValidationError[] {
-    // all of them would have the same value if they are the same thing!
-    let errors : B.ValidationError[] = [];
-    results.forEach((res) => {
-        if (!res.isValid) {
-            errors = errors.concat(res.getErrors());
-        }
-    });
-    return errors;
+function reduceErrors<T>(results : ValidationError[][]) : ValidationError[] {
+    return results.reduce((acc, res) => {
+        return acc.concat(res);
+    }, [] as ValidationError[]);
 }
 
 export interface Constraint<T> {
-    validate(v : T, path : string) : ConstraintResult<T>;
+    satisfy(v : T, path : string) : ValidationError[];
     and(constraint : Constraint<T>) : Constraint<T>;
     or(constraint: Constraint<T>) : Constraint<T>;
     not() : Constraint<T>;
 }
 
 export abstract class BaseConstraint<T> implements Constraint<T> {
-    abstract validate(v : T, path: string) : ConstraintResult<T>;
+    abstract satisfy(v : T, path: string) : ValidationError[];
 
     and(constraint : Constraint<T>) : Constraint<T> {
         return new AndConstraint(this, constraint);
@@ -85,13 +69,8 @@ class AndConstraint<T> extends BaseConstraint<T> {
         this.constraints = constraints;
     }
 
-    validate(v : T, path: string) : ConstraintResult<T> {
-        let errors = reduceErrors(this.constraints.map((constraint) => constraint.validate(v, path)));
-        if (errors.length > 0) {
-            return Failure(errors);
-        } else {
-            return Success(v);
-        }
+    satisfy(v : T, path: string) : ValidationError[] {
+        return reduceErrors(this.constraints.map((constraint) => constraint.satisfy(v, path)));
     }
 
     and(constraint : Constraint<T>) {
@@ -106,9 +85,8 @@ class OrConstraint<T> extends BaseConstraint<T> {
         this.constraints = constraints;
     }
 
-    validate(v : T, path: string) : ConstraintResult<T> {
-        // in this case - we are trying to capture the fact that there aren't all errors...
-        return reduceSuccess(this.constraints.map((constraint) => constraint.validate(v, path)));
+    satisfy(v : T, path: string) : ValidationError[] {
+        return reduceSuccess(this.constraints.map((constraint) => constraint.satisfy(v, path)));
     }
 
     or(constraint : Constraint<T>) {
@@ -123,19 +101,19 @@ class NotConstraint<T> extends BaseConstraint<T> {
         this.constraint = constraint;
     }
 
-    validate(v : T, path : string) : ConstraintResult<T> {
-        let result = this.constraint.validate(v, path);
-        if (result.isValid) {
-            return Failure({
+    satisfy(v : T, path : string) : ValidationError[] {
+        let result = this.constraint.satisfy(v, path);
+        if (result.length == 0) {
+            return [{
                 error: 'NotConstraint',
-                constraint: {
+                expected: {
                     inner: this.constraint
                 },
                 path: path,
                 actual: v
-            } as any as B.ValidationError);
+            }]
         } else {
-            return Success(v);
+            return [];
         }
     }
 
@@ -157,18 +135,18 @@ class PredicateConstraint<T> extends BaseConstraint<T> {
         this.predicate = predicate;
     }
 
-    validate(v : T, path : string) : ConstraintResult<T> {
+    satisfy(v : T, path : string) : ValidationError[] {
         if (this.predicate(v)) {
-            return Success(v);
+            return [];
         } else {
-            return Failure({
+            return [{
                 error: 'PredicateError',
-                constraint: {
+                expected: {
                     predicate: this.predicate
                 },
                 path: path,
                 actual: v
-            } as any as B.ValidationError);
+            }];
         }
     }
 }

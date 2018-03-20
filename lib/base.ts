@@ -1,4 +1,4 @@
-export type ValidationError = {
+export interface ValidationError {
     readonly error: string;
     readonly path : string;
     readonly expected: any;
@@ -13,8 +13,8 @@ export function isValidationErrorArray(arg : any) : arg is ValidationError[] {
     return arg instanceof Array && arg.every(isValidationError);
 }
 
-export type IValidationResult<T> = Promise<T>;
+export type ValidationResult<T> = Promise<T>;
 
-export function isValidationResult<T>(item : any) : item is IValidationResult<T> {
+export function isValidationResult<T>(item : any) : item is ValidationResult<T> {
     return !!item && item.onSuccess; 
 }

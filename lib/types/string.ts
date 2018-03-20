@@ -1,5 +1,5 @@
 import { ValidationError } from '../base';
-import { BaseConstraint , Success, Failure, ConstraintResult } from '../constraint';
+import { BaseConstraint } from '../constraint';
 import { isa , isLiteral } from '../validator';
 
 export let isString = isa((value : any) : value is string => typeof(value) === 'string', 'string');
@@ -11,18 +11,18 @@ class MatchConstraint extends BaseConstraint<string> {
         this.pattern = pattern;
     }
 
-    validate(v : string, path : string) : ConstraintResult<string> {
+    satisfy(v : string, path : string) : ValidationError[] {
         if (this.pattern.test(v)) {
-            return Success(v);
+            return [];
         } else {
-            return Failure({
+            return [{
                 error: 'MatchConstraint',
-                constraint: {
+                expected: {
                     pattern: this.pattern
                 },
                 path: path,
                 actual: v
-            } as any as ValidationError)
+            }];
         }
     }
 }
@@ -40,23 +40,23 @@ class MinLengthConstraint extends BaseConstraint<string> {
         this.inclusive = inclusive;
     }
 
-    satisfy(v : string) {
+    _satisfy(v : string) {
         return this.inclusive ? v.length >= this.minLength : v.length > this.minLength;
     }
 
-    validate(v : string, path : string) : ConstraintResult<string> {
-        if (this.satisfy(v)) {
-            return Success(v);
+    satisfy(v : string, path : string) : ValidationError[] {
+        if (this._satisfy(v)) {
+            return [];
         } else {
-            return Failure({
+            return [{
                 error: 'MinLengthConstraint',
-                constraint: {
+                expected: {
                     minLength: this.minLength,
                     minLengthInclusive : this.inclusive
                 },
                 path: path,
                 actual: v
-            } as any as ValidationError);
+            }];
         }
     }
 }
@@ -74,23 +74,23 @@ class MaxLengthConstraint extends BaseConstraint<string> {
         this.inclusive = inclusive;
     }
 
-    satisfy(v : string) {
+    _satisfy(v : string) {
         return this.inclusive ? v.length <= this.maxLength : v.length < this.maxLength;
     }
 
-    validate(v : string, path : string) : ConstraintResult<string> {
-        if (this.satisfy(v)) {
-            return Success(v);
+    satisfy(v : string, path : string) : ValidationError[] {
+        if (this._satisfy(v)) {
+            return [];
         } else {
-            return Failure({
+            return [{
                 error: 'MaxLengthConstraint',
-                constraint: {
+                expected: {
                     maxLength: this.maxLength,
                     maxLengthInclusive : this.inclusive
                 },
                 path: path,
                 actual: v
-            } as any as ValidationError);
+            }];
         }
     }
 }

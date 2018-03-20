@@ -1,4 +1,4 @@
-import { IValidationResult , ValidationError } from '../base';
+import { ValidationResult , ValidationError } from '../base';
 import { Validator , BaseValidator } from '../validator';
 
 type _MapType<T> = Map<string, T>;
@@ -10,7 +10,7 @@ class MapValidator<T, TInput = any> extends BaseValidator<_MapType<T>, TInput> {
         this.innerValidator = innerValidator;
     }
 
-    validate(arg : TInput, path : string = '$') : IValidationResult<_MapType<T>> {
+    validate(arg : TInput, path : string = '$') : ValidationResult<_MapType<T>> {
         if (!(arg instanceof Object)) {
             return Promise.reject<_MapType<T>>([{
                 error: 'TypeError',
