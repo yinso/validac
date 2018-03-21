@@ -8,10 +8,10 @@ export type DefaultProc<T> = () => T;
 export interface Validator<T, TInput = any> {
     validate(v : TInput, path ?: string) : ValidationResult<T>;
     where(constraint : Constraint<T> | ConstraintPredicate<T>) : Validator<T, TInput>;
+    then<U>(validator : Validator<U, T>) : Validator<U, TInput>; // transform and then are basically the same, except one is a simpler version..
     transform<U>(transform : TransformProc<T, U>) : Validator<U, TInput>;
-    and<U>(validator : Validator<U, TInput>) : Validator<T & U, TInput>;
-    or<U>(validator : Validator<U, TInput>) : Validator<T | U, TInput>;
-    then<U>(validator : Validator<U, T>) : Validator<U, TInput>;
+    intersect<U>(validator : Validator<U, TInput>) : Validator<T & U, TInput>;
+    union<U>(validator : Validator<U, TInput>) : Validator<T | U, TInput>;
     isOptional() : Validator<T | undefined, TInput>;
     defaultTo(defaultProc : DefaultProc<T>) : Validator<T, TInput>;
     thenAsync<U>(validator : Validator<U, T> | AsyncValidator<U, T>) : AsyncValidator<U, T>;
@@ -21,8 +21,8 @@ export abstract class BaseValidator<T, TInput = any> implements Validator<T, TIn
     abstract validate(v : TInput) : ValidationResult<T>;
     where(constraint : Constraint<T>) : Validator<T, TInput>;
     transform<U>(transform : TransformProc<T, U>) : Validator<U, TInput>;
-    and<U>(validator : Validator<U, TInput>) : Validator<T & U, TInput>;
-    or<U>(validator : Validator<U, TInput>) : Validator<T | U, TInput>;
+    intersect<U>(validator : Validator<U, TInput>) : Validator<T & U, TInput>;
+    union<U>(validator : Validator<U, TInput>) : Validator<T | U, TInput>;
     then<U>(validator : Validator<U, T>) : Validator<U, TInput>;
     isOptional() : Validator<undefined | T, TInput>;
     defaultTo(defaultProc : DefaultProc<T>) : Validator<T, TInput>;

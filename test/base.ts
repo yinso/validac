@@ -80,13 +80,13 @@ import { ValidationResult } from '../lib';
             })
     }
 
-    @test and() {
-        let validator = S.isString.and(N.isNumber); // nothing will match!!
+    @test intersect() {
+        let validator = S.isString.intersect(N.isNumber); // nothing will match!!
         return expectError(validator.validate(1));
     }
 
     @test or() {
-        let validator = S.isString.or(N.isNumber).or(V.isNull)
+        let validator = S.isString.union(N.isNumber).union(V.isNull)
         return ValidationResult.allOf(['hello', 5].map((item) => validator.validate(item)))
             .cata(() => {})
     }

@@ -80,12 +80,12 @@ var BaseTest = /** @class */ (function () {
             assert.equal(v, 1234);
         });
     };
-    BaseTest.prototype.and = function () {
-        var validator = S.isString.and(N.isNumber); // nothing will match!!
+    BaseTest.prototype.intersect = function () {
+        var validator = S.isString.intersect(N.isNumber); // nothing will match!!
         return test_util_1.expectError(validator.validate(1));
     };
     BaseTest.prototype.or = function () {
-        var validator = S.isString.or(N.isNumber).or(V.isNull);
+        var validator = S.isString.union(N.isNumber).union(V.isNull);
         return lib_1.ValidationResult.allOf(['hello', 5].map(function (item) { return validator.validate(item); }))
             .cata(function () { });
     };
@@ -178,7 +178,7 @@ var BaseTest = /** @class */ (function () {
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], BaseTest.prototype, "and", null);
+    ], BaseTest.prototype, "intersect", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
