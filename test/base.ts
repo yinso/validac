@@ -8,6 +8,7 @@ import { suite, test, slow, timeout , expectError } from '../lib/util/test-util'
     @test isa() {
         V.isa((v : Date) : v is Date => v instanceof Date, 'date')
             .assert(new Date())
+        assert.deepEqual(true, S.isString.isa('a string'))
     }
 
     @test invalidIsa() {

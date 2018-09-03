@@ -3,14 +3,14 @@ import { Validator , BaseValidator } from '../validator';
 
 type _MapType<T> = Map<string, T>;
 
-class MapValidator<TInput, T> extends BaseValidator<TInput, _MapType<T>> {
-    innerValidator : Validator<TInput, T>;
-    constructor(innerValidator : Validator<TInput, T>) {
+class MapValidator<T> extends BaseValidator<_MapType<T>> {
+    innerValidator : Validator<T>;
+    constructor(innerValidator : Validator<T>) {
         super();
         this.innerValidator = innerValidator;
     }
 
-    validate(arg : TInput, path : string = '$') : ValidationResult<_MapType<T>> {
+    validate(arg : any, path : string = '$') : ValidationResult<_MapType<T>> {
         if (!(arg instanceof Object)) {
             return ValidationResult.reject([{
                 error: 'TypeError',
@@ -41,6 +41,6 @@ class MapValidator<TInput, T> extends BaseValidator<TInput, _MapType<T>> {
     }
 }
 
-export function isMap<TInput, T>(innerValidator : Validator<TInput, T>) {
-    return new MapValidator<TInput, T>(innerValidator);
+export function isMap<T>(innerValidator : Validator<T>) {
+    return new MapValidator<T>(innerValidator);
 }

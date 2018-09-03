@@ -20,6 +20,7 @@ var BaseTest = /** @class */ (function () {
     BaseTest.prototype.isa = function () {
         V.isa(function (v) { return v instanceof Date; }, 'date')
             .assert(new Date());
+        assert.deepEqual(true, S.isString.isa('a string'));
     };
     BaseTest.prototype.invalidIsa = function () {
         test_util_1.expectError(V.isa(function (v) { return typeof (v) === 'number'; }, 'number')
