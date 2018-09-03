@@ -3,7 +3,7 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
 
 @suite class NumberTest {
     @test isNumber () {
-        return N.isNumber.validate(10.5);
+        N.isNumber.assert(10.5);
     }
 
     @test async isInvalidNumber() {
@@ -11,10 +11,14 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
     }
 
     @test parseNumber() {
-        return N.parseNumber.validate('10.5');
+        N.parseNumber.assert('10.5');
+    }
+
+    @test parseInteger() {
+        N.parseNumber.assert('10');
     }
 
     @test parseInvalidNumber() {
-        return expectError(N.parseNumber.validate('hello'))
+        expectError(N.parseNumber.validate('hello'))
     }
 }

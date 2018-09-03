@@ -3,9 +3,9 @@ import { Validator , BaseValidator } from '../validator';
 
 type _MapType<T> = Map<string, T>;
 
-class MapValidator<T, TInput = any> extends BaseValidator<_MapType<T>, TInput> {
-    innerValidator : Validator<T, TInput>;
-    constructor(innerValidator : Validator<T, TInput>) {
+class MapValidator<TInput, T> extends BaseValidator<TInput, _MapType<T>> {
+    innerValidator : Validator<TInput, T>;
+    constructor(innerValidator : Validator<TInput, T>) {
         super();
         this.innerValidator = innerValidator;
     }
@@ -41,6 +41,6 @@ class MapValidator<T, TInput = any> extends BaseValidator<_MapType<T>, TInput> {
     }
 }
 
-export function isMap<T, TInput = any>(innerValidator : Validator<T, TInput>) {
-    return new MapValidator<T, TInput>(innerValidator);
+export function isMap<TInput, T>(innerValidator : Validator<TInput, T>) {
+    return new MapValidator<TInput, T>(innerValidator);
 }

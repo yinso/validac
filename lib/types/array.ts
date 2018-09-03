@@ -1,9 +1,9 @@
 import { ValidationResult , ValidationError } from '../base';
 import { BaseValidator , Validator, isa } from '../validator';
 
-class MapValidator<T, U> extends BaseValidator<U[], T[]> {
-    itemValidator : Validator<U, T>;
-    constructor(itemValidator : Validator<U, T>) {
+class MapValidator<T, U> extends BaseValidator<T[], U[]> {
+    itemValidator : Validator<T, U>;
+    constructor(itemValidator : Validator<T, U>) {
         super();
         this.itemValidator = itemValidator;
     }
@@ -14,12 +14,12 @@ class MapValidator<T, U> extends BaseValidator<U[], T[]> {
         return ValidationResult.allOf<U>(results);
     }
 
-    map<V>(itemValidator : Validator<V, U>) :  MapValidator<U, V> {
+    map<V>(itemValidator : Validator<U, V>) :  MapValidator<U, V> {
         return new MapValidator<U, V>(itemValidator);
     }
 }
 
-export function isArray<U, TInput = any>(item : Validator<U, TInput>) {
+export function isArray<TInput, U>(item : Validator<TInput, U>) {
     return isa((v : any) : v is any[] => v instanceof Array, 'array')
-        .then(new MapValidator<TInput, U>(item));
+        .transform(new MapValidator<TInput, U>(item));
 }

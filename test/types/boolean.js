@@ -15,13 +15,30 @@ var BooleanTest = /** @class */ (function () {
     function BooleanTest() {
     }
     BooleanTest.prototype.isBoolean = function () {
-        return B.isBoolean.validate(true);
+        B.isBoolean.assert(true);
+        B.isBoolean.assert(false);
+    };
+    BooleanTest.prototype.parseBoolean = function () {
+        B.parseBoolean.assert(true);
+        B.parseBoolean.assert(false);
+        B.parseBoolean.assert('true');
+        B.parseBoolean.assert('false');
+        B.parseBoolean.assert('TRUE');
+        B.parseBoolean.assert('FALSE');
     };
     BooleanTest.prototype.isTrue = function () {
-        return B.isTrue.validate(true);
+        B.isTrue.assert(true);
+    };
+    BooleanTest.prototype.parseTrue = function () {
+        B.parseTrue.assert('true');
+        B.parseTrue.assert('TRUE');
     };
     BooleanTest.prototype.isFalse = function () {
-        return B.isFalse.validate(false);
+        B.isFalse.assert(false);
+    };
+    BooleanTest.prototype.parseFalse = function () {
+        B.parseFalse.assert('false');
+        B.parseFalse.assert('FALSE');
     };
     __decorate([
         test_util_1.test,
@@ -34,13 +51,31 @@ var BooleanTest = /** @class */ (function () {
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
+    ], BooleanTest.prototype, "parseBoolean", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
     ], BooleanTest.prototype, "isTrue", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
+    ], BooleanTest.prototype, "parseTrue", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
     ], BooleanTest.prototype, "isFalse", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], BooleanTest.prototype, "parseFalse", null);
     BooleanTest = __decorate([
         test_util_1.suite
     ], BooleanTest);

@@ -23,8 +23,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -50,7 +50,7 @@ var NumberTest = /** @class */ (function () {
     function NumberTest() {
     }
     NumberTest.prototype.isNumber = function () {
-        return N.isNumber.validate(10.5);
+        N.isNumber.assert(10.5);
     };
     NumberTest.prototype.isInvalidNumber = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -60,10 +60,13 @@ var NumberTest = /** @class */ (function () {
         });
     };
     NumberTest.prototype.parseNumber = function () {
-        return N.parseNumber.validate('10.5');
+        N.parseNumber.assert('10.5');
+    };
+    NumberTest.prototype.parseInteger = function () {
+        N.parseNumber.assert('10');
     };
     NumberTest.prototype.parseInvalidNumber = function () {
-        return test_util_1.expectError(N.parseNumber.validate('hello'));
+        test_util_1.expectError(N.parseNumber.validate('hello'));
     };
     __decorate([
         test_util_1.test,
@@ -83,6 +86,12 @@ var NumberTest = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], NumberTest.prototype, "parseNumber", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], NumberTest.prototype, "parseInteger", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),

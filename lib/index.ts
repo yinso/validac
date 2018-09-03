@@ -11,4 +11,5 @@ export * from './types/map';
 export * from './types/number';
 export * from './types/object';
 export * from './types/string';
+export * from './types/url';
 export * from './types/tuple';

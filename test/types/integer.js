@@ -11,14 +11,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var I = require("../../lib/types/integer");
 var test_util_1 = require("../../lib/util/test-util");
+// because Integer is a Value Object, we cannot directly validate a *number*.
 var IntegerTest = /** @class */ (function () {
     function IntegerTest() {
     }
     IntegerTest.prototype.isInteger = function () {
-        return I.isInteger.validate(10);
+        I.isInteger.assert(I.Integer.fromJSON(10)); // we want this to be validated.
     };
-    IntegerTest.prototype.parseInteger = function () {
-        return I.parseInteger.validate('10');
+    IntegerTest.prototype.isNotInteger = function () {
+        test_util_1.expectError(I.isInteger.validate(10));
+    };
+    IntegerTest.prototype.isNumber = function () {
+        test_util_1.expectError(I.isInteger.validate(10.5));
+    };
+    IntegerTest.prototype.parseIntegerFromString = function () {
+        I.parseInteger.assert('10');
+    };
+    IntegerTest.prototype.parseIntegerFromNumber = function () {
+        I.parseInteger.assert(10);
+    };
+    IntegerTest.prototype.parseNumberFail = function () {
+        test_util_1.expectError(I.parseInteger.validate('10.5'));
+    };
+    IntegerTest.prototype.parseNumberFailFromNumber = function () {
+        test_util_1.expectError(I.parseInteger.validate(10.5));
+    };
+    IntegerTest.prototype.fromJSON = function () {
+        I.Integer.fromJSON('1');
+        I.Integer.fromJSON(1);
     };
     __decorate([
         test_util_1.test,
@@ -31,7 +51,43 @@ var IntegerTest = /** @class */ (function () {
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], IntegerTest.prototype, "parseInteger", null);
+    ], IntegerTest.prototype, "isNotInteger", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], IntegerTest.prototype, "isNumber", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], IntegerTest.prototype, "parseIntegerFromString", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], IntegerTest.prototype, "parseIntegerFromNumber", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], IntegerTest.prototype, "parseNumberFail", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], IntegerTest.prototype, "parseNumberFailFromNumber", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], IntegerTest.prototype, "fromJSON", null);
     IntegerTest = __decorate([
         test_util_1.suite
     ], IntegerTest);

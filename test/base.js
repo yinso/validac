@@ -14,20 +14,19 @@ var V = require("../lib/validator");
 var S = require("../lib/types/string");
 var N = require("../lib/types/number");
 var test_util_1 = require("../lib/util/test-util");
-var lib_1 = require("../lib");
 var BaseTest = /** @class */ (function () {
     function BaseTest() {
     }
     BaseTest.prototype.isa = function () {
-        return V.isa(function (v) { return v instanceof Date; }, 'date')
-            .validate(new Date());
+        V.isa(function (v) { return v instanceof Date; }, 'date')
+            .assert(new Date());
     };
     BaseTest.prototype.invalidIsa = function () {
-        return test_util_1.expectError(V.isa(function (v) { return typeof (v) === 'number'; }, 'number')
+        test_util_1.expectError(V.isa(function (v) { return typeof (v) === 'number'; }, 'number')
             .validate(new Date()));
     };
     BaseTest.prototype.isAny = function () {
-        return Promise.all([
+        [
             undefined,
             null,
             1,
@@ -38,21 +37,20 @@ var BaseTest = /** @class */ (function () {
             false,
             [],
             {}
-        ].map(function (item) { return V.isAny.validate(item); }));
+        ].forEach(function (item) { return V.isAny.assert(item); });
     };
     BaseTest.prototype.isLiteral = function () {
-        return V.isLiteral('test').validate('test');
+        V.isLiteral('test').assert('test');
     };
     BaseTest.prototype.isInvalidLiteral = function () {
         return test_util_1.expectError(V.isLiteral('test').validate('test1'));
     };
     BaseTest.prototype.isEnum = function () {
-        lib_1.ValidationResult.allOf([
+        [
             'hello',
             'world',
             'foo'
-        ].map(function (item) { return V.isEnum('hello', 'world', 'foo').validate(item); }))
-            .cata(function () { });
+        ].forEach(function (item) { return V.isEnum('hello', 'world', 'foo').assert(item); });
     };
     BaseTest.prototype.isUndefined = function () {
         return V.isUndefined.validate(undefined);
@@ -61,7 +59,7 @@ var BaseTest = /** @class */ (function () {
         return test_util_1.expectError(V.isUndefined.validate('test'));
     };
     BaseTest.prototype.isNull = function () {
-        return V.isNull.validate(null);
+        return V.isNull.validate(null).cata(function () { });
     };
     BaseTest.prototype.isInvalidNull = function () {
         return test_util_1.expectError(V.isNull.validate('test'));
@@ -69,14 +67,15 @@ var BaseTest = /** @class */ (function () {
     BaseTest.prototype.where = function () {
         return S.isString
             .where(S.match(/^[+-]?\d+$/))
-            .validate('12305608');
+            .validate('12305608')
+            .cata(function () { });
     };
     BaseTest.prototype.transform = function () {
-        return S.isString
+        S.isString
             .where(S.match(/^[+-]?\d+(\.\d+)?$/))
             .transform(parseFloat)
             .validate('1234')
-            .then(function (v) {
+            .cata(function (v) {
             assert.equal(v, 1234);
         });
     };
@@ -84,22 +83,27 @@ var BaseTest = /** @class */ (function () {
         var validator = S.isString.intersect(N.isNumber); // nothing will match!!
         return test_util_1.expectError(validator.validate(1));
     };
-    BaseTest.prototype.or = function () {
+    BaseTest.prototype.union = function () {
         var validator = S.isString.union(N.isNumber).union(V.isNull);
-        return lib_1.ValidationResult.allOf(['hello', 5].map(function (item) { return validator.validate(item); }))
-            .cata(function () { });
+        ['hello', 5].forEach(function (item) { return validator.assert(item); });
     };
     BaseTest.prototype.isOptional = function () {
         var validator = S.isString.isOptional();
-        return lib_1.ValidationResult.allOf([undefined, 'test'].map(function (item) { return validator.validate(item); }))
-            .cata(function () { });
+        [undefined, 'test'].forEach(function (item) { return validator.assert(item); });
     };
     BaseTest.prototype.defaultTo = function () {
         var validator = S.isString.defaultTo(function () { return 'hello world'; });
-        return validator.validate(undefined)
-            .then(function (res) {
-            assert.equal(res, 'hello world');
-        });
+        validator.assert(undefined);
+    };
+    BaseTest.prototype.testAllOf = function () {
+        var validator = V.allOf(S.isString, V.isLiteral('test'));
+        validator.assert('test');
+    };
+    BaseTest.prototype.testOneOf = function () {
+        var validator = V.oneOf(S.isString, V.isNull, N.isNumber);
+        validator.assert('test');
+        validator.assert(null);
+        validator.assert(15.1);
     };
     __decorate([
         test_util_1.test,
@@ -184,7 +188,7 @@ var BaseTest = /** @class */ (function () {
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], BaseTest.prototype, "or", null);
+    ], BaseTest.prototype, "union", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
@@ -197,6 +201,18 @@ var BaseTest = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], BaseTest.prototype, "defaultTo", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], BaseTest.prototype, "testAllOf", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], BaseTest.prototype, "testOneOf", null);
     BaseTest = __decorate([
         test_util_1.suite
     ], BaseTest);

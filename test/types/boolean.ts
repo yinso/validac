@@ -3,14 +3,34 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
 
 @suite class BooleanTest {
     @test isBoolean () {
-        return B.isBoolean.validate(true);
+        B.isBoolean.assert(true)
+        B.isBoolean.assert(false)
+    }
+
+    @test parseBoolean () {
+        B.parseBoolean.assert(true)
+        B.parseBoolean.assert(false)
+        B.parseBoolean.assert('true')
+        B.parseBoolean.assert('false')
+        B.parseBoolean.assert('TRUE')
+        B.parseBoolean.assert('FALSE')
     }
 
     @test isTrue() {
-        return B.isTrue.validate(true)
+        B.isTrue.assert(true)
+    }
+
+    @test parseTrue() {
+        B.parseTrue.assert('true')
+        B.parseTrue.assert('TRUE')
     }
 
     @test isFalse() {
-        return B.isFalse.validate(false)
+        B.isFalse.assert(false)
+    }
+
+    @test parseFalse() {
+        B.parseFalse.assert('false')
+        B.parseFalse.assert('FALSE')
     }
 }

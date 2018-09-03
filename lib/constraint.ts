@@ -48,6 +48,8 @@ export interface Constraint<T> {
     not() : Constraint<T>;
 }
 
+// this is the highest level combinator.
+// and or not.
 export abstract class BaseConstraint<T> implements Constraint<T> {
     abstract satisfy(v : T, path: string) : ValidationError[];
 

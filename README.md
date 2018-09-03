@@ -14,6 +14,20 @@ npm install --save validac
 import * as V from 'validac';
 import * as assert from 'assert';
 
+// validate
+V.isString.validate('this is a string') // => SuccessResult { value : 'this is a string' }
+V.isString.validate(1234) // throws an error
+// => FailedResult { errors: [{ error: 'TypeError', type: 'string', path: '$', actual: 1234 }] } // validation error is an array of errors.
+
+// assert
+V.isNumber.assert(1234) // => 1234
+V.isNumber.assert('not number') // throws the FailedResult error.
+
+// parse
+V.parseNumber.assert('1234') // => 1234
+V.parseNumber.assert('not a number') // => error
+
+
 // this already exist - you can do V.isString
 let isString = V.isa((v: any) : v is string => typeof(v) === 'string', 'string')
 
