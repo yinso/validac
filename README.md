@@ -1,6 +1,6 @@
 # Validac - A **Valida**tion **C**ombinator Library
 
-`Validac` is an async **Valida**tion **C**ombinator library written in TypeScript, where you can build up a complex validator via combining simple ones, and generate the right type signature for the validated value.
+`Validac` is a **Valida**tion **C**ombinator library written in TypeScript, where you can build up a complex validator via combining simple ones, and generate the right type signature for the validated value.
 
 ## Install
 
@@ -80,7 +80,7 @@ if (V.isString.isa(value)) {
 }
 ```
 
-> Note - be sure to use the right combinators for `.isa` testing, as some combinators generates new values, and it's the new values that has the right type.
+> `.isa` is only available on validators that are based on `IsaValidator<T>` type to ensure that you can use it appropriately for type-guard purposes, as other types of `Validator` might generate new values instead of retaining the old values.
 
 ### `.assert(v : any) : T`
 

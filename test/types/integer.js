@@ -24,17 +24,17 @@ var IntegerTest = /** @class */ (function () {
     IntegerTest.prototype.isNumber = function () {
         test_util_1.expectError(I.isInteger.validate(10.5));
     };
-    IntegerTest.prototype.parseIntegerFromString = function () {
-        I.parseInteger.assert('10');
+    IntegerTest.prototype.convertIntegerFromString = function () {
+        I.convertInteger.assert('10');
     };
-    IntegerTest.prototype.parseIntegerFromNumber = function () {
-        I.parseInteger.assert(10);
+    IntegerTest.prototype.convertIntegerFromNumber = function () {
+        I.convertInteger.assert(10);
     };
-    IntegerTest.prototype.parseNumberFail = function () {
-        test_util_1.expectError(I.parseInteger.validate('10.5'));
+    IntegerTest.prototype.convertIntegerError = function () {
+        test_util_1.expectError(I.convertInteger.validate('10.5'));
     };
-    IntegerTest.prototype.parseNumberFailFromNumber = function () {
-        test_util_1.expectError(I.parseInteger.validate(10.5));
+    IntegerTest.prototype.convertIntegerErrorFromNumber = function () {
+        test_util_1.expectError(I.convertInteger.validate(10.5));
     };
     IntegerTest.prototype.fromJSON = function () {
         I.Integer.fromJSON('1');
@@ -63,25 +63,25 @@ var IntegerTest = /** @class */ (function () {
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], IntegerTest.prototype, "parseIntegerFromString", null);
+    ], IntegerTest.prototype, "convertIntegerFromString", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], IntegerTest.prototype, "parseIntegerFromNumber", null);
+    ], IntegerTest.prototype, "convertIntegerFromNumber", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], IntegerTest.prototype, "parseNumberFail", null);
+    ], IntegerTest.prototype, "convertIntegerError", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], IntegerTest.prototype, "parseNumberFailFromNumber", null);
+    ], IntegerTest.prototype, "convertIntegerErrorFromNumber", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),

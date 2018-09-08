@@ -7,30 +7,30 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
         B.isBoolean.assert(false)
     }
 
-    @test parseBoolean () {
-        B.parseBoolean.assert(true)
-        B.parseBoolean.assert(false)
-        B.parseBoolean.assert('true')
-        B.parseBoolean.assert('false')
-        B.parseBoolean.assert('TRUE')
-        B.parseBoolean.assert('FALSE')
+    @test convertBoolean () {
+        B.convertBoolean.assert(true)
+        B.convertBoolean.assert(false)
+        B.convertBoolean.assert('true')
+        B.convertBoolean.assert('false')
+        B.convertBoolean.assert('TRUE')
+        B.convertBoolean.assert('FALSE')
     }
 
     @test isTrue() {
         B.isTrue.assert(true)
     }
 
-    @test parseTrue() {
-        B.parseTrue.assert('true')
-        B.parseTrue.assert('TRUE')
+    @test convertTrue() {
+        B.convertTrue.assert('true')
+        B.convertTrue.assert('TRUE')
     }
 
     @test isFalse() {
         B.isFalse.assert(false)
     }
 
-    @test parseFalse() {
-        B.parseFalse.assert('false')
-        B.parseFalse.assert('FALSE')
+    @test convertFalse() {
+        B.convertFalse.assert('false')
+        B.convertFalse.assert('FALSE')
     }
 }

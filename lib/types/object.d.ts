@@ -1,10 +1,11 @@
-import { Validator } from '../validator';
+import { Validator , IsaValidator } from '../validator';
+import { Constraint , ConstraintPredicate } from '../constraint';
 
 export type ValidatorObject<T> = {
-    [P in keyof T]: Validator<T[P]>;
+    [P in keyof T]: IsaValidator<T[P]>;
 };
 
-export interface ObjectValidator<T> extends Validator<T> {
+export interface ObjectValidator<T> extends IsaValidator<T> {
     extends<U>(validator : ValidatorObject<U>) : ObjectValidator<T & U>;
     cast<U>() : ObjectValidator<U>;
 }

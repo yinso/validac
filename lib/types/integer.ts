@@ -9,10 +9,10 @@ export class Integer extends Scalar<number> {
     }
 
     static fromJSON(v : any, path : string = '$') {
-        return Integer.parseInteger.assert(v, path);
+        return Integer.convertInteger.assert(v, path);
     }
 
-    static parseInteger = isString
+    static convertInteger = isString
         .where(match(/^[+-]?\d+$/))
         .transform((v) => new Integer(parseInt(v)))
         .union(isNumber
@@ -23,4 +23,4 @@ export class Integer extends Scalar<number> {
 
 export let isInteger = isa(Integer.isInteger, 'isInteger')
 
-export let parseInteger = Integer.parseInteger;
+export let convertInteger = Integer.convertInteger;

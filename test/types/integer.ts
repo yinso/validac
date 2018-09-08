@@ -15,20 +15,20 @@ import { suite, test, slow, timeout , expectErrorAsync, expectError } from '../.
         expectError(I.isInteger.validate(10.5));
     }
 
-    @test parseIntegerFromString () {
-        I.parseInteger.assert('10')
+    @test convertIntegerFromString () {
+        I.convertInteger.assert('10')
     }
 
-    @test parseIntegerFromNumber () {
-        I.parseInteger.assert(10)
+    @test convertIntegerFromNumber () {
+        I.convertInteger.assert(10)
     }
 
-    @test parseNumberFail () {
-        expectError(I.parseInteger.validate('10.5'))
+    @test convertIntegerError () {
+        expectError(I.convertInteger.validate('10.5'))
     }
 
-    @test parseNumberFailFromNumber () {
-        expectError(I.parseInteger.validate(10.5))
+    @test convertIntegerErrorFromNumber () {
+        expectError(I.convertInteger.validate(10.5))
     }
 
     @test fromJSON() {

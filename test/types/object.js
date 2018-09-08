@@ -11,30 +11,61 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var V = require("../../lib");
 var test_util_1 = require("../../lib/util/test-util");
-var fooTest = V.isObject({
+var assert = require("assert");
+var isFoo = V.isObject({
     foo: V.isString
 });
-var barTest = fooTest.extends({
+var isBar = isFoo.extends({
     bar: V.isString
+}).cast();
+var isBaz = V.isObject({
+    xyz: V.isBoolean
 }).cast();
 var ObjectTest = /** @class */ (function () {
     function ObjectTest() {
     }
-    ObjectTest.prototype.try = function () {
-        fooTest.assert({
+    ObjectTest.prototype.canAssert = function () {
+        isFoo.assert({
             foo: 'test'
         });
-        barTest.assert({
+        isBar.assert({
             foo: 'test',
             bar: 'hello'
         });
+    };
+    ObjectTest.prototype.canIsa = function () {
+        assert.deepEqual(true, isFoo.isa({
+            foo: 'test'
+        }));
+        assert.deepEqual(true, isBar.isa({
+            foo: 'test',
+            bar: 'hello'
+        }));
+    };
+    ObjectTest.prototype.allOf = function () {
+        assert.deepEqual(true, V.allOf(isFoo, isBaz).isa({
+            foo: 'test',
+            xyz: true
+        }));
     };
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], ObjectTest.prototype, "try", null);
+    ], ObjectTest.prototype, "canAssert", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], ObjectTest.prototype, "canIsa", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], ObjectTest.prototype, "allOf", null);
     ObjectTest = __decorate([
         test_util_1.suite
     ], ObjectTest);

@@ -7,18 +7,18 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
     }
 
     @test async isInvalidNumber() {
-        return expectError(N.isNumber.validate('hello'));
+        return expectError(N.isNumber.validate('not a number'));
     }
 
-    @test parseNumber() {
-        N.parseNumber.assert('10.5');
+    @test convertNumberFromString() {
+        N.convertNumber.assert('10.5');
     }
 
-    @test parseInteger() {
-        N.parseNumber.assert('10');
+    @test convertIntegerFromString() {
+        N.convertNumber.assert('10');
     }
 
-    @test parseInvalidNumber() {
-        expectError(N.parseNumber.validate('hello'))
+    @test convertInvalidNumber() {
+        expectError(N.convertNumber.validate('not a number'))
     }
 }

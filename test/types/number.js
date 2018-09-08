@@ -55,18 +55,18 @@ var NumberTest = /** @class */ (function () {
     NumberTest.prototype.isInvalidNumber = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, test_util_1.expectError(N.isNumber.validate('hello'))];
+                return [2 /*return*/, test_util_1.expectError(N.isNumber.validate('not a number'))];
             });
         });
     };
-    NumberTest.prototype.parseNumber = function () {
-        N.parseNumber.assert('10.5');
+    NumberTest.prototype.convertNumberFromString = function () {
+        N.convertNumber.assert('10.5');
     };
-    NumberTest.prototype.parseInteger = function () {
-        N.parseNumber.assert('10');
+    NumberTest.prototype.convertIntegerFromString = function () {
+        N.convertNumber.assert('10');
     };
-    NumberTest.prototype.parseInvalidNumber = function () {
-        test_util_1.expectError(N.parseNumber.validate('hello'));
+    NumberTest.prototype.convertInvalidNumber = function () {
+        test_util_1.expectError(N.convertNumber.validate('not a number'));
     };
     __decorate([
         test_util_1.test,
@@ -85,19 +85,19 @@ var NumberTest = /** @class */ (function () {
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], NumberTest.prototype, "parseNumber", null);
+    ], NumberTest.prototype, "convertNumberFromString", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], NumberTest.prototype, "parseInteger", null);
+    ], NumberTest.prototype, "convertIntegerFromString", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], NumberTest.prototype, "parseInvalidNumber", null);
+    ], NumberTest.prototype, "convertInvalidNumber", null);
     NumberTest = __decorate([
         test_util_1.suite
     ], NumberTest);

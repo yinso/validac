@@ -17,12 +17,21 @@ var DateTest = /** @class */ (function () {
     DateTest.prototype.isDate = function () {
         return D.isDate.validate(new Date());
     };
+    DateTest.prototype.convertDate = function () {
+        D.convertDate.assert('2000-01-01T00:00:00Z');
+    };
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], DateTest.prototype, "isDate", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], DateTest.prototype, "convertDate", null);
     DateTest = __decorate([
         test_util_1.suite
     ], DateTest);

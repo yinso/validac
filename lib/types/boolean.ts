@@ -7,12 +7,10 @@ export let isTrue = isLiteral<true>(true);
 
 export let isFalse = isLiteral<false>(false);
 
-export let parseTrue =
-    isTrue
-    .union(isString.where(match(/^true$/i)).transform((v) => true))
+export let convertTrue =
+    isTrue.union(isString.where(match(/^true$/i))).transform(() => true)
 
-export let parseFalse =
-    isFalse
-    .union(isString.where(match(/^false$/i)).transform((v) => false))
+export let convertFalse =
+    isFalse.union(isString.where(match(/^false$/i))).transform((v) => false)
 
-export let parseBoolean = parseTrue.union(parseFalse)
+export let convertBoolean = convertTrue.union(convertFalse)

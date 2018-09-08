@@ -9,51 +9,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var A = require("../../lib/types/array");
-var S = require("../../lib/types/string");
+var V = require("../../lib");
 var test_util_1 = require("../../lib/util/test-util");
 var assert = require("assert");
-var ArrayTest = /** @class */ (function () {
-    function ArrayTest() {
+var isFoo = V.isTuple(V.isNumber, V.isString, V.isBoolean);
+var TupleTest = /** @class */ (function () {
+    function TupleTest() {
     }
-    ArrayTest.prototype.isArrayOfString = function () {
-        A.isArray(S.isString).assert(['hello', 'world']);
+    TupleTest.prototype.canAssert = function () {
+        isFoo.assert([1, 'a string', true]);
     };
-    ArrayTest.prototype.isInvalidArrayOfString = function () {
-        test_util_1.expectError(A.isArray(S.isString).validate(['hello', 'world', 5]));
-    };
-    ArrayTest.prototype.canIsa = function () {
-        assert.equal(true, A.isArray(S.isString).isa(['test', 'array']));
-    };
-    ArrayTest.prototype.isArrayofConterDate = function () {
+    TupleTest.prototype.canIsa = function () {
+        assert.deepEqual(true, isFoo.isa([2, 'a string', false]));
     };
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], ArrayTest.prototype, "isArrayOfString", null);
+    ], TupleTest.prototype, "canAssert", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], ArrayTest.prototype, "isInvalidArrayOfString", null);
-    __decorate([
-        test_util_1.test,
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", void 0)
-    ], ArrayTest.prototype, "canIsa", null);
-    __decorate([
-        test_util_1.test,
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", void 0)
-    ], ArrayTest.prototype, "isArrayofConterDate", null);
-    ArrayTest = __decorate([
+    ], TupleTest.prototype, "canIsa", null);
+    TupleTest = __decorate([
         test_util_1.suite
-    ], ArrayTest);
-    return ArrayTest;
+    ], TupleTest);
+    return TupleTest;
 }());
-//# sourceMappingURL=array.js.map
+//# sourceMappingURL=tuple.js.map
