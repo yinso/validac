@@ -1,5 +1,5 @@
 // how to 
-import { Validator , IsaValidator } from '../validator';
+import { IsaValidator } from '../isa';
 
 export function isTuple<T1>(
     v1 : IsaValidator<T1>,

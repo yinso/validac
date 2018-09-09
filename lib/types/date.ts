@@ -1,4 +1,4 @@
-import { isa, Validator } from '../validator';
+import { isa } from '../isa';
 import { isString } from './string';
 import { match } from './string';
 

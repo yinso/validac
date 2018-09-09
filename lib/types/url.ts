@@ -1,5 +1,4 @@
 import { Scalar } from '../scalar';
-import { isa } from '../validator';
 import { isString , match } from './string';
 import * as url from 'url';
 

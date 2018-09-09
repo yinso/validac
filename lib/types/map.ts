@@ -1,11 +1,11 @@
 import { ValidationResult , ValidationError } from '../base';
-import { Validator , BaseValidator } from '../validator';
+import { BaseIsaValidator, IsaValidator } from '../isa';
 
 type _MapType<T> = Map<string, T>;
 
-class MapValidator<T> extends BaseValidator<_MapType<T>> {
-    innerValidator : Validator<T>;
-    constructor(innerValidator : Validator<T>) {
+class MapValidator<T> extends BaseIsaValidator<_MapType<T>> {
+    innerValidator : IsaValidator<T>;
+    constructor(innerValidator : IsaValidator<T>) {
         super();
         this.innerValidator = innerValidator;
     }
@@ -41,6 +41,6 @@ class MapValidator<T> extends BaseValidator<_MapType<T>> {
     }
 }
 
-export function isMap<T>(innerValidator : Validator<T>) {
+export function isMap<T>(innerValidator : IsaValidator<T>) {
     return new MapValidator<T>(innerValidator);
 }

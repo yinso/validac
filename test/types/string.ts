@@ -1,5 +1,5 @@
 import * as S from '../../lib/types/string';
-import * as V from '../../lib/validator';
+import * as V from '../../lib/isa';
 import { suite, test, slow, timeout , expectError } from '../../lib/util/test-util';
 
 @suite class StringTest {

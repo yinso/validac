@@ -1,5 +1,4 @@
 import * as assert from 'assert';
-import * as V from '../../lib/validator';
 import * as S from '../../lib/types/string';
 import * as U from '../../lib/types/url';
 import { suite, test, slow, timeout , expectError } from '../../lib/util/test-util';

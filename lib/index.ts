@@ -1,11 +1,13 @@
 export * from './base';
 export * from './constraint';
 export * from './scalar';
-export * from './validator';
+export * from './convert';
+export * from './isa';
 
 export * from './types/array';
 export * from './types/boolean';
 export * from './types/date';
+export * from './types/enum';
 export * from './types/integer';
 export * from './types/map';
 export * from './types/number';

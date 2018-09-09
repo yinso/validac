@@ -1,4 +1,4 @@
-import { isa , isLiteral } from '../validator';
+import { isa , isLiteral } from '../isa';
 import { isString, match } from './string';
 
 export let isBoolean = isa((value : any) : value is boolean => typeof(value) === 'boolean', 'boolean');

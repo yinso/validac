@@ -1,3 +1,37 @@
+export type ExplicitAny = any
+
+export interface Validator<T> {
+    assert(v : ExplicitAny, path ?: string) : T;
+    validate(v : ExplicitAny, path ?: string) : ValidationResult<T>;
+}
+
+export abstract class BaseValidator<T> implements Validator<T> {
+    abstract validate(value : ExplicitAny, path ?: string) : ValidationResult<T>;
+    assert(value : ExplicitAny, path : string = '$') {
+        return this.validate(value, path).cata((v) => v)
+    }
+}
+
+export type ConstraintPredicate<T> = (v : T) => boolean;
+
+export interface Constraint<T> {
+    satisfy(v : T, path : string) : ValidationError[];
+    and(constraint : Constraint<T>) : Constraint<T>;
+    or(constraint: Constraint<T>) : Constraint<T>;
+    not() : Constraint<T>;
+}
+
+export function isConstraint<T>(x : any) : x is Constraint<T> {
+    return !!x && typeof(x.satisfy) === 'function'
+        && typeof(x.and) === 'function'
+        && typeof(x.or) === 'function'
+        && typeof(x.not) === 'function'
+}
+
+export type TransformProc<T, U> = (v : T) => U;
+
+export type DefaultProc<T> = () => T;
+
 export interface ValidationError {
     readonly error: string;
     readonly path : string;
@@ -6,7 +40,7 @@ export interface ValidationError {
 }
 
 export function isValidationError(arg : any) : arg is ValidationError {
-    return !!arg && arg.error && arg.path;
+    return !!arg && typeof(arg.error) === 'string' && typeof(arg.path) === 'string';
 }
 
 export function isValidationErrorArray(arg : any) : arg is ValidationError[] {

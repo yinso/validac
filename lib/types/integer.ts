@@ -1,5 +1,5 @@
 import { Scalar } from '../scalar';
-import { isa } from '../validator';
+import { isa } from '../isa';
 import { isNumber } from './number';
 import { isString , match } from './string';
 

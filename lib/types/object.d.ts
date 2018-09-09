@@ -1,5 +1,5 @@
-import { Validator , IsaValidator } from '../validator';
-import { Constraint , ConstraintPredicate } from '../constraint';
+import { Constraint } from '../base';
+import { IsaValidator } from '../isa';
 
 export type ValidatorObject<T> = {
     [P in keyof T]: IsaValidator<T[P]>;

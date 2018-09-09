@@ -1,7 +1,7 @@
 import * as V from '../../lib'
 import { suite, test, slow, timeout , expectError } from '../../lib/util/test-util';
 import * as assert from 'assert';
-import { allOf } from '../../lib';
+import { allOf } from '../../lib/intersect';
 
 interface Foo {
     foo: string;
@@ -48,9 +48,37 @@ let isBaz = V.isObject({
     }
 
     @test allOf() {
-        assert.deepEqual(true, V.allOf(isFoo, isBaz).isa({
+        assert.deepEqual(true, V.wrapIsa(allOf(isFoo, isBaz)).isa({
             foo: 'test',
             xyz: true
         }))
+    }
+
+    @test assertTypeErrorObject() {
+        let data = 'not an object'
+        V.isObject({}).validate(data)
+            .cata(() => {}, (errors) => {
+                assert.deepEqual([{
+                    error: 'TypeError',
+                    path: '$',
+                    expected: 'Object',
+                    actual: data
+                }], errors)
+            })
+    }
+
+    @test assertKeyTypeError() {
+        let data = {
+
+        }
+        isFoo.validate(data)
+            .cata(() => {}, (errors) => {
+                assert.deepEqual([{
+                    error: 'TypeError',
+                    path: '$.foo',
+                    expected: 'string',
+                    actual: undefined
+                }], errors)
+            })
     }
 }

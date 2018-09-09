@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var S = require("../../lib/types/string");
-var V = require("../../lib/validator");
+var V = require("../../lib/isa");
 var test_util_1 = require("../../lib/util/test-util");
 var StringTest = /** @class */ (function () {
     function StringTest() {

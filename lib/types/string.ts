@@ -1,6 +1,6 @@
 import { ValidationError } from '../base';
 import { BaseConstraint } from '../constraint';
-import { isa , isLiteral } from '../validator';
+import { isa } from '../isa';
 
 export let isString = isa((value : any) : value is string => typeof(value) === 'string', 'string');
 

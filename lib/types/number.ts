@@ -1,4 +1,4 @@
-import { isa , isLiteral } from '../validator';
+import { isa } from '../isa';
 import { isString , match } from './string';
 
 declare global {

@@ -1,6 +1,5 @@
 import { ValidationResult , ValidationError } from '../base';
-import { BaseValidator , BaseIsaValidator, Validator, isa , IsaValidator, sequence , constraint, allOf , isOptional } from '../validator';
-import { ConstraintPredicate, Constraint } from '../constraint';
+import { BaseIsaValidator, IsaValidator } from '../isa';
 
 class IsArrayValidator<T> extends BaseIsaValidator<T[]> {
     readonly inner : IsaValidator<T>;
@@ -34,9 +33,9 @@ class IsArrayValidator<T> extends BaseIsaValidator<T[]> {
 
 }
 
-class MapValidator<T> extends BaseValidator<T[]> {
-    itemValidator : Validator<T>;
-    constructor(itemValidator : Validator<T>) {
+class MapValidator<T> extends BaseIsaValidator<T[]> {
+    itemValidator : IsaValidator<T>;
+    constructor(itemValidator : IsaValidator<T>) {
         super();
         this.itemValidator = itemValidator;
     }
@@ -47,7 +46,7 @@ class MapValidator<T> extends BaseValidator<T[]> {
         return ValidationResult.allOf<T>(results);
     }
 
-    map<V>(itemValidator : Validator<V>) :  MapValidator<V> {
+    map<V>(itemValidator : IsaValidator<V>) :  MapValidator<V> {
         return new MapValidator<V>(itemValidator);
     }
 }
