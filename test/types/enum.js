@@ -11,24 +11,38 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var E = require("../../lib/types/enum");
 var test_util_1 = require("../../lib/util/test-util");
+var isFoo = E.isEnum('hello', 'world', 'foo');
+var convertFoo = E.convertEnum('hello', 'world', 'foo');
 var EnumTest = /** @class */ (function () {
     function EnumTest() {
     }
     EnumTest.prototype.isEnum = function () {
-        var testEnum = E.isEnum('hello', 'world', 'foo');
         [
             'hello',
             'world',
             'foo'
-        ].forEach(function (item) { return testEnum.assert(item); });
+        ].forEach(function (item) { return isFoo.assert(item); });
     };
     EnumTest.prototype.isNotEnum = function () {
-        var testEnum = E.isEnum('hello', 'world', 'foo');
         [
             'xyz',
             'abc',
             'def'
-        ].forEach(function (item) { return test_util_1.expectError(testEnum.validate(item)); });
+        ].forEach(function (item) { return test_util_1.expectError(isFoo.validate(item)); });
+    };
+    EnumTest.prototype.canConvertEnum = function () {
+        [
+            'hello',
+            'world',
+            'foo'
+        ].forEach(function (item) { return convertFoo.assert(item); });
+    };
+    EnumTest.prototype.errorConvertInvalidEnum = function () {
+        [
+            'xyz',
+            'abc',
+            'def'
+        ].forEach(function (item) { return test_util_1.expectError(convertFoo.validate(item)); });
     };
     __decorate([
         test_util_1.test,
@@ -42,6 +56,18 @@ var EnumTest = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], EnumTest.prototype, "isNotEnum", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], EnumTest.prototype, "canConvertEnum", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], EnumTest.prototype, "errorConvertInvalidEnum", null);
     EnumTest = __decorate([
         test_util_1.suite
     ], EnumTest);
