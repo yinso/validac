@@ -22,12 +22,26 @@ var EnumTest = /** @class */ (function () {
             'foo'
         ].forEach(function (item) { return testEnum.assert(item); });
     };
+    EnumTest.prototype.isNotEnum = function () {
+        var testEnum = E.isEnum('hello', 'world', 'foo');
+        [
+            'xyz',
+            'abc',
+            'def'
+        ].forEach(function (item) { return test_util_1.expectError(testEnum.validate(item)); });
+    };
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], EnumTest.prototype, "isEnum", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], EnumTest.prototype, "isNotEnum", null);
     EnumTest = __decorate([
         test_util_1.suite
     ], EnumTest);

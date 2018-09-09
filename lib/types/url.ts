@@ -1,8 +1,9 @@
 import { Scalar } from '../scalar';
 import { isString , match } from './string';
 import * as url from 'url';
+import { isa } from '../isa';
 
-export let isUrl = isString
+export let isUrlString = isString
     .where((str) => {
         try {
             let res = new url.URL(str)
@@ -80,11 +81,12 @@ export class Url extends Scalar<string> {
     }
 
     static fromJSON(v : any, path : string = '$') {
-        return Url.parseUrl.assert(v, path);
+        return Url.convertUrl.assert(v, path);
     }
 
-    static parseUrl = isUrl
+    static convertUrl = isUrlString
         .transform((v) => new Url(v))
 }
 
-export let parseUrl = Url.parseUrl;
+export let isUrl = isa(Url.isUrl, 'Url')
+export let convertUrl = isUrl.transform((v) => v).union(Url.convertUrl);

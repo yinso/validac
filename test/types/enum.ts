@@ -11,4 +11,12 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
             'foo'
         ].forEach((item) => testEnum.assert(item))
     }
+    @test isNotEnum() {
+        let testEnum = E.isEnum('hello', 'world', 'foo');
+        [
+            'xyz',
+            'abc',
+            'def'
+        ].forEach((item) => expectError(testEnum.validate(item)))
+    }
 }

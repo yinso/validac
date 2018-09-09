@@ -8,9 +8,9 @@ export let isTrue = isLiteral<true>(true);
 export let isFalse = isLiteral<false>(false);
 
 export let convertTrue =
-    isTrue.union(isString.where(match(/^true$/i))).transform(() => true)
+    isTrue.union(isString.where(match(/^true$/i))).transform<true>(() => true)
 
 export let convertFalse =
-    isFalse.union(isString.where(match(/^false$/i))).transform((v) => false)
+    isFalse.union(isString.where(match(/^false$/i))).transform<false>((v) => false)
 
 export let convertBoolean = convertTrue.union(convertFalse)

@@ -13,6 +13,7 @@ var V = require("../../lib");
 var test_util_1 = require("../../lib/util/test-util");
 var assert = require("assert");
 var isFoo = V.isTuple(V.isNumber, V.isString, V.isBoolean);
+var convertFoo = V.convertTuple(V.convertNumber, V.convertString, V.convertBoolean);
 var TupleTest = /** @class */ (function () {
     function TupleTest() {
     }
@@ -21,6 +22,12 @@ var TupleTest = /** @class */ (function () {
     };
     TupleTest.prototype.canIsa = function () {
         assert.deepEqual(true, isFoo.isa([2, 'a string', false]));
+        assert.deepEqual(false, isFoo.isa(['a string', 2, false]));
+        assert.deepEqual(false, isFoo.isa([2, 'a string', false, 1]));
+        assert.deepEqual(false, isFoo.isa([2, 'a string']));
+    };
+    TupleTest.prototype.canConvertTuple = function () {
+        convertFoo.assert(['10', 'a string', 'true']);
     };
     __decorate([
         test_util_1.test,
@@ -34,6 +41,12 @@ var TupleTest = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], TupleTest.prototype, "canIsa", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], TupleTest.prototype, "canConvertTuple", null);
     TupleTest = __decorate([
         test_util_1.suite
     ], TupleTest);

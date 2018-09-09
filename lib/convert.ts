@@ -15,7 +15,7 @@ export interface ConvertValidator<T> extends B.Validator<T> {
     cast<U extends T>() : ConvertValidator<U>;
 }
 
-export abstract class BaseConvertValidator2<T> extends B.BaseValidator<T> implements ConvertValidator<T> {
+export abstract class BaseConvertValidator<T> extends B.BaseValidator<T> implements ConvertValidator<T> {
     abstract validate(value : B.ExplicitAny, path ?: string) : B.ValidationResult<T>;
 
     where(constraint : B.Constraint<T> | B.ConstraintPredicate<T>) : ConvertValidator<T> {
@@ -47,7 +47,7 @@ export abstract class BaseConvertValidator2<T> extends B.BaseValidator<T> implem
     }
 }
 
-export class WrapperConvertValidator<T> extends BaseConvertValidator2<T> {
+export class WrapperConvertValidator<T> extends BaseConvertValidator<T> {
     readonly inner : B.Validator<T>;
     constructor(inner : B.Validator<T>) {
         super();
@@ -59,6 +59,6 @@ export class WrapperConvertValidator<T> extends BaseConvertValidator2<T> {
     }
 }
 
-export function wrapConvert<T>(inner : B.Validator<T>) : BaseConvertValidator2<T> {
+export function wrapConvert<T>(inner : B.Validator<T>) : BaseConvertValidator<T> {
     return new WrapperConvertValidator(inner);
 }

@@ -124,6 +124,20 @@ export abstract class ValidationResult<T> {
             return ValidationResult.reject(errors);
         }
     }
+
+    static filterErrors(results : ValidationResult<ExplicitAny>[]) : ValidationError[] {
+        let errors : ValidationError[] = [];
+        results.forEach((res, i) => {
+            res.cata(
+                (r, _) => {
+                },
+                (errs, _) => {
+                    errors = errors.concat(errs)
+                }
+            )
+        })
+        return errors;
+    }
 }
 
 class SuccessResult<T> extends ValidationResult<T> {

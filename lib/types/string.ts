@@ -1,8 +1,21 @@
 import { ValidationError } from '../base';
 import { BaseConstraint } from '../constraint';
-import { isa } from '../isa';
+import { isa , isAny } from '../isa';
 
 export let isString = isa((value : any) : value is string => typeof(value) === 'string', 'string');
+
+export let convertString = isString.transform((v) => v)
+    .union(isAny.transform((v) => {
+        if (v === undefined) {
+            return ''
+        } else if (v === null) {
+            return ''
+        } else if (v instanceof Date) {
+            return v.toISOString()
+        } else {
+            return v.toString()
+        }
+    }))
 
 class MatchConstraint extends BaseConstraint<string> {
     readonly pattern : RegExp;

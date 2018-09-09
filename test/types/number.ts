@@ -10,12 +10,10 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
         return expectError(N.isNumber.validate('not a number'));
     }
 
-    @test convertNumberFromString() {
+    @test convertNumber() {
         N.convertNumber.assert('10.5');
-    }
-
-    @test convertIntegerFromString() {
         N.convertNumber.assert('10');
+        N.convertNumber.assert(10.5);
     }
 
     @test convertInvalidNumber() {

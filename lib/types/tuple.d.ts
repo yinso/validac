@@ -1,5 +1,5 @@
-// how to 
 import { IsaValidator } from '../isa';
+import { ConvertValidator } from '../convert';
 
 export function isTuple<T1>(
     v1 : IsaValidator<T1>,
@@ -152,156 +152,153 @@ export function isTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, 
     v15 : IsaValidator<T15>,
 ) : IsaValidator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15]>;
 
-/*
 export function convertTuple<T1>(
-    v1 : Validator<T1>,
-) : Validator<[T1]>;
+    v1 : ConvertValidator<T1>,
+) : ConvertValidator<[T1]>;
 export function convertTuple<T1, T2>(
-    v1 : Validator<T1>,
-    v2 : Validator<T2>
-) : Validator<[T1, T2]>;
+    v1 : ConvertValidator<T1>,
+    v2 : ConvertValidator<T2>
+) : ConvertValidator<[T1, T2]>;
 export function convertTuple<T1, T2, T3>(
-    v1 : Validator<T1>,
-    v2 : Validator<T2>,
-    v3 : Validator<T3>
-) : Validator<[T1, T2, T3]>;
+    v1 : ConvertValidator<T1>,
+    v2 : ConvertValidator<T2>,
+    v3 : ConvertValidator<T3>
+) : ConvertValidator<[T1, T2, T3]>;
 export function convertTuple<T1, T2, T3, T4>(
-    v1 : Validator<T1>,
-    v2 : Validator<T2>,
-    v3 : Validator<T3>,
-    v4 : Validator<T4>,
-) : Validator<[T1, T2, T3, T4]>;
+    v1 : ConvertValidator<T1>,
+    v2 : ConvertValidator<T2>,
+    v3 : ConvertValidator<T3>,
+    v4 : ConvertValidator<T4>,
+) : ConvertValidator<[T1, T2, T3, T4]>;
 export function convertTuple<T1, T2, T3, T4, T5>(
-    v1 : Validator<T1>,
-    v2 : Validator<T2>,
-    v3 : Validator<T3>,
-    v4 : Validator<T4>,
-    v5 : Validator<T5>,
-) : Validator<[T1, T2, T3, T4, T5]>;
+    v1 : ConvertValidator<T1>,
+    v2 : ConvertValidator<T2>,
+    v3 : ConvertValidator<T3>,
+    v4 : ConvertValidator<T4>,
+    v5 : ConvertValidator<T5>,
+) : ConvertValidator<[T1, T2, T3, T4, T5]>;
 export function convertTuple<T1, T2, T3, T4, T5, T6>(
-    v1 : Validator<T1>,
-    v2 : Validator<T2>,
-    v3 : Validator<T3>,
-    v4 : Validator<T4>,
-    v5 : Validator<T5>,
-    v6 : Validator<T6>,
-) : Validator<[T1, T2, T3, T4, T5, T6]>;
+    v1 : ConvertValidator<T1>,
+    v2 : ConvertValidator<T2>,
+    v3 : ConvertValidator<T3>,
+    v4 : ConvertValidator<T4>,
+    v5 : ConvertValidator<T5>,
+    v6 : ConvertValidator<T6>,
+) : ConvertValidator<[T1, T2, T3, T4, T5, T6]>;
 export function convertTuple<T1, T2, T3, T4, T5, T6, T7>(
-    v1 : Validator<T1>,
-    v2 : Validator<T2>,
-    v3 : Validator<T3>,
-    v4 : Validator<T4>,
-    v5 : Validator<T5>,
-    v6 : Validator<T6>,
-    v7 : Validator<T7>,
-) : Validator<[T1, T2, T3, T4, T5, T6, T7]>;
+    v1 : ConvertValidator<T1>,
+    v2 : ConvertValidator<T2>,
+    v3 : ConvertValidator<T3>,
+    v4 : ConvertValidator<T4>,
+    v5 : ConvertValidator<T5>,
+    v6 : ConvertValidator<T6>,
+    v7 : ConvertValidator<T7>,
+) : ConvertValidator<[T1, T2, T3, T4, T5, T6, T7]>;
 export function convertTuple<T1, T2, T3, T4, T5, T6, T7, T8>(
-    v1 : Validator<T1>,
-    v2 : Validator<T2>,
-    v3 : Validator<T3>,
-    v4 : Validator<T4>,
-    v5 : Validator<T5>,
-    v6 : Validator<T6>,
-    v7 : Validator<T7>,
-    v8 : Validator<T8>,
-) : Validator<[T1, T2, T3, T4, T5, T6, T7, T8]>;
+    v1 : ConvertValidator<T1>,
+    v2 : ConvertValidator<T2>,
+    v3 : ConvertValidator<T3>,
+    v4 : ConvertValidator<T4>,
+    v5 : ConvertValidator<T5>,
+    v6 : ConvertValidator<T6>,
+    v7 : ConvertValidator<T7>,
+    v8 : ConvertValidator<T8>,
+) : ConvertValidator<[T1, T2, T3, T4, T5, T6, T7, T8]>;
 export function convertTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-    v1 : Validator<T1>,
-    v2 : Validator<T2>,
-    v3 : Validator<T3>,
-    v4 : Validator<T4>,
-    v5 : Validator<T5>,
-    v6 : Validator<T6>,
-    v7 : Validator<T7>,
-    v8 : Validator<T8>,
-    v9 : Validator<T9>,
-) : Validator<[T1, T2, T3, T4, T5, T6, T7, T8, T9]>;
+    v1 : ConvertValidator<T1>,
+    v2 : ConvertValidator<T2>,
+    v3 : ConvertValidator<T3>,
+    v4 : ConvertValidator<T4>,
+    v5 : ConvertValidator<T5>,
+    v6 : ConvertValidator<T6>,
+    v7 : ConvertValidator<T7>,
+    v8 : ConvertValidator<T8>,
+    v9 : ConvertValidator<T9>,
+) : ConvertValidator<[T1, T2, T3, T4, T5, T6, T7, T8, T9]>;
 export function convertTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
-    v1 : Validator<T1>,
-    v2 : Validator<T2>,
-    v3 : Validator<T3>,
-    v4 : Validator<T4>,
-    v5 : Validator<T5>,
-    v6 : Validator<T6>,
-    v7 : Validator<T7>,
-    v8 : Validator<T8>,
-    v9 : Validator<T9>,
-    v10 : Validator<T10>,
-) : Validator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]>;
+    v1 : ConvertValidator<T1>,
+    v2 : ConvertValidator<T2>,
+    v3 : ConvertValidator<T3>,
+    v4 : ConvertValidator<T4>,
+    v5 : ConvertValidator<T5>,
+    v6 : ConvertValidator<T6>,
+    v7 : ConvertValidator<T7>,
+    v8 : ConvertValidator<T8>,
+    v9 : ConvertValidator<T9>,
+    v10 : ConvertValidator<T10>,
+) : ConvertValidator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]>;
 export function convertTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
-    v1 : Validator<T1>,
-    v2 : Validator<T2>,
-    v3 : Validator<T3>,
-    v4 : Validator<T4>,
-    v5 : Validator<T5>,
-    v6 : Validator<T6>,
-    v7 : Validator<T7>,
-    v8 : Validator<T8>,
-    v9 : Validator<T9>,
-    v10 : Validator<T10>,
-    v11 : Validator<T11>,
-) : Validator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11]>;
+    v1 : ConvertValidator<T1>,
+    v2 : ConvertValidator<T2>,
+    v3 : ConvertValidator<T3>,
+    v4 : ConvertValidator<T4>,
+    v5 : ConvertValidator<T5>,
+    v6 : ConvertValidator<T6>,
+    v7 : ConvertValidator<T7>,
+    v8 : ConvertValidator<T8>,
+    v9 : ConvertValidator<T9>,
+    v10 : ConvertValidator<T10>,
+    v11 : ConvertValidator<T11>,
+) : ConvertValidator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11]>;
 export function convertTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
-    v1 : Validator<T1>,
-    v2 : Validator<T2>,
-    v3 : Validator<T3>,
-    v4 : Validator<T4>,
-    v5 : Validator<T5>,
-    v6 : Validator<T6>,
-    v7 : Validator<T7>,
-    v8 : Validator<T8>,
-    v9 : Validator<T9>,
-    v10 : Validator<T10>,
-    v11 : Validator<T11>,
-    v12 : Validator<T12>,
-) : Validator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12]>;
+    v1 : ConvertValidator<T1>,
+    v2 : ConvertValidator<T2>,
+    v3 : ConvertValidator<T3>,
+    v4 : ConvertValidator<T4>,
+    v5 : ConvertValidator<T5>,
+    v6 : ConvertValidator<T6>,
+    v7 : ConvertValidator<T7>,
+    v8 : ConvertValidator<T8>,
+    v9 : ConvertValidator<T9>,
+    v10 : ConvertValidator<T10>,
+    v11 : ConvertValidator<T11>,
+    v12 : ConvertValidator<T12>,
+) : ConvertValidator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12]>;
 export function convertTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
-    v1 : Validator<T1>,
-    v2 : Validator<T2>,
-    v3 : Validator<T3>,
-    v4 : Validator<T4>,
-    v5 : Validator<T5>,
-    v6 : Validator<T6>,
-    v7 : Validator<T7>,
-    v8 : Validator<T8>,
-    v9 : Validator<T9>,
-    v10 : Validator<T10>,
-    v11 : Validator<T11>,
-    v12 : Validator<T12>,
-    v13 : Validator<T13>,
-) : Validator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13]>;
+    v1 : ConvertValidator<T1>,
+    v2 : ConvertValidator<T2>,
+    v3 : ConvertValidator<T3>,
+    v4 : ConvertValidator<T4>,
+    v5 : ConvertValidator<T5>,
+    v6 : ConvertValidator<T6>,
+    v7 : ConvertValidator<T7>,
+    v8 : ConvertValidator<T8>,
+    v9 : ConvertValidator<T9>,
+    v10 : ConvertValidator<T10>,
+    v11 : ConvertValidator<T11>,
+    v12 : ConvertValidator<T12>,
+    v13 : ConvertValidator<T13>,
+) : ConvertValidator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13]>;
 export function convertTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
-    v1 : Validator<T1>,
-    v2 : Validator<T2>,
-    v3 : Validator<T3>,
-    v4 : Validator<T4>,
-    v5 : Validator<T5>,
-    v6 : Validator<T6>,
-    v7 : Validator<T7>,
-    v8 : Validator<T8>,
-    v9 : Validator<T9>,
-    v10 : Validator<T10>,
-    v11 : Validator<T11>,
-    v12 : Validator<T12>,
-    v13 : Validator<T13>,
-    v14 : Validator<T14>,
-) : Validator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14]>;
+    v1 : ConvertValidator<T1>,
+    v2 : ConvertValidator<T2>,
+    v3 : ConvertValidator<T3>,
+    v4 : ConvertValidator<T4>,
+    v5 : ConvertValidator<T5>,
+    v6 : ConvertValidator<T6>,
+    v7 : ConvertValidator<T7>,
+    v8 : ConvertValidator<T8>,
+    v9 : ConvertValidator<T9>,
+    v10 : ConvertValidator<T10>,
+    v11 : ConvertValidator<T11>,
+    v12 : ConvertValidator<T12>,
+    v13 : ConvertValidator<T13>,
+    v14 : ConvertValidator<T14>,
+) : ConvertValidator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14]>;
 export function convertTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
-    v1 : Validator<T1>,
-    v2 : Validator<T2>,
-    v3 : Validator<T3>,
-    v4 : Validator<T4>,
-    v5 : Validator<T5>,
-    v6 : Validator<T6>,
-    v7 : Validator<T7>,
-    v8 : Validator<T8>,
-    v9 : Validator<T9>,
-    v10 : Validator<T10>,
-    v11 : Validator<T11>,
-    v12 : Validator<T12>,
-    v13 : Validator<T13>,
-    v14 : Validator<T14>,
-    v15 : Validator<T15>,
-) : Validator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15]>;
-
-//*/
+    v1 : ConvertValidator<T1>,
+    v2 : ConvertValidator<T2>,
+    v3 : ConvertValidator<T3>,
+    v4 : ConvertValidator<T4>,
+    v5 : ConvertValidator<T5>,
+    v6 : ConvertValidator<T6>,
+    v7 : ConvertValidator<T7>,
+    v8 : ConvertValidator<T8>,
+    v9 : ConvertValidator<T9>,
+    v10 : ConvertValidator<T10>,
+    v11 : ConvertValidator<T11>,
+    v12 : ConvertValidator<T12>,
+    v13 : ConvertValidator<T13>,
+    v14 : ConvertValidator<T14>,
+    v15 : ConvertValidator<T15>,
+) : ConvertValidator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15]>;

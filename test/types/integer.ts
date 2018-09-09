@@ -15,12 +15,10 @@ import { suite, test, slow, timeout , expectErrorAsync, expectError } from '../.
         expectError(I.isInteger.validate(10.5));
     }
 
-    @test convertIntegerFromString () {
+    @test convertInteger() {
         I.convertInteger.assert('10')
-    }
-
-    @test convertIntegerFromNumber () {
         I.convertInteger.assert(10)
+        I.convertInteger.assert(I.Integer.fromJSON(10))
     }
 
     @test convertIntegerError () {

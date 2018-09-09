@@ -15,30 +15,46 @@ var BooleanTest = /** @class */ (function () {
     function BooleanTest() {
     }
     BooleanTest.prototype.isBoolean = function () {
-        B.isBoolean.assert(true);
-        B.isBoolean.assert(false);
+        [true, false].forEach(function (v) { return B.isBoolean.assert(v); });
+    };
+    BooleanTest.prototype.isNotBoolean = function () {
+        ['true', 'false', 1, 2].forEach(function (v) { return test_util_1.expectError(B.isBoolean.validate(v)); });
     };
     BooleanTest.prototype.convertBoolean = function () {
-        B.convertBoolean.assert(true);
-        B.convertBoolean.assert(false);
-        B.convertBoolean.assert('true');
-        B.convertBoolean.assert('false');
-        B.convertBoolean.assert('TRUE');
-        B.convertBoolean.assert('FALSE');
+        [true, false, 'true', 'false', 'TRUE', 'FALSE']
+            .forEach(function (v) { return B.convertBoolean.assert(v); });
+    };
+    BooleanTest.prototype.convertNotBoolean = function () {
+        [1, new Date(), 'not a boolean']
+            .forEach(function (v) { return test_util_1.expectError(B.convertBoolean.validate(v)); });
     };
     BooleanTest.prototype.isTrue = function () {
         B.isTrue.assert(true);
     };
+    BooleanTest.prototype.isNotTrue = function () {
+        ['true', 'false', 1, 2].forEach(function (v) { return test_util_1.expectError(B.isTrue.validate(v)); });
+    };
     BooleanTest.prototype.convertTrue = function () {
-        B.convertTrue.assert('true');
-        B.convertTrue.assert('TRUE');
+        [true, 'true', 'TRUE']
+            .forEach(function (v) { return B.convertTrue.assert(v); });
+    };
+    BooleanTest.prototype.convertNotTrue = function () {
+        [1, new Date(), 'not a boolean']
+            .forEach(function (v) { return test_util_1.expectError(B.convertTrue.validate(v)); });
     };
     BooleanTest.prototype.isFalse = function () {
         B.isFalse.assert(false);
     };
+    BooleanTest.prototype.isNotFalse = function () {
+        ['true', 'false', 1, 2].forEach(function (v) { return test_util_1.expectError(B.isFalse.validate(v)); });
+    };
     BooleanTest.prototype.convertFalse = function () {
-        B.convertFalse.assert('false');
-        B.convertFalse.assert('FALSE');
+        [false, 'false', 'FALSE']
+            .forEach(function (v) { return B.convertFalse.assert(v); });
+    };
+    BooleanTest.prototype.convertNotFalse = function () {
+        [1, new Date(), 'not a boolean']
+            .forEach(function (v) { return test_util_1.expectError(B.convertFalse.validate(v)); });
     };
     __decorate([
         test_util_1.test,
@@ -51,7 +67,19 @@ var BooleanTest = /** @class */ (function () {
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
+    ], BooleanTest.prototype, "isNotBoolean", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
     ], BooleanTest.prototype, "convertBoolean", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], BooleanTest.prototype, "convertNotBoolean", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
@@ -63,7 +91,19 @@ var BooleanTest = /** @class */ (function () {
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
+    ], BooleanTest.prototype, "isNotTrue", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
     ], BooleanTest.prototype, "convertTrue", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], BooleanTest.prototype, "convertNotTrue", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
@@ -75,7 +115,19 @@ var BooleanTest = /** @class */ (function () {
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
+    ], BooleanTest.prototype, "isNotFalse", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
     ], BooleanTest.prototype, "convertFalse", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], BooleanTest.prototype, "convertNotFalse", null);
     BooleanTest = __decorate([
         test_util_1.suite
     ], BooleanTest);

@@ -3,34 +3,57 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
 
 @suite class BooleanTest {
     @test isBoolean () {
-        B.isBoolean.assert(true)
-        B.isBoolean.assert(false)
+        [true, false].forEach((v) => B.isBoolean.assert(v))
+    }
+
+    @test isNotBoolean () {
+        ['true', 'false', 1, 2].forEach((v) => expectError(B.isBoolean.validate(v)))
     }
 
     @test convertBoolean () {
-        B.convertBoolean.assert(true)
-        B.convertBoolean.assert(false)
-        B.convertBoolean.assert('true')
-        B.convertBoolean.assert('false')
-        B.convertBoolean.assert('TRUE')
-        B.convertBoolean.assert('FALSE')
+        [true, false, 'true', 'false', 'TRUE', 'FALSE']
+        .forEach((v) => B.convertBoolean.assert(v))
+    }
+
+    @test convertNotBoolean () {
+        [1, new Date(), 'not a boolean']
+        .forEach((v) => expectError(B.convertBoolean.validate(v)))
     }
 
     @test isTrue() {
         B.isTrue.assert(true)
     }
 
+    @test isNotTrue() {
+        ['true', 'false', 1, 2].forEach((v) => expectError(B.isTrue.validate(v)))
+    }
+
     @test convertTrue() {
-        B.convertTrue.assert('true')
-        B.convertTrue.assert('TRUE')
+        [true, 'true', 'TRUE']
+        .forEach((v) => B.convertTrue.assert(v))
+    }
+
+    @test convertNotTrue() {
+        [1, new Date(), 'not a boolean']
+        .forEach((v) => expectError(B.convertTrue.validate(v)))
     }
 
     @test isFalse() {
         B.isFalse.assert(false)
     }
 
-    @test convertFalse() {
-        B.convertFalse.assert('false')
-        B.convertFalse.assert('FALSE')
+    @test isNotFalse() {
+        ['true', 'false', 1, 2].forEach((v) => expectError(B.isFalse.validate(v)))
     }
+
+    @test convertFalse() {
+        [false, 'false', 'FALSE']
+        .forEach((v) => B.convertFalse.assert(v))
+    }
+
+    @test convertNotFalse() {
+        [1, new Date(), 'not a boolean']
+        .forEach((v) => expectError(B.convertFalse.validate(v)))
+    }
+
 }

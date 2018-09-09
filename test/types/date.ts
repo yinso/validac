@@ -1,13 +1,23 @@
 import * as D from '../../lib/types/date';
-import { suite, test, slow, timeout , expectErrorAsync } from '../../lib/util/test-util';
+import { suite, test, slow, timeout , expectError } from '../../lib/util/test-util';
 
 @suite class DateTest {
     @test isDate () {
-        return D.isDate.validate(new Date());
+        D.isDate.assert(new Date());
+    }
+
+    @test isNotDate () {
+        ['not a date', 21304987, true, null]
+            .forEach((v) => expectError(D.isDate.validate(v)))
     }
 
     @test convertDate() {
         D.convertDate.assert('2000-01-01T00:00:00Z')
+    }
+
+    @test convertNotDate () {
+        ['not a date', 21304987, true, null]
+            .forEach((v) => expectError(D.convertDate.validate(v)))
     }
 }
 

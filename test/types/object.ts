@@ -4,11 +4,15 @@ import * as assert from 'assert';
 import { allOf } from '../../lib/intersect';
 
 interface Foo {
-    foo: string;
+    foo: Date;
 }
 
 let isFoo = V.isObject<Foo>({
-    foo: V.isString
+    foo: V.isDate
+})
+
+let convertFoo = V.convertObject<Foo>({
+    foo: V.convertDate
 })
 
 interface Bar extends Foo {
@@ -19,6 +23,10 @@ let isBar = isFoo.extends({
     bar: V.isString
 }).cast<Bar>();
 
+let convertBar = convertFoo.extends({
+    bar: V.convertString
+}).cast<Bar>();
+
 interface Baz {
     xyz: boolean;
 }
@@ -27,29 +35,36 @@ let isBaz = V.isObject({
     xyz: V.isBoolean
 }).cast<Baz>()
 
+let convertBaz = V.convertObject({
+    xyz: V.convertBoolean
+}).cast<Baz>()
+
+let date1S = '2001-01-01T00:00:00Z'
+let date1 = new Date(date1S);
+
 @suite class ObjectTest {
     @test canAssert() {
         isFoo.assert({
-            foo: 'test'
+            foo: date1
         })
         isBar.assert({
-            foo: 'test',
+            foo: date1,
             bar: 'hello'
         })
     }
     @test canIsa() {
         assert.deepEqual(true, isFoo.isa({
-            foo: 'test'
+            foo: date1
         }))
         assert.deepEqual(true, isBar.isa({
-            foo: 'test',
+            foo: date1,
             bar: 'hello'
         }))
     }
 
     @test allOf() {
         assert.deepEqual(true, V.wrapIsa(allOf(isFoo, isBaz)).isa({
-            foo: 'test',
+            foo: date1,
             xyz: true
         }))
     }
@@ -76,9 +91,25 @@ let isBaz = V.isObject({
                 assert.deepEqual([{
                     error: 'TypeError',
                     path: '$.foo',
-                    expected: 'string',
+                    expected: 'Date',
                     actual: undefined
                 }], errors)
             })
+    }
+
+    @test canConvertObject() {
+        convertFoo.assert({
+            foo: date1
+        })
+        assert.deepEqual({
+           foo: date1 
+        }, convertFoo.assert({
+            foo: date1S
+        }))
+        assert.deepEqual({
+           xyz: true 
+        }, convertBaz.assert({
+            xyz: 'true'
+        }))
     }
 }

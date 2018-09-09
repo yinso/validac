@@ -20,5 +20,23 @@ import * as assert from 'assert';
     @test isArrayofConterDate() {
 
     }
+
+    @test canConvertDates() {
+        let isArrayOfDates = A.isArray(D.isDate)
+        let convertArrayOfDates = A.convertArray(D.convertDate);
+        isArrayOfDates.assert(convertArrayOfDates.assert([
+            '2018-01-01T00:00:00Z',
+            new Date(),
+        ]))
+    }
+
+    @test convertInvalidDates() {
+        let convertArrayOfDates = A.convertArray(D.convertDate);
+        expectError(convertArrayOfDates.validate([
+            'not a date',
+            false,
+            1234
+        ]))
+    }
 }
 

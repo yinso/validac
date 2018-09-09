@@ -59,11 +59,10 @@ var NumberTest = /** @class */ (function () {
             });
         });
     };
-    NumberTest.prototype.convertNumberFromString = function () {
+    NumberTest.prototype.convertNumber = function () {
         N.convertNumber.assert('10.5');
-    };
-    NumberTest.prototype.convertIntegerFromString = function () {
         N.convertNumber.assert('10');
+        N.convertNumber.assert(10.5);
     };
     NumberTest.prototype.convertInvalidNumber = function () {
         test_util_1.expectError(N.convertNumber.validate('not a number'));
@@ -85,13 +84,7 @@ var NumberTest = /** @class */ (function () {
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], NumberTest.prototype, "convertNumberFromString", null);
-    __decorate([
-        test_util_1.test,
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", void 0)
-    ], NumberTest.prototype, "convertIntegerFromString", null);
+    ], NumberTest.prototype, "convertNumber", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),

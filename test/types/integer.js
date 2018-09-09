@@ -24,11 +24,10 @@ var IntegerTest = /** @class */ (function () {
     IntegerTest.prototype.isNumber = function () {
         test_util_1.expectError(I.isInteger.validate(10.5));
     };
-    IntegerTest.prototype.convertIntegerFromString = function () {
+    IntegerTest.prototype.convertInteger = function () {
         I.convertInteger.assert('10');
-    };
-    IntegerTest.prototype.convertIntegerFromNumber = function () {
         I.convertInteger.assert(10);
+        I.convertInteger.assert(I.Integer.fromJSON(10));
     };
     IntegerTest.prototype.convertIntegerError = function () {
         test_util_1.expectError(I.convertInteger.validate('10.5'));
@@ -63,13 +62,7 @@ var IntegerTest = /** @class */ (function () {
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], IntegerTest.prototype, "convertIntegerFromString", null);
-    __decorate([
-        test_util_1.test,
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", void 0)
-    ], IntegerTest.prototype, "convertIntegerFromNumber", null);
+    ], IntegerTest.prototype, "convertInteger", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),

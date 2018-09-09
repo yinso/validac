@@ -17,12 +17,13 @@ var UrlTest = /** @class */ (function () {
     function UrlTest() {
     }
     UrlTest.prototype.isUrl = function () {
-        U.isUrl.assert('http://test');
-        U.isUrl.assert('https://test:203');
-        test_util_1.expectError(U.isUrl.validate('test'));
+        U.isUrlString.assert('http://test');
+        U.isUrlString.assert('https://test:203');
+        test_util_1.expectError(U.isUrlString.validate('test'));
+        U.isUrl.assert(U.Url.fromJSON('http://test'));
     };
-    UrlTest.prototype.parseUrl = function () {
-        var result = U.parseUrl.assert('http://user:pass@host:8080/path1/path2?foo=test&bar=xyz');
+    UrlTest.prototype.convertUrl = function () {
+        var result = U.convertUrl.assert('http://user:pass@host:8080/path1/path2?foo=test&bar=xyz');
         assert.equal('http:', result.protocol);
         assert.equal('user', result.username);
         assert.equal('pass', result.password);
@@ -42,7 +43,7 @@ var UrlTest = /** @class */ (function () {
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], UrlTest.prototype, "parseUrl", null);
+    ], UrlTest.prototype, "convertUrl", null);
     UrlTest = __decorate([
         test_util_1.suite
     ], UrlTest);

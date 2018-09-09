@@ -14,38 +14,49 @@ var test_util_1 = require("../../lib/util/test-util");
 var assert = require("assert");
 var intersect_1 = require("../../lib/intersect");
 var isFoo = V.isObject({
-    foo: V.isString
+    foo: V.isDate
+});
+var convertFoo = V.convertObject({
+    foo: V.convertDate
 });
 var isBar = isFoo.extends({
     bar: V.isString
 }).cast();
+var convertBar = convertFoo.extends({
+    bar: V.convertString
+}).cast();
 var isBaz = V.isObject({
     xyz: V.isBoolean
 }).cast();
+var convertBaz = V.convertObject({
+    xyz: V.convertBoolean
+}).cast();
+var date1S = '2001-01-01T00:00:00Z';
+var date1 = new Date(date1S);
 var ObjectTest = /** @class */ (function () {
     function ObjectTest() {
     }
     ObjectTest.prototype.canAssert = function () {
         isFoo.assert({
-            foo: 'test'
+            foo: date1
         });
         isBar.assert({
-            foo: 'test',
+            foo: date1,
             bar: 'hello'
         });
     };
     ObjectTest.prototype.canIsa = function () {
         assert.deepEqual(true, isFoo.isa({
-            foo: 'test'
+            foo: date1
         }));
         assert.deepEqual(true, isBar.isa({
-            foo: 'test',
+            foo: date1,
             bar: 'hello'
         }));
     };
     ObjectTest.prototype.allOf = function () {
         assert.deepEqual(true, V.wrapIsa(intersect_1.allOf(isFoo, isBaz)).isa({
-            foo: 'test',
+            foo: date1,
             xyz: true
         }));
     };
@@ -68,10 +79,25 @@ var ObjectTest = /** @class */ (function () {
             assert.deepEqual([{
                     error: 'TypeError',
                     path: '$.foo',
-                    expected: 'string',
+                    expected: 'Date',
                     actual: undefined
                 }], errors);
         });
+    };
+    ObjectTest.prototype.canConvertObject = function () {
+        convertFoo.assert({
+            foo: date1
+        });
+        assert.deepEqual({
+            foo: date1
+        }, convertFoo.assert({
+            foo: date1S
+        }));
+        assert.deepEqual({
+            xyz: true
+        }, convertBaz.assert({
+            xyz: 'true'
+        }));
     };
     __decorate([
         test_util_1.test,
@@ -103,6 +129,12 @@ var ObjectTest = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], ObjectTest.prototype, "assertKeyTypeError", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], ObjectTest.prototype, "canConvertObject", null);
     ObjectTest = __decorate([
         test_util_1.suite
     ], ObjectTest);

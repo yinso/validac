@@ -15,10 +15,18 @@ var DateTest = /** @class */ (function () {
     function DateTest() {
     }
     DateTest.prototype.isDate = function () {
-        return D.isDate.validate(new Date());
+        D.isDate.assert(new Date());
+    };
+    DateTest.prototype.isNotDate = function () {
+        ['not a date', 21304987, true, null]
+            .forEach(function (v) { return test_util_1.expectError(D.isDate.validate(v)); });
     };
     DateTest.prototype.convertDate = function () {
         D.convertDate.assert('2000-01-01T00:00:00Z');
+    };
+    DateTest.prototype.convertNotDate = function () {
+        ['not a date', 21304987, true, null]
+            .forEach(function (v) { return test_util_1.expectError(D.convertDate.validate(v)); });
     };
     __decorate([
         test_util_1.test,
@@ -31,7 +39,19 @@ var DateTest = /** @class */ (function () {
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
+    ], DateTest.prototype, "isNotDate", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
     ], DateTest.prototype, "convertDate", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], DateTest.prototype, "convertNotDate", null);
     DateTest = __decorate([
         test_util_1.suite
     ], DateTest);

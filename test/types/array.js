@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var A = require("../../lib/types/array");
 var S = require("../../lib/types/string");
 var test_util_1 = require("../../lib/util/test-util");
+var D = require("../../lib/types/date");
 var assert = require("assert");
 var ArrayTest = /** @class */ (function () {
     function ArrayTest() {
@@ -26,6 +27,22 @@ var ArrayTest = /** @class */ (function () {
         assert.equal(true, A.isArray(S.isString).isa(['test', 'array']));
     };
     ArrayTest.prototype.isArrayofConterDate = function () {
+    };
+    ArrayTest.prototype.canConvertDates = function () {
+        var isArrayOfDates = A.isArray(D.isDate);
+        var convertArrayOfDates = A.convertArray(D.convertDate);
+        isArrayOfDates.assert(convertArrayOfDates.assert([
+            '2018-01-01T00:00:00Z',
+            new Date(),
+        ]));
+    };
+    ArrayTest.prototype.convertInvalidDates = function () {
+        var convertArrayOfDates = A.convertArray(D.convertDate);
+        test_util_1.expectError(convertArrayOfDates.validate([
+            'not a date',
+            false,
+            1234
+        ]));
     };
     __decorate([
         test_util_1.test,
@@ -51,6 +68,18 @@ var ArrayTest = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], ArrayTest.prototype, "isArrayofConterDate", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], ArrayTest.prototype, "canConvertDates", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], ArrayTest.prototype, "convertInvalidDates", null);
     ArrayTest = __decorate([
         test_util_1.suite
     ], ArrayTest);

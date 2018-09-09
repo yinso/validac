@@ -21,6 +21,6 @@ export class Integer extends Scalar<number> {
         )
 }
 
-export let isInteger = isa(Integer.isInteger, 'isInteger')
+export let isInteger = isa(Integer.isInteger, 'Integer')
 
-export let convertInteger = Integer.convertInteger;
+export let convertInteger = isInteger.transform((v) => v).union(Integer.convertInteger);

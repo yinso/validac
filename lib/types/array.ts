@@ -1,5 +1,6 @@
 import { ValidationResult , ValidationError } from '../base';
 import { BaseIsaValidator, IsaValidator } from '../isa';
+import { BaseConvertValidator , ConvertValidator } from '../convert'
 
 class IsArrayValidator<T> extends BaseIsaValidator<T[]> {
     readonly inner : IsaValidator<T>;
@@ -59,10 +60,46 @@ export function isArray<T>(item : IsaValidator<T>) : IsaValidator<T[]> {
     return new IsArrayValidator(item);
 }
 
-/*
-export function convertArray<T>(item : Validator<T>) {
-    return isa(_isArray, 'array') // this doesn't hae a transform...
-        .transform(new MapValidator<T>(item))
+class ConvertArrayValidator<T> extends BaseConvertValidator<T[]> {
+    readonly inner : ConvertValidator<T>;
+    constructor(inner : ConvertValidator<T>) {
+        super();
+        this.inner = inner;
+    }
+
+    validate(arg : any, path : string = '$') : ValidationResult<T[]> {
+        if (!(arg instanceof Array)) {
+            return ValidationResult.reject([{
+                error: 'TypeError',
+                path: path,
+                expected: 'Array',
+                actual: arg
+            }]);
+        }
+        let result : T[] = [];
+        let changed : boolean = false;
+        let errors : ValidationError[] = [];
+        arg.forEach((item, i) => {
+            this.inner.validate(item, path + '[' + i + ']')
+                .cata((value) => {
+                    if (value !== item) {
+                        changed = true
+                    }
+                    result[i] = value
+                }, (errs) => {
+                    errors = errors.concat(errs)
+                })
+        });
+        if (errors.length > 0) {
+            return ValidationResult.reject(errors)
+        } else if (!changed) {
+            return ValidationResult.resolve(arg)
+        } else {
+            return ValidationResult.resolve(result)
+        }
+    }
 }
 
-//*/
+export function convertArray<T>(item : ConvertValidator<T>) {
+    return new ConvertArrayValidator(item);
+}
