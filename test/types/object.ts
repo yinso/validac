@@ -42,6 +42,20 @@ let convertBaz = V.convertObject({
 let date1S = '2001-01-01T00:00:00Z'
 let date1 = new Date(date1S);
 
+interface Baw extends Bar {
+    nested: string[]
+}
+
+let isBaw = isBar.extends({
+    nested: V.isArray(V.isString)
+}).cast<Baw>()
+
+let convertStringArray = V.convertArray(V.convertString)
+
+let convertBaw = convertBar.extends({
+    nested: convertStringArray
+}).cast<Baw>()
+
 @suite class ObjectTest {
     @test canAssert() {
         isFoo.assert({
@@ -111,5 +125,13 @@ let date1 = new Date(date1S);
         }, convertBaz.assert({
             xyz: 'true'
         }))
+    }
+
+    @test canEmbedNestedArray() {
+        convertBaw.assert({
+            foo: date1S,
+            bar: 'a string',
+            nested: [1 , true, null, undefined ]
+        })
     }
 }

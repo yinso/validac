@@ -1,5 +1,5 @@
 import * as S from '../../lib/types/string';
-import * as V from '../../lib/isa';
+import * as L from '../../lib/types/literal';
 import { suite, test, slow, timeout , expectError } from '../../lib/util/test-util';
 
 @suite class StringTest {
@@ -12,10 +12,10 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
     }
 
     @test isStringLiteral() {
-        return V.isLiteral('test').validate('test')
+        return L.isLiteral('test').validate('test')
     }
 
     @test isInvalidStringLiteral() {
-        return expectError(V.isLiteral('test').validate('wrong'))
+        return expectError(L.isLiteral('test').validate('wrong'))
     }
 }

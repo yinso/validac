@@ -13,6 +13,8 @@ var assert = require("assert");
 var I = require("../lib/isa");
 var S = require("../lib/types/string");
 var N = require("../lib/types/number");
+var _N = require("../lib/types/null");
+var L = require("../lib/types/literal");
 var X = require("../lib/intersect");
 var U = require("../lib/union");
 var test_util_1 = require("../lib/util/test-util");
@@ -27,38 +29,6 @@ var IsaTest = /** @class */ (function () {
     IsaTest.prototype.invalidIsa = function () {
         test_util_1.expectError(I.isa(function (v) { return typeof (v) === 'number'; }, 'number')
             .validate(new Date()));
-    };
-    IsaTest.prototype.isAny = function () {
-        [
-            undefined,
-            null,
-            1,
-            0,
-            '',
-            'hello',
-            true,
-            false,
-            [],
-            {}
-        ].forEach(function (item) { return I.isAny.assert(item); });
-    };
-    IsaTest.prototype.isLiteral = function () {
-        I.isLiteral('test').assert('test');
-    };
-    IsaTest.prototype.isInvalidLiteral = function () {
-        return test_util_1.expectError(I.isLiteral('test').validate('test1'));
-    };
-    IsaTest.prototype.isUndefined = function () {
-        return I.isUndefined.validate(undefined);
-    };
-    IsaTest.prototype.isInvalidUndefined = function () {
-        return test_util_1.expectError(I.isUndefined.validate('test'));
-    };
-    IsaTest.prototype.isNull = function () {
-        return I.isNull.validate(null).cata(function () { });
-    };
-    IsaTest.prototype.isInvalidNull = function () {
-        return test_util_1.expectError(I.isNull.validate('test'));
     };
     IsaTest.prototype.where = function () {
         return S.isString
@@ -80,7 +50,7 @@ var IsaTest = /** @class */ (function () {
         return test_util_1.expectError(validator.validate(1));
     };
     IsaTest.prototype.union = function () {
-        var validator = S.isString.union(N.isNumber).union(I.isNull);
+        var validator = S.isString.union(N.isNumber).union(_N.isNull);
         ['hello', 5].forEach(function (item) { return validator.assert(item); });
     };
     IsaTest.prototype.isOptional = function () {
@@ -92,11 +62,11 @@ var IsaTest = /** @class */ (function () {
         validator.assert(undefined);
     };
     IsaTest.prototype.testAllOf = function () {
-        var validator = X.allOf(S.isString, I.isLiteral('test'));
+        var validator = X.allOf(S.isString, L.isLiteral('test'));
         validator.assert('test');
     };
     IsaTest.prototype.testOneOf = function () {
-        var validator = U.oneOf(S.isString, I.isNull, N.isNumber);
+        var validator = U.oneOf(S.isString, _N.isNull, N.isNumber);
         validator.assert('test');
         validator.assert(null);
         validator.assert(15.1);
@@ -113,48 +83,6 @@ var IsaTest = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], IsaTest.prototype, "invalidIsa", null);
-    __decorate([
-        test_util_1.test,
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", void 0)
-    ], IsaTest.prototype, "isAny", null);
-    __decorate([
-        test_util_1.test,
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", void 0)
-    ], IsaTest.prototype, "isLiteral", null);
-    __decorate([
-        test_util_1.test,
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", void 0)
-    ], IsaTest.prototype, "isInvalidLiteral", null);
-    __decorate([
-        test_util_1.test,
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", void 0)
-    ], IsaTest.prototype, "isUndefined", null);
-    __decorate([
-        test_util_1.test,
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", void 0)
-    ], IsaTest.prototype, "isInvalidUndefined", null);
-    __decorate([
-        test_util_1.test,
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", void 0)
-    ], IsaTest.prototype, "isNull", null);
-    __decorate([
-        test_util_1.test,
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", void 0)
-    ], IsaTest.prototype, "isInvalidNull", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),

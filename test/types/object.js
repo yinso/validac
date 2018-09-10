@@ -33,6 +33,13 @@ var convertBaz = V.convertObject({
 }).cast();
 var date1S = '2001-01-01T00:00:00Z';
 var date1 = new Date(date1S);
+var isBaw = isBar.extends({
+    nested: V.isArray(V.isString)
+}).cast();
+var convertStringArray = V.convertArray(V.convertString);
+var convertBaw = convertBar.extends({
+    nested: convertStringArray
+}).cast();
 var ObjectTest = /** @class */ (function () {
     function ObjectTest() {
     }
@@ -99,6 +106,13 @@ var ObjectTest = /** @class */ (function () {
             xyz: 'true'
         }));
     };
+    ObjectTest.prototype.canEmbedNestedArray = function () {
+        convertBaw.assert({
+            foo: date1S,
+            bar: 'a string',
+            nested: [1, true, null, undefined]
+        });
+    };
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
@@ -135,6 +149,12 @@ var ObjectTest = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], ObjectTest.prototype, "canConvertObject", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], ObjectTest.prototype, "canEmbedNestedArray", null);
     ObjectTest = __decorate([
         test_util_1.suite
     ], ObjectTest);

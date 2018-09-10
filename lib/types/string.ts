@@ -1,11 +1,12 @@
 import { ValidationError } from '../base';
 import { BaseConstraint } from '../constraint';
-import { isa , isAny } from '../isa';
+import { isa } from '../isa';
+import { isAny } from './any';
 
 export let isString = isa((value : any) : value is string => typeof(value) === 'string', 'string');
 
 export let convertString = isString.transform((v) => v)
-    .union(isAny.transform((v) => {
+    .union(isAny.transform<string>((v) => {
         if (v === undefined) {
             return ''
         } else if (v === null) {

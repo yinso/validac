@@ -100,6 +100,6 @@ class ConvertArrayValidator<T> extends BaseConvertValidator<T[]> {
     }
 }
 
-export function convertArray<T>(item : ConvertValidator<T>) {
+export function convertArray<T>(item : ConvertValidator<T>) : ConvertValidator<T[]> {
     return new ConvertArrayValidator(item);
 }

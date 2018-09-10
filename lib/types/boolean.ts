@@ -1,4 +1,5 @@
-import { isa , isLiteral } from '../isa';
+import { isa } from '../isa';
+import { isLiteral } from './literal';
 import { isString, match } from './string';
 
 export let isBoolean = isa((value : any) : value is boolean => typeof(value) === 'boolean', 'boolean');

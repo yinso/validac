@@ -2,6 +2,8 @@ import * as assert from 'assert';
 import * as I from '../lib/isa';
 import * as S from '../lib/types/string';
 import * as N from '../lib/types/number';
+import * as _N from '../lib/types/null';
+import * as L from '../lib/types/literal';
 import * as X from '../lib/intersect';
 import * as U from '../lib/union';
 import { suite, test, slow, timeout , expectError } from '../lib/util/test-util';
@@ -16,45 +18,6 @@ import { suite, test, slow, timeout , expectError } from '../lib/util/test-util'
     @test invalidIsa() {
         expectError(I.isa((v : number) : v is number => typeof(v) === 'number', 'number')
             .validate(new Date()))
-    }
-
-    @test isAny() {
-        [
-            undefined,
-            null,
-            1,
-            0,
-            '',
-            'hello',
-            true,
-            false,
-            [],
-            {}
-        ].forEach((item) => I.isAny.assert(item))
-    }
-
-    @test isLiteral() {
-        I.isLiteral('test').assert('test')
-    }
-
-    @test isInvalidLiteral() {
-        return expectError(I.isLiteral('test').validate('test1'))
-    }
-
-    @test isUndefined() {
-        return I.isUndefined.validate(undefined);
-    }
-
-    @test isInvalidUndefined() {
-        return expectError(I.isUndefined.validate('test'));
-    }
-
-    @test isNull() {
-        return I.isNull.validate(null).cata(() => {})
-    }
-
-    @test isInvalidNull() {
-        return expectError(I.isNull.validate('test'))
     }
 
     @test where() {
@@ -80,7 +43,7 @@ import { suite, test, slow, timeout , expectError } from '../lib/util/test-util'
     }
 
     @test union() {
-        let validator = S.isString.union(N.isNumber).union(I.isNull);
+        let validator = S.isString.union(N.isNumber).union(_N.isNull);
         ['hello', 5].forEach((item) => validator.assert(item))
     }
 
@@ -95,13 +58,13 @@ import { suite, test, slow, timeout , expectError } from '../lib/util/test-util'
     }
 
     @test testAllOf() {
-        let validator = X.allOf(S.isString, I.isLiteral('test'))
+        let validator = X.allOf(S.isString, L.isLiteral('test'))
         validator.assert('test')
     }
 
 
     @test testOneOf() {
-        let validator = U.oneOf(S.isString, I.isNull, N.isNumber)
+        let validator = U.oneOf(S.isString, _N.isNull, N.isNumber)
         validator.assert('test')
         validator.assert(null)
         validator.assert(15.1)

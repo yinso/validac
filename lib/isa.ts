@@ -15,6 +15,7 @@ export interface IsaValidator<T> extends B.Validator<T> {
     transform<U>(transform : B.TransformProc<T, U>) : ConvertValidator<U>;
     defaultTo(defaultProc : B.DefaultProc<T>) : ConvertValidator<T>;
     cast<U extends T>() : IsaValidator<U>;
+    toConvert() : ConvertValidator<T>;
 }
 
 export abstract class BaseIsaValidator<T> extends B.BaseValidator<T> implements IsaValidator<T> {
@@ -50,6 +51,10 @@ export abstract class BaseIsaValidator<T> extends B.BaseValidator<T> implements 
 
     cast<U extends T>() : IsaValidator<U> {
         return (this as B.ExplicitAny) as IsaValidator<U>;
+    }
+
+    toConvert() : ConvertValidator<T> {
+        return this.transform((v) => v);
     }
 }
 
@@ -97,19 +102,4 @@ class TypeofValidator<T> extends BaseIsaValidator<T> {
 export function isa<T>(test : IsaPredicate<T>, typeName : string) : IsaValidator<T> {
     return new TypeofValidator(test, typeName);
 }
-
-export let isAny : IsaValidator<any> = isa((arg : B.ExplicitAny) : arg is any => true, 'Any')
-
-export function isLiteral<T extends string>(value : T, typeName ?: string) : IsaValidator<T>;
-export function isLiteral<T extends number>(value : T, typeName ?: string) : IsaValidator<T>;
-export function isLiteral<T extends boolean>(value : T, typeName ?: string) : IsaValidator<T>;
-export function isLiteral<T extends null>(value : T, typeName ?: string) : IsaValidator<T>;
-export function isLiteral<T extends undefined>(value : T, typeName ?: string) : IsaValidator<T>;
-export function isLiteral<T>(value : T, typeName ?: string) : IsaValidator<T> {
-    return isa((v) : v is T => v === value, typeName || value.toString());
-}
-
-export const isNull = isLiteral(null, 'null');
-
-export const isUndefined = isLiteral(undefined, 'undefined');
 
