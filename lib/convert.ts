@@ -6,7 +6,9 @@ import * as I from './intersect';
 import * as U from './union';
 
 export interface ConvertValidator<T> extends B.Validator<T> {
-    where(constraint : B.Constraint<T> | B.ConstraintPredicate<T>) : ConvertValidator<T>;
+    // how do I want to write the convert function so it would work?
+    // convert(value : T) : T; // is this thing right? feels wrong.
+    where(constraint : C.Constraint<T> | C.ConstraintPredicate<T>) : ConvertValidator<T>;
     intersect<U>(validator : ConvertValidator<U>) : ConvertValidator<T & U>;
     union<U>(validator : ConvertValidator<U>) : ConvertValidator<T | U>;
     isOptional() : ConvertValidator<T | undefined>;
@@ -18,7 +20,7 @@ export interface ConvertValidator<T> extends B.Validator<T> {
 export abstract class BaseConvertValidator<T> extends B.BaseValidator<T> implements ConvertValidator<T> {
     abstract validate(value : B.ExplicitAny, path ?: string) : B.ValidationResult<T>;
 
-    where(constraint : B.Constraint<T> | B.ConstraintPredicate<T>) : ConvertValidator<T> {
+    where(constraint : C.Constraint<T> | C.ConstraintPredicate<T>) : ConvertValidator<T> {
         return new WrapperConvertValidator(S.sequence(this, C.check(constraint)))
     }
 

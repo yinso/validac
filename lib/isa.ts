@@ -8,7 +8,7 @@ import { ConvertValidator , wrapConvert } from './convert';
 
 export interface IsaValidator<T> extends B.Validator<T> {
     isa(v : B.ExplicitAny) : v is T;
-    where(constraint : B.Constraint<T> | B.ConstraintPredicate<T>) : IsaValidator<T>;
+    where(constraint : C.Constraint<T> | C.ConstraintPredicate<T>) : IsaValidator<T>;
     intersect<U>(validator : IsaValidator<U>) : IsaValidator<T & U>;
     union<U>(validator : IsaValidator<U>) : IsaValidator<T | U>;
     isOptional() : IsaValidator<T | undefined>;
@@ -25,7 +25,7 @@ export abstract class BaseIsaValidator<T> extends B.BaseValidator<T> implements 
         return this.validate(value, path).cata((_) => true, (_) => false);
     }
 
-    where(constraint : B.Constraint<T> | B.ConstraintPredicate<T>) : IsaValidator<T> {
+    where(constraint : C.Constraint<T> | C.ConstraintPredicate<T>) : IsaValidator<T> {
         return new WrapperIsaValidator(S.sequence(this, C.check(constraint)))
     }
 

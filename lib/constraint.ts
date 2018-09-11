@@ -1,4 +1,4 @@
-import { ValidationError , ConstraintPredicate , Constraint , BaseValidator, ExplicitAny, isConstraint, ValidationResult } from './base';
+import { ValidationError , BaseValidator, ExplicitAny, ValidationResult } from './base';
 
 /**
  * Constraint is a limited type of validation that basically deal with the following question.
@@ -13,6 +13,22 @@ import { ValidationError , ConstraintPredicate , Constraint , BaseValidator, Exp
  * 
  * 
  */
+export type ConstraintPredicate<T> = (v : T) => boolean;
+
+export interface Constraint<T> {
+    satisfy(v : T, path : string) : ValidationError[];
+    and(constraint : Constraint<T>) : Constraint<T>;
+    or(constraint: Constraint<T>) : Constraint<T>;
+    not() : Constraint<T>;
+}
+
+export function isConstraint<T>(x : any) : x is Constraint<T> {
+    return !!x && typeof(x.satisfy) === 'function'
+        && typeof(x.and) === 'function'
+        && typeof(x.or) === 'function'
+        && typeof(x.not) === 'function'
+}
+
 
 function reduceSuccess<T>(results : ValidationError[][]) : ValidationError[] {
     // what are we returning?
