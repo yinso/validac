@@ -1,13 +1,13 @@
 export type ExplicitAny = any
 
-export interface Validator<T> {
-    assert(v : ExplicitAny, path ?: string) : T;
-    validate(v : ExplicitAny, path ?: string) : ValidationResult<T>;
+export interface Validator<T, U> {
+    assert(v : T, path ?: string) : U;
+    validate(v : T, path ?: string) : ValidationResult<U>;
 }
 
-export abstract class BaseValidator<T> implements Validator<T> {
-    abstract validate(value : ExplicitAny, path ?: string) : ValidationResult<T>;
-    assert(value : ExplicitAny, path : string = '$') {
+export abstract class BaseValidator<T, U> implements Validator<T, U> {
+    abstract validate(value : T, path ?: string) : ValidationResult<U>;
+    assert(value : T, path : string = '$') : U {
         return this.validate(value, path).cata((v) => v)
     }
 }

@@ -164,7 +164,7 @@ export function pass<T>(predicate : ConstraintPredicate<T>) : Constraint<T> {
     return new PredicateConstraint<T>(predicate);
 }
 
-export class ConstraintValidator<T> extends BaseValidator<T> {
+export class ConstraintValidator<T> extends BaseValidator<T, T> {
     readonly constraint : Constraint<T>;
     constructor(constraint : Constraint<T> | ConstraintPredicate<T>) {
         super()

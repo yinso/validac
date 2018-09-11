@@ -1,3 +1,4 @@
+import { ExplicitAny } from '../base';
 import { IsaValidator } from '../isa';
 import { ConvertValidator } from '../convert';
 
@@ -97,14 +98,14 @@ export function convertEnum<
     T2 extends string,
     >
     (v1 : T1, v2 : T2)
-: ConvertValidator<T1 | T2>;
+: ConvertValidator<ExplicitAny, T1 | T2>;
 export function convertEnum<
     T1 extends string,
     T2 extends string,
     T3 extends string,
     >
     (v1 : T1, v2 : T2, v3 : T3)
-: ConvertValidator<T1 | T2 | T3>;
+: ConvertValidator<ExplicitAny, T1 | T2 | T3>;
 export function convertEnum<
     T1 extends string,
     T2 extends string,
@@ -112,7 +113,7 @@ export function convertEnum<
     T4 extends string,
     >
     (v1 : T1, v2 : T2, v3 : T3, v4 : T4)
-: ConvertValidator<T1 | T2 | T3 | T4>;
+: ConvertValidator<ExplicitAny, T1 | T2 | T3 | T4>;
 export function convertEnum<
     T1 extends string,
     T2 extends string,
@@ -121,7 +122,7 @@ export function convertEnum<
     T5 extends string,
     >
     (v1 : T1, v2 : T2, v3 : T3, v4 : T4, v5 : T5)
-: ConvertValidator<T1 | T2 | T3 | T4 | T5>;
+: ConvertValidator<ExplicitAny, T1 | T2 | T3 | T4 | T5>;
 export function convertEnum<
     T1 extends string,
     T2 extends string,
@@ -131,7 +132,7 @@ export function convertEnum<
     T6 extends string,
     >
     (v1 : T1, v2 : T2, v3 : T3, v4 : T4, v5 : T5, v6 : T6)
-: ConvertValidator<T1 | T2 | T3 | T4 | T5 | T6>;
+: ConvertValidator<ExplicitAny, T1 | T2 | T3 | T4 | T5 | T6>;
 export function convertEnum<
     T1 extends string,
     T2 extends string,
@@ -142,7 +143,7 @@ export function convertEnum<
     T7 extends string,
     >
     (v1 : T1, v2 : T2, v3 : T3, v4 : T4, v5 : T5, v6 : T6, v7 : T7)
-: ConvertValidator<T1 | T2 | T3 | T4 | T5 | T6 | T7>;
+: ConvertValidator<ExplicitAny, T1 | T2 | T3 | T4 | T5 | T6 | T7>;
 export function convertEnum<
     T1 extends string,
     T2 extends string,
@@ -154,7 +155,7 @@ export function convertEnum<
     T8 extends string,
     >
     (v1 : T1, v2 : T2, v3 : T3, v4 : T4, v5 : T5, v6 : T6, v7 : T7, v8 : T8)
-: ConvertValidator<T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8>;
+: ConvertValidator<ExplicitAny, T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8>;
 export function convertEnum<
     T1 extends string,
     T2 extends string,
@@ -167,7 +168,7 @@ export function convertEnum<
     T9 extends string,
     >
     (v1 : T1, v2 : T2, v3 : T3, v4 : T4, v5 : T5, v6 : T6, v7 : T7, v8 : T8, v9 : T9)
-: ConvertValidator<T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 | T9>;
+: ConvertValidator<ExplicitAny, T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 | T9>;
 export function convertEnum<
     T1 extends string,
     T2 extends string,
@@ -181,5 +182,5 @@ export function convertEnum<
     T10 extends string,
     >
     (v1 : T1, v2 : T2, v3 : T3, v4 : T4, v5 : T5, v6 : T6, v7 : T7, v8 : T8, v9 : T9, v10: T10)
-: ConvertValidator<T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 | T9 | T10>;
+: ConvertValidator<ExplicitAny, T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 | T9 | T10>;
 

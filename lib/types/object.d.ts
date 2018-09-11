@@ -1,3 +1,4 @@
+import { ExplicitAny } from '../base';
 import { Constraint } from '../constraint';
 import { IsaValidator } from '../isa';
 import { ConvertValidator } from '../convert';
@@ -13,13 +14,14 @@ export interface IsaObjectValidator<T> extends IsaValidator<T> {
 
 export function isObject<T>(validatorMap : IsaValidatorKVMap<T>) : IsaObjectValidator<T>;
 
-export type ConvertValidatorKVMap<T> = {
-    [P in keyof T]: ConvertValidator<T[P]>;
+// this is a very difficult thing to specify...!!! hmm...
+export type ConvertValidatorKVMap<ExplicitAny, T> = {
+    [P in keyof T]: ConvertValidator<ExplicitAny, T[P]>;
 };
 
-export interface ConvertObjectValidator<T> extends ConvertValidator<T> {
-    extends<U>(validatorMap : ConvertValidatorKVMap<U>) : ConvertObjectValidator<T & U>;
+export interface ConvertObjectValidator<T> extends ConvertValidator<ExplicitAny, T> {
+    extends<U>(validatorMap : ConvertValidatorKVMap<ExplicitAny, U>) : ConvertObjectValidator<T & U>;
     cast<U>() : ConvertObjectValidator<U>;
 }
 
-export function convertObject<T>(validatorMap : ConvertValidatorKVMap<T>) : ConvertObjectValidator<T>;
+export function convertObject<T>(validatorMap : ConvertValidatorKVMap<ExplicitAny, T>) : ConvertObjectValidator<T>;

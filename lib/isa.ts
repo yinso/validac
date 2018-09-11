@@ -6,19 +6,19 @@ import * as I from './intersect';
 import * as U from './union';
 import { ConvertValidator , wrapConvert , DefaultProc } from './convert';
 
-export interface IsaValidator<T> extends B.Validator<T> {
+export interface IsaValidator<T> extends B.Validator<B.ExplicitAny, T> {
     isa(v : B.ExplicitAny) : v is T;
     where(constraint : C.Constraint<T> | C.ConstraintPredicate<T>) : IsaValidator<T>;
     intersect<U>(validator : IsaValidator<U>) : IsaValidator<T & U>;
     union<U>(validator : IsaValidator<U>) : IsaValidator<T | U>;
     isOptional() : IsaValidator<T | undefined>;
-    transform<U>(transform : T.TransformProc<T, U>) : ConvertValidator<U>;
-    defaultTo(defaultProc : DefaultProc<T>) : ConvertValidator<T>;
+    transform<U>(transform : T.TransformProc<T, U>) : ConvertValidator<B.ExplicitAny, U>;
+    defaultTo(defaultProc : DefaultProc<T>) : ConvertValidator<B.ExplicitAny, T>;
     cast<U extends T>() : IsaValidator<U>;
-    toConvert() : ConvertValidator<T>;
+    toConvert() : ConvertValidator<B.ExplicitAny, T>;
 }
 
-export abstract class BaseIsaValidator<T> extends B.BaseValidator<T> implements IsaValidator<T> {
+export abstract class BaseIsaValidator<T> extends B.BaseValidator<B.ExplicitAny, T> implements IsaValidator<T> {
     abstract validate(value : B.ExplicitAny, path ?: string) : B.ValidationResult<T>;
 
     isa(value : B.ExplicitAny, path : string = '$') : value is T {
@@ -45,7 +45,7 @@ export abstract class BaseIsaValidator<T> extends B.BaseValidator<T> implements 
         return new WrapperIsaValidator(U.oneOf(C.check((v) => v === undefined), this));
     }
 
-    defaultTo(defaultProc : DefaultProc<T>) : ConvertValidator<T> {
+    defaultTo(defaultProc : DefaultProc<T>) : ConvertValidator<B.ExplicitAny, T> {
         return wrapConvert(U.oneOf(S.sequence(C.check((v) => v === undefined), T.transform(defaultProc)), this))
     }
 
@@ -53,14 +53,14 @@ export abstract class BaseIsaValidator<T> extends B.BaseValidator<T> implements 
         return (this as B.ExplicitAny) as IsaValidator<U>;
     }
 
-    toConvert() : ConvertValidator<T> {
+    toConvert() : ConvertValidator<B.ExplicitAny, T> {
         return this.transform((v) => v);
     }
 }
 
 export class WrapperIsaValidator<T> extends BaseIsaValidator<T> {
-    readonly inner : B.Validator<T>;
-    constructor(inner : B.Validator<T>) {
+    readonly inner : B.Validator<B.ExplicitAny, T>;
+    constructor(inner : B.Validator<B.ExplicitAny, T>) {
         super();
         this.inner = inner;
     }
@@ -70,7 +70,7 @@ export class WrapperIsaValidator<T> extends BaseIsaValidator<T> {
     }
 }
 
-export function wrapIsa<T>(inner : B.Validator<T>) : BaseIsaValidator<T> {
+export function wrapIsa<T>(inner : B.Validator<B.ExplicitAny, T>) : BaseIsaValidator<T> {
     return new WrapperIsaValidator(inner);
 }
 

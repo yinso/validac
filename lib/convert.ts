@@ -7,53 +7,55 @@ import * as U from './union';
 
 export type DefaultProc<T> = () => T;
 
-export interface ConvertValidator<T> extends B.Validator<T> {
-    // how do I want to write the convert function so it would work?
-    // convert(value : T) : T; // is this thing right? feels wrong.
-    where(constraint : C.Constraint<T> | C.ConstraintPredicate<T>) : ConvertValidator<T>;
-    intersect<U>(validator : ConvertValidator<U>) : ConvertValidator<T & U>;
-    union<U>(validator : ConvertValidator<U>) : ConvertValidator<T | U>;
-    isOptional() : ConvertValidator<T | undefined>;
-    transform<U>(transform : T.TransformProc<T, U>) : ConvertValidator<U>;
-    defaultTo(defaultProc : DefaultProc<T>) : ConvertValidator<T>;
-    cast<U extends T>() : ConvertValidator<U>;
+export interface ConvertValidator<T, U> extends B.Validator<T, U> {
+    where(constraint : C.Constraint<U> | C.ConstraintPredicate<U>) : ConvertValidator<T, U>;
+    intersect<V>(validator : ConvertValidator<T, V>) : ConvertValidator<T, U & V>;
+    union<V>(validator : ConvertValidator<T, V>) : ConvertValidator<T, U | V>;
+    isOptional() : ConvertValidator<T, U | undefined>;
+    transform<V>(transform : T.TransformProc<U, V>) : ConvertValidator<T, V>;
+    defaultTo(defaultProc : DefaultProc<U>) : ConvertValidator<T, U>;
+    cast<V extends U>() : ConvertValidator<T, V>;
 }
 
-export abstract class BaseConvertValidator<T> extends B.BaseValidator<T> implements ConvertValidator<T> {
-    abstract validate(value : B.ExplicitAny, path ?: string) : B.ValidationResult<T>;
+export abstract class BaseConvertValidator<T, U> extends B.BaseValidator<T, U> implements ConvertValidator<T, U> {
+    abstract validate(value : T, path ?: string) : B.ValidationResult<U>;
 
-    where(constraint : C.Constraint<T> | C.ConstraintPredicate<T>) : ConvertValidator<T> {
+    where(constraint : C.Constraint<U> | C.ConstraintPredicate<U>) : ConvertValidator<T, U> {
         return new WrapperConvertValidator(S.sequence(this, C.check(constraint)))
     }
 
-    intersect<U>(validator: ConvertValidator<U>) : ConvertValidator<T & U> {
+    intersect<V>(validator: ConvertValidator<T, V>) : ConvertValidator<T, U & V> {
         return new WrapperConvertValidator(I.allOf(this, validator))
     }
 
-    union<U>(validator : ConvertValidator<U>) : ConvertValidator<T | U> {
+    union<V>(validator : ConvertValidator<T, V>) : ConvertValidator<T, U | V> {
         return new WrapperConvertValidator(U.oneOf(this, validator));
     }
 
-    transform<U>(transform : T.TransformProc<any, U>) : ConvertValidator<U> {
+    transform<V>(transform : T.TransformProc<U, V>) : ConvertValidator<T, V> {
+        let trans = new T.TransformValidator(transform);
+        let seq = S.sequence(this, trans);
+        let wrapper = new WrapperConvertValidator(seq);
+        return wrapper;
         return new WrapperConvertValidator(S.sequence(this, new T.TransformValidator(transform)))
     }
 
-    isOptional() : ConvertValidator<T | undefined> {
+    isOptional() : ConvertValidator<T, U | undefined> {
         return new WrapperConvertValidator(U.oneOf(C.check((v) => v === undefined), this));
     }
 
-    defaultTo(defaultProc : DefaultProc<T>) : ConvertValidator<T> {
+    defaultTo(defaultProc : DefaultProc<U>) : ConvertValidator<T, U> {
         return new WrapperConvertValidator(U.oneOf(S.sequence(C.check((v) => v === undefined), T.transform(defaultProc)), this))
     }
 
-    cast<U extends T>() : ConvertValidator<U> {
-        return (this as B.ExplicitAny) as ConvertValidator<U>;
+    cast<V extends U>() : ConvertValidator<T, V> {
+        return (this as B.ExplicitAny) as ConvertValidator<T, V>;
     }
 }
 
-export class WrapperConvertValidator<T> extends BaseConvertValidator<T> {
-    readonly inner : B.Validator<T>;
-    constructor(inner : B.Validator<T>) {
+export class WrapperConvertValidator<T, U> extends BaseConvertValidator<T, U> {
+    readonly inner : B.Validator<T, U>;
+    constructor(inner : B.Validator<T, U>) {
         super();
         this.inner = inner;
     }
@@ -63,6 +65,6 @@ export class WrapperConvertValidator<T> extends BaseConvertValidator<T> {
     }
 }
 
-export function wrapConvert<T>(inner : B.Validator<T>) : BaseConvertValidator<T> {
+export function wrapConvert<T, U>(inner : B.Validator<T, U>) : BaseConvertValidator<T, U> {
     return new WrapperConvertValidator(inner);
 }
