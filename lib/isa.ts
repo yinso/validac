@@ -4,7 +4,7 @@ import * as S from './sequence';
 import * as C from './constraint';
 import * as I from './intersect';
 import * as U from './union';
-import { ConvertValidator , wrapConvert } from './convert';
+import { ConvertValidator , wrapConvert , DefaultProc } from './convert';
 
 export interface IsaValidator<T> extends B.Validator<T> {
     isa(v : B.ExplicitAny) : v is T;
@@ -12,8 +12,8 @@ export interface IsaValidator<T> extends B.Validator<T> {
     intersect<U>(validator : IsaValidator<U>) : IsaValidator<T & U>;
     union<U>(validator : IsaValidator<U>) : IsaValidator<T | U>;
     isOptional() : IsaValidator<T | undefined>;
-    transform<U>(transform : B.TransformProc<T, U>) : ConvertValidator<U>;
-    defaultTo(defaultProc : B.DefaultProc<T>) : ConvertValidator<T>;
+    transform<U>(transform : T.TransformProc<T, U>) : ConvertValidator<U>;
+    defaultTo(defaultProc : DefaultProc<T>) : ConvertValidator<T>;
     cast<U extends T>() : IsaValidator<U>;
     toConvert() : ConvertValidator<T>;
 }
@@ -37,7 +37,7 @@ export abstract class BaseIsaValidator<T> extends B.BaseValidator<T> implements 
         return new WrapperIsaValidator(U.oneOf(this, validator));
     }
 
-    transform<U>(transform : B.TransformProc<any, U>) : IsaValidator<U> {
+    transform<U>(transform : T.TransformProc<any, U>) : IsaValidator<U> {
         return new WrapperIsaValidator(S.sequence(this, new T.TransformValidator(transform)))
     }
 
@@ -45,7 +45,7 @@ export abstract class BaseIsaValidator<T> extends B.BaseValidator<T> implements 
         return new WrapperIsaValidator(U.oneOf(C.check((v) => v === undefined), this));
     }
 
-    defaultTo(defaultProc : B.DefaultProc<T>) : ConvertValidator<T> {
+    defaultTo(defaultProc : DefaultProc<T>) : ConvertValidator<T> {
         return wrapConvert(U.oneOf(S.sequence(C.check((v) => v === undefined), T.transform(defaultProc)), this))
     }
 

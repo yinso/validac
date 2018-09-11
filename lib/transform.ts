@@ -1,8 +1,10 @@
 import * as B from './base';
 
+export type TransformProc<T, U> = (v : T) => U;
+
 export class TransformValidator<T> implements B.Validator<T> {
-    readonly transformProc : B.TransformProc<B.ExplicitAny, T>;
-    constructor(transformProc : B.TransformProc<B.ExplicitAny, T>) {
+    readonly transformProc : TransformProc<B.ExplicitAny, T>;
+    constructor(transformProc : TransformProc<B.ExplicitAny, T>) {
         this.transformProc = transformProc;
     }
 
@@ -22,6 +24,6 @@ export class TransformValidator<T> implements B.Validator<T> {
     }
 }
 
-export function transform<T>(transformProc : B.TransformProc<B.ExplicitAny, T>) : TransformValidator<T> {
+export function transform<T>(transformProc : TransformProc<B.ExplicitAny, T>) : TransformValidator<T> {
     return new TransformValidator(transformProc);
 }

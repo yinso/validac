@@ -5,6 +5,8 @@ import * as C from './constraint';
 import * as I from './intersect';
 import * as U from './union';
 
+export type DefaultProc<T> = () => T;
+
 export interface ConvertValidator<T> extends B.Validator<T> {
     // how do I want to write the convert function so it would work?
     // convert(value : T) : T; // is this thing right? feels wrong.
@@ -12,8 +14,8 @@ export interface ConvertValidator<T> extends B.Validator<T> {
     intersect<U>(validator : ConvertValidator<U>) : ConvertValidator<T & U>;
     union<U>(validator : ConvertValidator<U>) : ConvertValidator<T | U>;
     isOptional() : ConvertValidator<T | undefined>;
-    transform<U>(transform : B.TransformProc<T, U>) : ConvertValidator<U>;
-    defaultTo(defaultProc : B.DefaultProc<T>) : ConvertValidator<T>;
+    transform<U>(transform : T.TransformProc<T, U>) : ConvertValidator<U>;
+    defaultTo(defaultProc : DefaultProc<T>) : ConvertValidator<T>;
     cast<U extends T>() : ConvertValidator<U>;
 }
 
@@ -32,7 +34,7 @@ export abstract class BaseConvertValidator<T> extends B.BaseValidator<T> impleme
         return new WrapperConvertValidator(U.oneOf(this, validator));
     }
 
-    transform<U>(transform : B.TransformProc<any, U>) : ConvertValidator<U> {
+    transform<U>(transform : T.TransformProc<any, U>) : ConvertValidator<U> {
         return new WrapperConvertValidator(S.sequence(this, new T.TransformValidator(transform)))
     }
 
@@ -40,7 +42,7 @@ export abstract class BaseConvertValidator<T> extends B.BaseValidator<T> impleme
         return new WrapperConvertValidator(U.oneOf(C.check((v) => v === undefined), this));
     }
 
-    defaultTo(defaultProc : B.DefaultProc<T>) : ConvertValidator<T> {
+    defaultTo(defaultProc : DefaultProc<T>) : ConvertValidator<T> {
         return new WrapperConvertValidator(U.oneOf(S.sequence(C.check((v) => v === undefined), T.transform(defaultProc)), this))
     }
 

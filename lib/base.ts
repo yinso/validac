@@ -12,10 +12,6 @@ export abstract class BaseValidator<T> implements Validator<T> {
     }
 }
 
-export type TransformProc<T, U> = (v : T) => U;
-
-export type DefaultProc<T> = () => T;
-
 export interface ValidationError {
     readonly error: string;
     readonly path : string;
