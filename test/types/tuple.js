@@ -13,7 +13,7 @@ var V = require("../../lib");
 var test_util_1 = require("../../lib/util/test-util");
 var assert = require("assert");
 var isFoo = V.isTuple(V.isNumber, V.isString, V.isBoolean);
-var convertFoo = V.convertTuple(V.convertNumber, V.convertString, V.convertBoolean);
+var convertFoo = isFoo.toConvert();
 var TupleTest = /** @class */ (function () {
     function TupleTest() {
     }

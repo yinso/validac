@@ -7,6 +7,7 @@ export type IsaValidatorKVMap<T> = {
 export interface IsaObjectValidator<T> extends IsaValidator<T> {
     extends<U>(validatorMap : IsaValidatorKVMap<U>) : IsaObjectValidator<T & U>;
     cast<U>() : IsaObjectValidator<U>;
+    toConvert() : ConvertObjectValidator<T>;
 }
 
 export function isObject<T>(validatorMap : IsaValidatorKVMap<T>) : IsaObjectValidator<T>;

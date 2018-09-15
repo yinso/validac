@@ -32,7 +32,7 @@ class IsArrayValidator<T> extends BaseIsaValidator<T[]> {
         }
     }
 
-    toConvert() {
+    toConvert() : ConvertArrayValidator<T> {
         return new ConvertArrayValidator(this.inner.toConvert())
     }
 

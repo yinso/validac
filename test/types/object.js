@@ -15,9 +15,7 @@ var assert = require("assert");
 var isFoo = V.isObject({
     foo: V.isDate
 });
-var convertFoo = V.convertObject({
-    foo: V.convertDate
-});
+var convertFoo = isFoo.toConvert();
 var isBar = isFoo.extends({
     bar: V.isString
 }).cast();

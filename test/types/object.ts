@@ -10,9 +10,7 @@ let isFoo = V.isObject<Foo>({
     foo: V.isDate
 })
 
-let convertFoo = V.convertObject<Foo>({
-    foo: V.convertDate
-})
+let convertFoo = isFoo.toConvert();
 
 interface Bar extends Foo {
     bar : string;

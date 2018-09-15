@@ -6,7 +6,7 @@ type Foo = [ number, string, boolean ]
 
 let isFoo = V.isTuple(V.isNumber, V.isString, V.isBoolean)
 
-let convertFoo = V.convertTuple(V.convertNumber, V.convertString, V.convertBoolean)
+let convertFoo = isFoo.toConvert()
 
 @suite class TupleTest {
     @test canAssert() {
