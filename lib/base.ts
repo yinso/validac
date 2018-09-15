@@ -57,7 +57,9 @@ export function isArrayOf<T>(isa : (v : any) => v is T) : (v : any) => v is T[] 
 }
 
 export function isConvertValidator<T, U>(v : any) : v is ConvertValidator<T, U> {
-    return isValidator(v) && isFunction((v as any).where) && isFunction((v as any).intersect);
+    return isValidator(v) && isFunction((v as any).where)
+        && isFunction((v as any).intersect) && isFunction((v as any).union) && isFunction((v as any).isOptional)
+        && isFunction((v as any).transform) && isFunction((v as any).defaultTo) && isFunction((v as any).cast);
 }
 
 export interface IsaValidator<T> extends Validator<ExplicitAny, T> {
@@ -70,6 +72,13 @@ export interface IsaValidator<T> extends Validator<ExplicitAny, T> {
     defaultTo(defaultProc : DefaultProc<T>) : IsaValidator<T>;
     cast<U extends T>() : IsaValidator<U>;
     toConvert() : ConvertValidator<ExplicitAny, T>;
+}
+
+export function isIsaValidator<T>(v : any) : v is IsaValidator<T> {
+    return isValidator(v) && isFunction((v as any).isa) && isFunction((v as any).where)
+        && isFunction((v as any).intersect) && isFunction((v as any).union) && isFunction((v as any).isOptional)
+        && isFunction((v as any).transform) && isFunction((v as any).defaultTo) && isFunction((v as any).cast)
+        && isFunction((v as any).toConvert);
 }
 
 export type IsaPredicate<T> = (v : any) => v is T;
