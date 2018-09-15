@@ -4,8 +4,6 @@ import * as S from '../lib/types/string';
 import * as N from '../lib/types/number';
 import * as _N from '../lib/types/null';
 import * as L from '../lib/types/literal';
-import * as X from '../lib/intersect';
-import * as U from '../lib/union';
 import * as E from '../lib/isa';
 import * as O from '../lib/types/object';
 import { suite, test, slow, timeout , expectError } from '../lib/util/test-util';
@@ -64,13 +62,13 @@ import { suite, test, slow, timeout , expectError } from '../lib/util/test-util'
     }
 
     @test testAllOf() {
-        let validator = X.allOf(S.isString, L.isLiteral('test'))
+        let validator = I.isAllOf(S.isString, L.isLiteral('test'))
         validator.assert('test')
     }
 
 
     @test testOneOf() {
-        let validator = U.oneOf(S.isString, _N.isNull, N.isNumber)
+        let validator = I.isOneOf(S.isString, _N.isNull, N.isNumber)
         validator.assert('test')
         validator.assert(null)
         validator.assert(15.1)

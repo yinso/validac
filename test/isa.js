@@ -15,8 +15,6 @@ var S = require("../lib/types/string");
 var N = require("../lib/types/number");
 var _N = require("../lib/types/null");
 var L = require("../lib/types/literal");
-var X = require("../lib/intersect");
-var U = require("../lib/union");
 var E = require("../lib/isa");
 var O = require("../lib/types/object");
 var test_util_1 = require("../lib/util/test-util");
@@ -68,11 +66,11 @@ var IsaTest = /** @class */ (function () {
         convertDefaultString.assert(undefined);
     };
     IsaTest.prototype.testAllOf = function () {
-        var validator = X.allOf(S.isString, L.isLiteral('test'));
+        var validator = I.isAllOf(S.isString, L.isLiteral('test'));
         validator.assert('test');
     };
     IsaTest.prototype.testOneOf = function () {
-        var validator = U.oneOf(S.isString, _N.isNull, N.isNumber);
+        var validator = I.isOneOf(S.isString, _N.isNull, N.isNumber);
         validator.assert('test');
         validator.assert(null);
         validator.assert(15.1);

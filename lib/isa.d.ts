@@ -21,16 +21,6 @@ export abstract class BaseIsaValidator<T> extends BaseValidator<ExplicitAny, T> 
     toConvert() : ConvertValidator<ExplicitAny, T>;
 }
 
-export class WrapperIsaValidator<T> extends BaseIsaValidator<T> {
-    readonly inner : Validator<ExplicitAny, T>;
-
-    constructor(inner : Validator<ExplicitAny, T>);
-
-    validate(value : any, path ?: string) : ValidationResult<T>;
-}
-
-export function wrapIsa<T>(inner : Validator<ExplicitAny, T>) : BaseIsaValidator<T>;
-
 export class TypeofIsaValidator<T> extends BaseIsaValidator<T> {
     readonly isaProc : IsaPredicate<T>;
     readonly typeName : string; 

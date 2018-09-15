@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var V = require("../../lib");
 var test_util_1 = require("../../lib/util/test-util");
 var assert = require("assert");
-var intersect_1 = require("../../lib/intersect");
 var isFoo = V.isObject({
     foo: V.isDate
 });
@@ -62,7 +61,7 @@ var ObjectTest = /** @class */ (function () {
         }));
     };
     ObjectTest.prototype.allOf = function () {
-        assert.deepEqual(true, V.wrapIsa(intersect_1.allOf(isFoo, isBaz)).isa({
+        assert.deepEqual(true, V.isAllOf(isFoo, isBaz).isa({
             foo: date1,
             xyz: true
         }));

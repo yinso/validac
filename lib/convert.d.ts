@@ -1,5 +1,4 @@
 import { Validator, BaseValidator, ConvertValidator, Constraint, ValidationResult, ConstraintPredicate, TransformProc, DefaultProc, ExplicitAny, IsaPredicate } from './base';
-import { ConstraintValidator } from './constraint';
 
 export abstract class BaseConvertValidator<T, U> extends BaseValidator<T, U> implements ConvertValidator<T, U> {
     abstract validate(value : T, path ?: string) : ValidationResult<U>;
@@ -52,8 +51,6 @@ export class DefaultToConvertValidator<T, U> extends BaseConvertValidator<T, U> 
     constructor(validator: ConvertValidator<T, U>, defaultToProc: () => U);
     validate(value: T, path ?: string) : ValidationResult<U>;
 }
-
-export function wrapConvert<T, U>(inner : Validator<T, U>) : BaseConvertValidator<T, U>;
 
 export function convertOneOf<T, T1>(v1 : ConvertValidator<T, T1>) : ConvertValidator<T, T1>;
 export function convertOneOf<T, T1, T2>

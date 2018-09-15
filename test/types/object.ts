@@ -1,7 +1,6 @@
 import * as V from '../../lib'
 import { suite, test, slow, timeout , expectError } from '../../lib/util/test-util';
 import * as assert from 'assert';
-import { allOf } from '../../lib/intersect';
 
 interface Foo {
     foo: Date;
@@ -77,7 +76,7 @@ let convertBaw = convertBar.extends({
     }
 
     @test allOf() {
-        assert.deepEqual(true, V.wrapIsa(allOf(isFoo, isBaz)).isa({
+        assert.deepEqual(true, V.isAllOf(isFoo, isBaz).isa({
             foo: date1,
             xyz: true
         }))
