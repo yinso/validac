@@ -1,4 +1,5 @@
-import { IsaValidator, isa } from '../isa';
+import { IsaValidator } from '../base';
+import { isa } from '../isa';
 
 export function isLiteral<T extends string>(value : T, typeName ?: string) : IsaValidator<T>;
 export function isLiteral<T extends number>(value : T, typeName ?: string) : IsaValidator<T>;

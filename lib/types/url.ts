@@ -90,3 +90,5 @@ export class Url extends Scalar<string> {
 
 export let isUrl = isa(Url.isUrl, 'Url')
 export let convertUrl = isUrl.transform((v) => v).union(Url.convertUrl);
+
+isUrl.toConvert = () => convertUrl

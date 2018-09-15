@@ -21,6 +21,15 @@ export class Integer extends Scalar<number> {
         )
 }
 
+// the following are needed for scalar object.
+// 1) the basic "type check" -> this is the "instanceof method"
+// 2) the isaValidator over the typecheck.
+// 3) the isaValidator over the scalar options.
+// 4) the convertValidator that wraps around both of the isaValidators.
+
+
 export let isInteger = isa(Integer.isInteger, 'Integer')
 
-export let convertInteger = isInteger.transform((v) => v).union(Integer.convertInteger);
+export let convertInteger = isInteger.toConvert().union(Integer.convertInteger);
+
+//isInteger.toConvert = () => convertInteger

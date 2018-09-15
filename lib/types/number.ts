@@ -17,3 +17,5 @@ export let convertNumber =
         isString
         .where(match(/^[+-]?\d+(\.\d+)?$/))
         .transform((v: string) => parseFloat(v)))
+
+isNumber.toConvert = () => convertNumber

@@ -1,4 +1,53 @@
-import { IsaValidator } from './isa';
+import { IsaValidator , BaseValidator, ExplicitAny, Constraint, ConstraintPredicate, ValidationResult, ConvertValidator, TransformProc, DefaultProc, Validator, IsaPredicate } from './base';
+
+export abstract class BaseIsaValidator<T> extends BaseValidator<ExplicitAny, T> implements IsaValidator<T> {
+    abstract validate(value : ExplicitAny, path ?: string) : ValidationResult<T>;
+
+    isa(value : ExplicitAny, path ?: string) : value is T;
+
+    where(constraint : Constraint<T> | ConstraintPredicate<T>) : IsaValidator<T>;
+
+    intersect<U>(validator: IsaValidator<U>) : IsaValidator<T & U>;
+    union<U>(validator : IsaValidator<U>) : IsaValidator<T | U>;
+
+    transform<U>(transform : TransformProc<ExplicitAny, U>) : ConvertValidator<ExplicitAny, U>;
+
+    isOptional() : IsaValidator<T | undefined>;
+
+    defaultTo(defaultProc : DefaultProc<T>) : IsaValidator<T>;
+
+    cast<U extends T>() : IsaValidator<U>;
+
+    toConvert() : ConvertValidator<ExplicitAny, T>;
+}
+
+export class WrapperIsaValidator<T> extends BaseIsaValidator<T> {
+    readonly inner : Validator<ExplicitAny, T>;
+
+    constructor(inner : Validator<ExplicitAny, T>);
+
+    validate(value : any, path ?: string) : ValidationResult<T>;
+}
+
+export function wrapIsa<T>(inner : Validator<ExplicitAny, T>) : BaseIsaValidator<T>;
+
+export class TypeofIsaValidator<T> extends BaseIsaValidator<T> {
+    readonly isaProc : IsaPredicate<T>;
+    readonly typeName : string; 
+    constructor(isa : IsaPredicate<T>, typeName : string);
+
+    validate(value : any, path ?: string) : ValidationResult<T>;
+}
+
+export function isa<T>(test : IsaPredicate<T>, typeName : string) : IsaValidator<T>;
+
+export class ConstraintIsaValidator<T> extends BaseIsaValidator<T> {
+    readonly validator : IsaValidator<T>;
+    readonly constraint : Constraint<T>;
+    constructor(validator : IsaValidator<T>, constraint : Constraint<T> | ConstraintPredicate<T>);
+ 
+    validate(value : ExplicitAny, path ?: string) : ValidationResult<T>;
+}
 
 export function isOneOf<T1>(v1 : IsaValidator<T1>) : IsaValidator<T1>;
 export function isOneOf<T1, T2>

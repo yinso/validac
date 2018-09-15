@@ -1,4 +1,59 @@
-import { ConvertValidator } from './convert';
+import { Validator, BaseValidator, ConvertValidator, Constraint, ValidationResult, ConstraintPredicate, TransformProc, DefaultProc, ExplicitAny, IsaPredicate } from './base';
+import { ConstraintValidator } from './constraint';
+
+export abstract class BaseConvertValidator<T, U> extends BaseValidator<T, U> implements ConvertValidator<T, U> {
+    abstract validate(value : T, path ?: string) : ValidationResult<U>;
+
+    where(constraint : Constraint<U> | ConstraintPredicate<U>) : ConvertValidator<T, U>;
+
+    intersect<V>(validator: ConvertValidator<T, V>) : ConvertValidator<T, U & V>;
+
+    union<V>(validator : ConvertValidator<T, V>) : ConvertValidator<T, U | V>;
+
+    transform<V>(transform : TransformProc<U, V>) : ConvertValidator<T, V>;
+
+    isOptional() : ConvertValidator<T, U | undefined>;
+
+    defaultTo(defaultProc : DefaultProc<U>) : ConvertValidator<T, U>;
+
+    cast<V extends U>() : ConvertValidator<T, V>;
+}
+
+export class TypeofConvertValidator<T> extends BaseConvertValidator<ExplicitAny, T> {
+    readonly isaProc : IsaPredicate<T>;
+    readonly typeName : string;
+    constructor(isa : IsaPredicate<T>, typeName : string);
+    validate(value : any, path ?: string) : ValidationResult<T>;
+}
+
+export class TransformConvertValidator<T, U, V> extends BaseConvertValidator<T, V> {
+    readonly validator : Validator<T, U>;
+    readonly transformProc : TransformProc<U, V>;
+    constructor(validator: Validator<T, U>, transformProc : TransformProc<U, V>);
+    validate(value : T, path ?: string) : ValidationResult<V>;
+}
+
+export class ConstraintConvertValidator<T, U> extends BaseConvertValidator<T, U> {
+    readonly validator : ConvertValidator<T, U>;
+    readonly constraint : Constraint<U> | ConstraintPredicate<U>;
+    constructor(validator : ConvertValidator<T, U>, constraint : Constraint<U> | ConstraintPredicate<U>);
+    validate(value : T, path ?: string) : ValidationResult<U>;
+}
+
+export class OptionalConvertValidator<T, U> extends BaseConvertValidator<T, U | undefined> {
+    readonly validator: ConvertValidator<T, U>;
+    constructor(validator : ConvertValidator<T, U>);
+    validate(value : T, path ?: string) : ValidationResult<U | undefined>;
+}
+
+export class DefaultToConvertValidator<T, U> extends BaseConvertValidator<T, U> {
+    readonly validator : ConvertValidator<T, U>;
+    readonly defaultToProc : () => U;
+    constructor(validator: ConvertValidator<T, U>, defaultToProc: () => U);
+    validate(value: T, path ?: string) : ValidationResult<U>;
+}
+
+export function wrapConvert<T, U>(inner : Validator<T, U>) : BaseConvertValidator<T, U>;
 
 export function convertOneOf<T, T1>(v1 : ConvertValidator<T, T1>) : ConvertValidator<T, T1>;
 export function convertOneOf<T, T1, T2>

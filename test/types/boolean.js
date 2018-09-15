@@ -22,11 +22,11 @@ var BooleanTest = /** @class */ (function () {
     };
     BooleanTest.prototype.convertBoolean = function () {
         [true, false, 'true', 'false', 'TRUE', 'FALSE']
-            .forEach(function (v) { return B.convertBoolean.assert(v); });
+            .forEach(function (v) { return B.isBoolean.toConvert().assert(v); });
     };
     BooleanTest.prototype.convertNotBoolean = function () {
         [1, new Date(), 'not a boolean']
-            .forEach(function (v) { return test_util_1.expectError(B.convertBoolean.validate(v)); });
+            .forEach(function (v) { return test_util_1.expectError(B.isBoolean.toConvert().validate(v)); });
     };
     BooleanTest.prototype.isTrue = function () {
         B.isTrue.assert(true);
@@ -36,11 +36,11 @@ var BooleanTest = /** @class */ (function () {
     };
     BooleanTest.prototype.convertTrue = function () {
         [true, 'true', 'TRUE']
-            .forEach(function (v) { return B.convertTrue.assert(v); });
+            .forEach(function (v) { return B.isTrue.toConvert().assert(v); });
     };
     BooleanTest.prototype.convertNotTrue = function () {
         [1, new Date(), 'not a boolean']
-            .forEach(function (v) { return test_util_1.expectError(B.convertTrue.validate(v)); });
+            .forEach(function (v) { return test_util_1.expectError(B.isTrue.toConvert().validate(v)); });
     };
     BooleanTest.prototype.isFalse = function () {
         B.isFalse.assert(false);
@@ -50,11 +50,11 @@ var BooleanTest = /** @class */ (function () {
     };
     BooleanTest.prototype.convertFalse = function () {
         [false, 'false', 'FALSE']
-            .forEach(function (v) { return B.convertFalse.assert(v); });
+            .forEach(function (v) { return B.isFalse.toConvert().assert(v); });
     };
     BooleanTest.prototype.convertNotFalse = function () {
         [1, new Date(), 'not a boolean']
-            .forEach(function (v) { return test_util_1.expectError(B.convertFalse.validate(v)); });
+            .forEach(function (v) { return test_util_1.expectError(B.isBoolean.toConvert().validate(v)); });
     };
     __decorate([
         test_util_1.test,

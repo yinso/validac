@@ -9,24 +9,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var assert = require("assert");
 var A = require("../../lib/types/any");
 var test_util_1 = require("../../lib/util/test-util");
+var items = [
+    undefined,
+    null,
+    1,
+    0,
+    '',
+    'hello',
+    true,
+    false,
+    [],
+    {}
+];
 var AnyTest = /** @class */ (function () {
     function AnyTest() {
     }
     AnyTest.prototype.isAny = function () {
-        [
-            undefined,
-            null,
-            1,
-            0,
-            '',
-            'hello',
-            true,
-            false,
-            [],
-            {}
-        ].forEach(function (item) { return A.isAny.assert(item); });
+        items.forEach(function (item) { return A.isAny.assert(item); });
+    };
+    AnyTest.prototype.convertAny = function () {
+        items.forEach(function (item) { return assert.deepEqual(item, A.isAny.toConvert().assert(item)); });
     };
     __decorate([
         test_util_1.test,
@@ -34,6 +39,12 @@ var AnyTest = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], AnyTest.prototype, "isAny", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], AnyTest.prototype, "convertAny", null);
     AnyTest = __decorate([
         test_util_1.suite
     ], AnyTest);

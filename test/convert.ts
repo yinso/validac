@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import * as I from '../lib/convert';
-import * as E from '../lib/convert-extended';
+import * as E from '../lib/convert';
 import * as S from '../lib/types/string';
 import * as N from '../lib/types/number';
 import * as O from '../lib/types/object';

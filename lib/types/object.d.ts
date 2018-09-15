@@ -1,7 +1,4 @@
-import { ExplicitAny } from '../base';
-import { Constraint } from '../constraint';
-import { IsaValidator } from '../isa';
-import { ConvertValidator } from '../convert';
+import { ExplicitAny , Constraint, ConvertValidator , IsaValidator } from '../base';
 
 export type IsaValidatorKVMap<T> = {
     [P in keyof T]: IsaValidator<T[P]>;

@@ -15,3 +15,9 @@ export let convertFalse =
     isFalse.union(isString.where(match(/^false$/i))).transform<false>((v) => false)
 
 export let convertBoolean = convertTrue.union(convertFalse)
+
+isBoolean.toConvert = function () { return convertBoolean }
+
+isTrue.toConvert = function () { return convertTrue }
+
+isFalse.toConvert = function () { return convertFalse }

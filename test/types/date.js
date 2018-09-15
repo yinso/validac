@@ -22,11 +22,11 @@ var DateTest = /** @class */ (function () {
             .forEach(function (v) { return test_util_1.expectError(D.isDate.validate(v)); });
     };
     DateTest.prototype.convertDate = function () {
-        D.convertDate.assert('2000-01-01T00:00:00Z');
+        D.isDate.toConvert().assert('2000-01-01T00:00:00Z');
     };
     DateTest.prototype.convertNotDate = function () {
         ['not a date', 21304987, true, null]
-            .forEach(function (v) { return test_util_1.expectError(D.convertDate.validate(v)); });
+            .forEach(function (v) { return test_util_1.expectError(D.isDate.toConvert().validate(v)); });
     };
     __decorate([
         test_util_1.test,

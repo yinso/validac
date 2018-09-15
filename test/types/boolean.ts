@@ -12,12 +12,12 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
 
     @test convertBoolean () {
         [true, false, 'true', 'false', 'TRUE', 'FALSE']
-        .forEach((v) => B.convertBoolean.assert(v))
+        .forEach((v) => B.isBoolean.toConvert().assert(v))
     }
 
     @test convertNotBoolean () {
         [1, new Date(), 'not a boolean']
-        .forEach((v) => expectError(B.convertBoolean.validate(v)))
+        .forEach((v) => expectError(B.isBoolean.toConvert().validate(v)))
     }
 
     @test isTrue() {
@@ -30,12 +30,12 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
 
     @test convertTrue() {
         [true, 'true', 'TRUE']
-        .forEach((v) => B.convertTrue.assert(v))
+        .forEach((v) => B.isTrue.toConvert().assert(v))
     }
 
     @test convertNotTrue() {
         [1, new Date(), 'not a boolean']
-        .forEach((v) => expectError(B.convertTrue.validate(v)))
+        .forEach((v) => expectError(B.isTrue.toConvert().validate(v)))
     }
 
     @test isFalse() {
@@ -48,12 +48,12 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
 
     @test convertFalse() {
         [false, 'false', 'FALSE']
-        .forEach((v) => B.convertFalse.assert(v))
+        .forEach((v) => B.isFalse.toConvert().assert(v))
     }
 
     @test convertNotFalse() {
         [1, new Date(), 'not a boolean']
-        .forEach((v) => expectError(B.convertFalse.validate(v)))
+        .forEach((v) => expectError(B.isBoolean.toConvert().validate(v)))
     }
 
 }

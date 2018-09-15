@@ -1,6 +1,6 @@
-import { ValidationResult , ValidationError, ExplicitAny } from '../base';
-import { BaseIsaValidator, IsaValidator } from '../isa';
-import { BaseConvertValidator , ConvertValidator } from '../convert'
+import { ValidationResult , ValidationError, ExplicitAny , ConvertValidator , IsaValidator } from '../base';
+import { BaseIsaValidator } from '../isa';
+import { BaseConvertValidator } from '../convert'
 
 class IsArrayValidator<T> extends BaseIsaValidator<T[]> {
     readonly inner : IsaValidator<T>;
@@ -30,6 +30,10 @@ class IsArrayValidator<T> extends BaseIsaValidator<T[]> {
         } else {
             return ValidationResult.resolve(arg)
         }
+    }
+
+    toConvert() {
+        return new ConvertArrayValidator(this.inner.toConvert())
     }
 
 }

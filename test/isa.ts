@@ -6,6 +6,8 @@ import * as _N from '../lib/types/null';
 import * as L from '../lib/types/literal';
 import * as X from '../lib/intersect';
 import * as U from '../lib/union';
+import * as E from '../lib/isa';
+import * as O from '../lib/types/object';
 import { suite, test, slow, timeout , expectError } from '../lib/util/test-util';
 
 @suite class IsaTest {
@@ -53,8 +55,12 @@ import { suite, test, slow, timeout , expectError } from '../lib/util/test-util'
     }
 
     @test defaultTo() {
-        let validator = S.isString.defaultTo(() => 'hello world')
-        validator.assert(undefined)
+        let isDefaultString = S.isString.defaultTo(() => 'hello world')
+        isDefaultString.assert('a string')
+        expectError(isDefaultString.validate(undefined)) // the Isa version doesn't convert.
+        let convertDefaultString = isDefaultString.toConvert();
+        convertDefaultString.assert('a string')
+        convertDefaultString.assert(undefined)
     }
 
     @test testAllOf() {
@@ -68,5 +74,26 @@ import { suite, test, slow, timeout , expectError } from '../lib/util/test-util'
         validator.assert('test')
         validator.assert(null)
         validator.assert(15.1)
+    }
+}
+
+@suite class IsOneOfTest {
+    @test canAssert() {
+        [null, 'a string']
+            .forEach((v) => E.isOneOf(_N.isNull, S.isString).assert(v))
+    }
+}
+
+@suite class IsAllOfTest {
+    @test canAssert() {
+        let isFoo = O.isObject({
+            foo: N.isNumber
+        });
+        let isBar = O.isObject({
+            bar: S.isString
+        });
+        [{
+            foo: 1, bar: 'a string'
+        }].forEach((v) => E.isAllOf(isFoo, isBar).assert(v))
     }
 }

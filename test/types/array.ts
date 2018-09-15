@@ -4,6 +4,8 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
 import * as D from '../../lib/types/date';
 import * as assert from 'assert';
 
+let isArrayOfDates = A.isArray(D.isDate)
+let convertArrayOfDates = isArrayOfDates.toConvert();
 @suite class ArrayTest {
     @test isArrayOfString () {
         A.isArray(S.isString).assert(['hello', 'world']);
@@ -22,8 +24,6 @@ import * as assert from 'assert';
     }
 
     @test canConvertDates() {
-        let isArrayOfDates = A.isArray(D.isDate)
-        let convertArrayOfDates = A.convertArray(D.convertDate);
         isArrayOfDates.assert(convertArrayOfDates.assert([
             '2018-01-01T00:00:00Z',
             new Date(),
@@ -31,7 +31,6 @@ import * as assert from 'assert';
     }
 
     @test convertInvalidDates() {
-        let convertArrayOfDates = A.convertArray(D.convertDate);
         expectError(convertArrayOfDates.validate([
             'not a date',
             false,

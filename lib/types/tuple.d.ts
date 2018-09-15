@@ -1,6 +1,4 @@
-import { ExplicitAny } from '../base';
-import { IsaValidator } from '../isa';
-import { ConvertValidator } from '../convert';
+import { ExplicitAny , ConvertValidator , IsaValidator } from '../base';
 
 export function isTuple<T1>(
     v1 : IsaValidator<T1>,

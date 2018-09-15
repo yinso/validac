@@ -12,12 +12,12 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
     }
 
     @test convertDate() {
-        D.convertDate.assert('2000-01-01T00:00:00Z')
+        D.isDate.toConvert().assert('2000-01-01T00:00:00Z')
     }
 
     @test convertNotDate () {
         ['not a date', 21304987, true, null]
-            .forEach((v) => expectError(D.convertDate.validate(v)))
+            .forEach((v) => expectError(D.isDate.toConvert().validate(v)))
     }
 }
 

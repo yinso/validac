@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var E = require("../lib/convert-extended");
+var E = require("../lib/convert");
 var S = require("../lib/types/string");
 var N = require("../lib/types/number");
 var O = require("../lib/types/object");
@@ -62,4 +62,4 @@ var ConvertAllOfTest = /** @class */ (function () {
     ], ConvertAllOfTest);
     return ConvertAllOfTest;
 }());
-//# sourceMappingURL=convert-extended.js.map
+//# sourceMappingURL=convert.js.map

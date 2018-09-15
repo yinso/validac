@@ -5,12 +5,74 @@ export interface Validator<T, U> {
     validate(v : T, path ?: string) : ValidationResult<U>;
 }
 
+export function isValidator<T, U>(v : any) : v is Validator<T, U> {
+    return !!v && typeof(v.assert) === 'function' && typeof(v.validate) === 'function';
+}
+
 export abstract class BaseValidator<T, U> implements Validator<T, U> {
     abstract validate(value : T, path ?: string) : ValidationResult<U>;
     assert(value : T, path : string = '$') : U {
         return this.validate(value, path).cata((v) => v)
     }
 }
+
+export type ConstraintPredicate<T> = (v : T) => boolean;
+
+export interface Constraint<T> {
+    satisfy(v : T, path : string) : ValidationError[];
+    and(constraint : Constraint<T>) : Constraint<T>;
+    or(constraint: Constraint<T>) : Constraint<T>;
+    not() : Constraint<T>;
+}
+
+export function isConstraint<T>(x : any) : x is Constraint<T> {
+    return !!x && typeof(x.satisfy) === 'function'
+        && typeof(x.and) === 'function'
+        && typeof(x.or) === 'function'
+        && typeof(x.not) === 'function'
+}
+
+export type DefaultProc<T> = () => T;
+
+export type TransformProc<T, U> = (v : T) => U;
+
+export interface ConvertValidator<T, U> extends Validator<T, U> {
+    where(constraint : Constraint<U> | ConstraintPredicate<U>) : ConvertValidator<T, U>;
+    intersect<V>(validator : ConvertValidator<T, V>) : ConvertValidator<T, U & V>;
+    union<V>(validator : ConvertValidator<T, V>) : ConvertValidator<T, U | V>;
+    isOptional() : ConvertValidator<T, U | undefined>;
+    transform<V>(transform : TransformProc<U, V>) : ConvertValidator<T, V>;
+    defaultTo(defaultProc : DefaultProc<U>) : ConvertValidator<T, U>;
+    cast<V extends U>() : ConvertValidator<T, V>;
+}
+
+function isFunction(v : any) : v is Function {
+    return typeof(v) === 'function' || v instanceof Function;
+}
+
+export function isArrayOf<T>(isa : (v : any) => v is T) : (v : any) => v is T[] {
+    return (v : any) : v is T[] => {
+        return !!v && (v instanceof Array) && v.map(isa).filter((v) => v === false).length === 0;
+    };
+}
+
+export function isConvertValidator<T, U>(v : any) : v is ConvertValidator<T, U> {
+    return isValidator(v) && isFunction((v as any).where) && isFunction((v as any).intersect);
+}
+
+export interface IsaValidator<T> extends Validator<ExplicitAny, T> {
+    isa(v : ExplicitAny) : v is T;
+    where(constraint : Constraint<T> | ConstraintPredicate<T>) : IsaValidator<T>;
+    intersect<U>(validator : IsaValidator<U>) : IsaValidator<T & U>;
+    union<U>(validator : IsaValidator<U>) : IsaValidator<T | U>;
+    isOptional() : IsaValidator<T | undefined>;
+    transform<U>(transform : TransformProc<T, U>) : ConvertValidator<ExplicitAny, U>;
+    defaultTo(defaultProc : DefaultProc<T>) : IsaValidator<T>;
+    cast<U extends T>() : IsaValidator<U>;
+    toConvert() : ConvertValidator<ExplicitAny, T>;
+}
+
+export type IsaPredicate<T> = (v : any) => v is T;
 
 export interface ValidationError {
     readonly error: string;

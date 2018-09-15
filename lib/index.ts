@@ -2,9 +2,7 @@ export * from './base';
 export * from './constraint';
 export * from './scalar';
 export * from './convert';
-export * from './convert-extended';
 export * from './isa';
-export * from './isa-extended';
 
 export * from './types/any';
 export * from './types/array';
@@ -13,7 +11,6 @@ export * from './types/date';
 export * from './types/enum';
 export * from './types/integer';
 export * from './types/literal';
-export * from './types/map';
 export * from './types/number';
 export * from './types/null';
 export * from './types/object';

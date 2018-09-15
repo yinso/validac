@@ -18,6 +18,8 @@ export let convertString = isString.transform((v) => v)
         }
     }))
 
+//isString.toConvert = () => convertString
+
 class MatchConstraint extends BaseConstraint<string> {
     readonly pattern : RegExp;
     constructor(pattern : RegExp) {

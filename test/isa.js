@@ -17,6 +17,8 @@ var _N = require("../lib/types/null");
 var L = require("../lib/types/literal");
 var X = require("../lib/intersect");
 var U = require("../lib/union");
+var E = require("../lib/isa");
+var O = require("../lib/types/object");
 var test_util_1 = require("../lib/util/test-util");
 var IsaTest = /** @class */ (function () {
     function IsaTest() {
@@ -58,8 +60,12 @@ var IsaTest = /** @class */ (function () {
         [undefined, 'test'].forEach(function (item) { return validator.assert(item); });
     };
     IsaTest.prototype.defaultTo = function () {
-        var validator = S.isString.defaultTo(function () { return 'hello world'; });
-        validator.assert(undefined);
+        var isDefaultString = S.isString.defaultTo(function () { return 'hello world'; });
+        isDefaultString.assert('a string');
+        test_util_1.expectError(isDefaultString.validate(undefined)); // the Isa version doesn't convert.
+        var convertDefaultString = isDefaultString.toConvert();
+        convertDefaultString.assert('a string');
+        convertDefaultString.assert(undefined);
     };
     IsaTest.prototype.testAllOf = function () {
         var validator = X.allOf(S.isString, L.isLiteral('test'));
@@ -135,5 +141,48 @@ var IsaTest = /** @class */ (function () {
         test_util_1.suite
     ], IsaTest);
     return IsaTest;
+}());
+var IsOneOfTest = /** @class */ (function () {
+    function IsOneOfTest() {
+    }
+    IsOneOfTest.prototype.canAssert = function () {
+        [null, 'a string']
+            .forEach(function (v) { return E.isOneOf(_N.isNull, S.isString).assert(v); });
+    };
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], IsOneOfTest.prototype, "canAssert", null);
+    IsOneOfTest = __decorate([
+        test_util_1.suite
+    ], IsOneOfTest);
+    return IsOneOfTest;
+}());
+var IsAllOfTest = /** @class */ (function () {
+    function IsAllOfTest() {
+    }
+    IsAllOfTest.prototype.canAssert = function () {
+        var isFoo = O.isObject({
+            foo: N.isNumber
+        });
+        var isBar = O.isObject({
+            bar: S.isString
+        });
+        [{
+                foo: 1, bar: 'a string'
+            }].forEach(function (v) { return E.isAllOf(isFoo, isBar).assert(v); });
+    };
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], IsAllOfTest.prototype, "canAssert", null);
+    IsAllOfTest = __decorate([
+        test_util_1.suite
+    ], IsAllOfTest);
+    return IsAllOfTest;
 }());
 //# sourceMappingURL=isa.js.map

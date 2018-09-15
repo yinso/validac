@@ -14,6 +14,8 @@ var S = require("../../lib/types/string");
 var test_util_1 = require("../../lib/util/test-util");
 var D = require("../../lib/types/date");
 var assert = require("assert");
+var isArrayOfDates = A.isArray(D.isDate);
+var convertArrayOfDates = isArrayOfDates.toConvert();
 var ArrayTest = /** @class */ (function () {
     function ArrayTest() {
     }
@@ -29,15 +31,12 @@ var ArrayTest = /** @class */ (function () {
     ArrayTest.prototype.isArrayofConterDate = function () {
     };
     ArrayTest.prototype.canConvertDates = function () {
-        var isArrayOfDates = A.isArray(D.isDate);
-        var convertArrayOfDates = A.convertArray(D.convertDate);
         isArrayOfDates.assert(convertArrayOfDates.assert([
             '2018-01-01T00:00:00Z',
             new Date(),
         ]));
     };
     ArrayTest.prototype.convertInvalidDates = function () {
-        var convertArrayOfDates = A.convertArray(D.convertDate);
         test_util_1.expectError(convertArrayOfDates.validate([
             'not a date',
             false,
