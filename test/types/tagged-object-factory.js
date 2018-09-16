@@ -9,8 +9,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var V = require("../lib");
-var test_util_1 = require("../lib/util/test-util");
+var V = require("../../lib");
+var test_util_1 = require("../../lib/util/test-util");
 var ObjectFamilyTest = /** @class */ (function () {
     function ObjectFamilyTest() {
     }
@@ -54,4 +54,4 @@ var ObjectFamilyTest = /** @class */ (function () {
     ], ObjectFamilyTest);
     return ObjectFamilyTest;
 }());
-//# sourceMappingURL=object-family.js.map
+//# sourceMappingURL=tagged-object-factory.js.map

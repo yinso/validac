@@ -1,6 +1,6 @@
 import * as assert from 'assert';
-import * as V from '../lib';
-import { suite, test, slow, timeout , expectError } from '../lib/util/test-util';
+import * as V from '../../lib';
+import { suite, test, slow, timeout , expectError } from '../../lib/util/test-util';
 import * as util from 'util';
 
 interface Element {

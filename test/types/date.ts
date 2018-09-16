@@ -13,6 +13,9 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
 
     @test convertDate() {
         D.isDate.toConvert().assert('2000-01-01T00:00:00Z')
+        D.isDate.toConvert().assert('2000-01-01T00:00:00.000Z')
+        D.isDate.toConvert().assert('2000-01-01T00:00:00.000+00:00')
+        D.isDate.toConvert().assert('2000-01-01T00:00:00.000-08:00')
     }
 
     @test convertNotDate () {
