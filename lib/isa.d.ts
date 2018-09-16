@@ -1,4 +1,5 @@
 import { IsaValidator , BaseValidator, ExplicitAny, Constraint, ConstraintPredicate, ValidationResult, ConvertValidator, TransformProc, DefaultProc, Validator, IsaPredicate } from './base';
+import { ExecFileOptions } from 'child_process';
 
 export abstract class BaseIsaValidator<T> extends BaseValidator<ExplicitAny, T> implements IsaValidator<T> {
     abstract validate(value : ExplicitAny, path ?: string) : ValidationResult<T>;
@@ -16,9 +17,11 @@ export abstract class BaseIsaValidator<T> extends BaseValidator<ExplicitAny, T> 
 
     defaultTo(defaultProc : DefaultProc<T>) : IsaValidator<T>;
 
-    cast<U extends T>() : IsaValidator<U>;
-
     toConvert() : ConvertValidator<ExplicitAny, T>;
+
+    appendConvert(converter : ConvertValidator<ExplicitAny, T>) : void;
+
+    protected abstract _toConvert() : ConvertValidator<ExplicitAny, T>;
 }
 
 export class TypeofIsaValidator<T> extends BaseIsaValidator<T> {
@@ -27,6 +30,7 @@ export class TypeofIsaValidator<T> extends BaseIsaValidator<T> {
     constructor(isa : IsaPredicate<T>, typeName : string);
 
     validate(value : any, path ?: string) : ValidationResult<T>;
+    protected _toConvert(): ConvertValidator<ExplicitAny, T>;
 }
 
 export function isa<T>(test : IsaPredicate<T>, typeName : string) : IsaValidator<T>;
@@ -37,6 +41,7 @@ export class ConstraintIsaValidator<T> extends BaseIsaValidator<T> {
     constructor(validator : IsaValidator<T>, constraint : Constraint<T> | ConstraintPredicate<T>);
  
     validate(value : ExplicitAny, path ?: string) : ValidationResult<T>;
+    protected _toConvert(): ConvertValidator<ExplicitAny, T>;
 }
 
 export function isOneOf<T1>(v1 : IsaValidator<T1>) : IsaValidator<T1>;

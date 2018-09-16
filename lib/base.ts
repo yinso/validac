@@ -1,5 +1,9 @@
 export type ExplicitAny = any
 
+export type Tagged<KEY extends string, T> = Record<KEY, T>;
+
+export type Omit<T extends {[key: string]: ExplicitAny; }, KEY extends keyof T> = Pick<T, Exclude<keyof T, KEY>>;
+
 export interface Validator<T, U> {
     assert(v : T, path ?: string) : U;
     validate(v : T, path ?: string) : ValidationResult<U>;
@@ -43,7 +47,6 @@ export interface ConvertValidator<T, U> extends Validator<T, U> {
     isOptional() : ConvertValidator<T, U | undefined>;
     transform<V>(transform : TransformProc<U, V>) : ConvertValidator<T, V>;
     defaultTo(defaultProc : DefaultProc<U>) : ConvertValidator<T, U>;
-    cast<V extends U>() : ConvertValidator<T, V>;
 }
 
 function isFunction(v : any) : v is Function {
@@ -59,7 +62,7 @@ export function isArrayOf<T>(isa : (v : any) => v is T) : (v : any) => v is T[] 
 export function isConvertValidator<T, U>(v : any) : v is ConvertValidator<T, U> {
     return isValidator(v) && isFunction((v as any).where)
         && isFunction((v as any).intersect) && isFunction((v as any).union) && isFunction((v as any).isOptional)
-        && isFunction((v as any).transform) && isFunction((v as any).defaultTo) && isFunction((v as any).cast);
+        && isFunction((v as any).transform) && isFunction((v as any).defaultTo);
 }
 
 export interface IsaValidator<T> extends Validator<ExplicitAny, T> {
@@ -70,15 +73,14 @@ export interface IsaValidator<T> extends Validator<ExplicitAny, T> {
     isOptional() : IsaValidator<T | undefined>;
     transform<U>(transform : TransformProc<T, U>) : ConvertValidator<ExplicitAny, U>;
     defaultTo(defaultProc : DefaultProc<T>) : IsaValidator<T>;
-    cast<U extends T>() : IsaValidator<U>;
     toConvert() : ConvertValidator<ExplicitAny, T>;
+    appendConvert(converter : ConvertValidator<ExplicitAny, T>) : void;
 }
 
 export function isIsaValidator<T>(v : any) : v is IsaValidator<T> {
     return isValidator(v) && isFunction((v as any).isa) && isFunction((v as any).where)
         && isFunction((v as any).intersect) && isFunction((v as any).union) && isFunction((v as any).isOptional)
-        && isFunction((v as any).transform) && isFunction((v as any).defaultTo) && isFunction((v as any).cast)
-        && isFunction((v as any).toConvert);
+        && isFunction((v as any).transform) && isFunction((v as any).defaultTo) && isFunction((v as any).toConvert);
 }
 
 export type IsaPredicate<T> = (v : any) => v is T;

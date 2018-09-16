@@ -16,25 +16,25 @@ interface Bar extends Foo {
     bar : string;
 }
 
-let isBar = isFoo.extends({
+let isBar = isFoo.extends<Bar>({
     bar: V.isString
-}).cast<Bar>();
+});
 
-let convertBar = convertFoo.extends({
+let convertBar = convertFoo.extends<Bar>({
     bar: V.convertString
-}).cast<Bar>();
+})
 
 interface Baz {
     xyz: boolean;
 }
 
-let isBaz = V.isObject({
+let isBaz = V.isObject<Baz>({
     xyz: V.isBoolean
-}).cast<Baz>()
+})
 
-let convertBaz = V.convertObject({
+let convertBaz = V.convertObject<Baz>({
     xyz: V.convertBoolean
-}).cast<Baz>()
+})
 
 let date1S = '2001-01-01T00:00:00Z'
 let date1 = new Date(date1S);
@@ -43,15 +43,15 @@ interface Baw extends Bar {
     nested: string[]
 }
 
-let isBaw = isBar.extends({
+let isBaw = isBar.extends<Baw>({
     nested: V.isArray(V.isString)
-}).cast<Baw>()
+})
 
 let convertStringArray = V.convertArray(V.convertString)
 
-let convertBaw = convertBar.extends({
+let convertBaw = convertBar.extends<Baw>({
     nested: convertStringArray
-}).cast<Baw>()
+})
 
 @suite class ObjectTest {
     @test canAssert() {

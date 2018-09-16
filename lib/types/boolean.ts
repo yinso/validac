@@ -8,16 +8,16 @@ export let isTrue = isLiteral<true>(true);
 
 export let isFalse = isLiteral<false>(false);
 
-export let convertTrue =
-    isTrue.union(isString.where(match(/^true$/i))).transform<true>(() => true)
+let convertTrueString = isString.where(match(/^true$/i)).transform<true>(() => true)
+isBoolean.appendConvert(convertTrueString)
+isTrue.appendConvert(convertTrueString)
 
-export let convertFalse =
-    isFalse.union(isString.where(match(/^false$/i))).transform<false>((v) => false)
+let convertFalseString = isString.where(match(/^false$/i)).transform<false>(() => false)
+isFalse.appendConvert(convertFalseString)
+isBoolean.appendConvert(convertFalseString)
 
-export let convertBoolean = convertTrue.union(convertFalse)
+export let convertTrue = isTrue.toConvert()
 
-isBoolean.toConvert = function () { return convertBoolean }
+export let convertFalse = isFalse.toConvert()
 
-isTrue.toConvert = function () { return convertTrue }
-
-isFalse.toConvert = function () { return convertFalse }
+export let convertBoolean = isBoolean.toConvert()

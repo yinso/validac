@@ -42,10 +42,9 @@ interface Foo {
     foo: string;
 }
 
-let isFoo = V.isObject({
+let isFoo = V.isObject<Foo>({
     foo: V.isString
-})
-.cast<Foo>(); // type => Validator<Foo>
+});
 
 isFoo.assert({ foo: 'a string' }) // => { foo: 'a string' }, type => Foo
 isFoo.assert({ }) // throws
@@ -56,10 +55,9 @@ interface Bar extends Foo {
 }
 
 let isBar = isFoo
-    .extends({
+    .extends<Bar>({
         bar: V.isNumber
-    })
-    .cast<Bar>();
+    });
 
 isBar.assert({ bar: 1 }) // throws
 isBar.assert({ foo: 'a string', bar: 1 }) // => { foo: 'a string', bar: 1 }, type => Bar
@@ -156,7 +154,7 @@ For example, we can define the status of a TODO application as follows:
 
 ```typescript
 type ToDoStatus = 'new' | 'in-progress' | 'postponed' | 'completed';
-let isTodoStatus = V.isEnum('new', 'in-progress', 'postponed', 'completed').cast<ToDoStatus>()
+let isTodoStatus = V.isEnum('new', 'in-progress', 'postponed', 'completed');
 ```
 
 `V.isEnum` is set so you can only use enum of the same type at this time. I.e. it's either a set of `string` literals, or a set of `number` literals.
@@ -182,7 +180,6 @@ isNumberArray.assert([1, 'not a number', 2]) // throws
 type Vector = [ number , number , number ] // an array of 3 numbers.
 
 let isVector = V.isTuple(V.isNumber, V.isNumber, V.isNumber)
-    .cast<Vector>() // cast is a helper for setting up the right type. Note the casted type must extends from the current type.
 
 isVector.assert([0, 0, 0]) // => [0, 0, 0], type Vector
 
@@ -200,12 +197,11 @@ interface Vector {
     z: number;
 }
 
-let isVector = V.isObject({
+let isVector = V.isObject<Vector>({
     x: V.isNumber,
     y: V.isNumber,
     z: V.isNumber
 })
-    .cast<Vector>()
 
 isVector.assert({x: 0, y: 0, z: 0}) // { x: 0, y: 0, z: 0}, type => Vector
 ```

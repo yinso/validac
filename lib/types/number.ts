@@ -11,11 +11,8 @@ Number.isNumber = (value : any) : value is number => typeof(value) === 'number';
 
 export let isNumber = isa(Number.isNumber, 'number');
 
-export let convertNumber =
-    isNumber.transform((v) => v)
-    .union(
-        isString
-        .where(match(/^[+-]?\d+(\.\d+)?$/))
-        .transform((v: string) => parseFloat(v)))
+isNumber.appendConvert(isString
+    .where(match(/^[+-]?\d+(\.\d+)?$/))
+    .transform((v: string) => parseFloat(v)))
 
-isNumber.toConvert = () => convertNumber
+export let convertNumber = isNumber.toConvert()

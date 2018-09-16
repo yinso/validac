@@ -18,25 +18,25 @@ var isFoo = V.isObject({
 var convertFoo = isFoo.toConvert();
 var isBar = isFoo.extends({
     bar: V.isString
-}).cast();
+});
 var convertBar = convertFoo.extends({
     bar: V.convertString
-}).cast();
+});
 var isBaz = V.isObject({
     xyz: V.isBoolean
-}).cast();
+});
 var convertBaz = V.convertObject({
     xyz: V.convertBoolean
-}).cast();
+});
 var date1S = '2001-01-01T00:00:00Z';
 var date1 = new Date(date1S);
 var isBaw = isBar.extends({
     nested: V.isArray(V.isString)
-}).cast();
+});
 var convertStringArray = V.convertArray(V.convertString);
 var convertBaw = convertBar.extends({
     nested: convertStringArray
-}).cast();
+});
 var ObjectTest = /** @class */ (function () {
     function ObjectTest() {
     }

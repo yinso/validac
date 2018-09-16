@@ -9,16 +9,16 @@ export class Integer extends Scalar<number> {
     }
 
     static fromJSON(v : any, path : string = '$') {
-        return Integer.convertInteger.assert(v, path);
+        return convertInteger.assert(v, path);
     }
 
-    static convertInteger = isString
+    static convertIntegerString = isString
         .where(match(/^[+-]?\d+$/))
         .transform((v) => new Integer(parseInt(v)))
-        .union(isNumber
+
+    static convertIntegerNumber = isNumber
             .where((v : number) => Math.floor(v) === v)
             .transform((v) => new Integer(v))
-        )
 }
 
 // the following are needed for scalar object.
@@ -26,10 +26,10 @@ export class Integer extends Scalar<number> {
 // 2) the isaValidator over the typecheck.
 // 3) the isaValidator over the scalar options.
 // 4) the convertValidator that wraps around both of the isaValidators.
-
-
 export let isInteger = isa(Integer.isInteger, 'Integer')
 
-export let convertInteger = isInteger.toConvert().union(Integer.convertInteger);
+isInteger.appendConvert(Integer.convertIntegerNumber)
 
-//isInteger.toConvert = () => convertInteger
+isInteger.appendConvert(Integer.convertIntegerString)
+
+export let convertInteger = isInteger.toConvert()

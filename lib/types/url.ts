@@ -81,14 +81,14 @@ export class Url extends Scalar<string> {
     }
 
     static fromJSON(v : any, path : string = '$') {
-        return Url.convertUrl.assert(v, path);
+        return isUrl.toConvert().assert(v, path);
     }
 
-    static convertUrl = isUrlString
+    static convertUrlString = isUrlString
         .transform((v) => new Url(v))
 }
 
 export let isUrl = isa(Url.isUrl, 'Url')
-export let convertUrl = isUrl.transform((v) => v).union(Url.convertUrl);
+isUrl.appendConvert(Url.convertUrlString)
 
-isUrl.toConvert = () => convertUrl
+export let convertUrl = isUrl.toConvert()

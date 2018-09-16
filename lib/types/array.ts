@@ -9,7 +9,7 @@ class IsArrayValidator<T> extends BaseIsaValidator<T[]> {
         this.inner = inner;
     }
 
-    validate(arg : any, path : string = '$') : ValidationResult<T[]> {
+    validate(arg : ExplicitAny, path : string = '$') : ValidationResult<T[]> {
         if (!(arg instanceof Array)) {
             return ValidationResult.reject([{
                 error: 'TypeError',
@@ -32,28 +32,10 @@ class IsArrayValidator<T> extends BaseIsaValidator<T[]> {
         }
     }
 
-    toConvert() : ConvertArrayValidator<T> {
+    _toConvert() : ConvertArrayValidator<T> {
         return new ConvertArrayValidator(this.inner.toConvert())
     }
 
-}
-
-class MapValidator<T> extends BaseIsaValidator<T[]> {
-    itemValidator : IsaValidator<T>;
-    constructor(itemValidator : IsaValidator<T>) {
-        super();
-        this.itemValidator = itemValidator;
-    }
-    // what we need is the following th
-    validate(value : any[], path : string = '$') : ValidationResult<T[]> {
-        let results = value.map((item, i) => this.itemValidator.validate(item, `${path}[${i}]`));
-        // what do I do with the results? I want to flatten the results?
-        return ValidationResult.allOf<T>(results);
-    }
-
-    map<V>(itemValidator : IsaValidator<V>) :  MapValidator<V> {
-        return new MapValidator<V>(itemValidator);
-    }
 }
 
 export function matchArray(v : any) : v is any[] {

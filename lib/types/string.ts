@@ -5,20 +5,15 @@ import { isAny } from './any';
 
 export let isString = isa((value : any) : value is string => typeof(value) === 'string', 'string');
 
-export let convertString = isString.transform((v) => v)
-    .union(isAny.transform<string>((v) => {
-        if (v === undefined) {
-            return ''
-        } else if (v === null) {
-            return ''
-        } else if (v instanceof Date) {
-            return v.toISOString()
-        } else {
-            return v.toString()
-        }
-    }))
+isString.appendConvert(isa((v) : v is undefined => v == undefined, 'undefined').transform<string>(() => ''))
 
-//isString.toConvert = () => convertString
+isString.appendConvert(isa((v) : v is null => v == null, 'null').transform<string>(() => ''))
+
+isString.appendConvert(isa((v) : v is Date => v instanceof Date, 'Date').transform<string>((v) => v.toISOString()))
+
+isString.appendConvert(isAny.transform<string>((v) => v.toString()))
+
+export let convertString = isString.toConvert()
 
 class MatchConstraint extends BaseConstraint<string> {
     readonly pattern : RegExp;

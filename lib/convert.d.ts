@@ -14,8 +14,6 @@ export abstract class BaseConvertValidator<T, U> extends BaseValidator<T, U> imp
     isOptional() : ConvertValidator<T, U | undefined>;
 
     defaultTo(defaultProc : DefaultProc<U>) : ConvertValidator<T, U>;
-
-    cast<V extends U>() : ConvertValidator<T, V>;
 }
 
 export class TypeofConvertValidator<T> extends BaseConvertValidator<ExplicitAny, T> {
