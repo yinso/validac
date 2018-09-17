@@ -14,7 +14,7 @@
     "mocha": "^5.2.0",
     "mocha-typescript": "^1.1.17",
     "source-map-support": "^0.5.9",
-    "typescript": "^2.9.2"
+    "typescript": "^3.0.3"
   },
   "dependencies": {}
 }
