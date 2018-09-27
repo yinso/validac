@@ -66,7 +66,7 @@ export function isConvertValidator<T, U>(v : any) : v is ConvertValidator<T, U> 
 }
 
 export interface IsaValidator<T> extends Validator<ExplicitAny, T> {
-    isa(v : ExplicitAny) : v is T;
+    isa(v : ExplicitAny, path ?: string) : v is T;
     where(constraint : Constraint<T> | ConstraintPredicate<T>) : IsaValidator<T>;
     intersect<U>(validator : IsaValidator<U>) : IsaValidator<T & U>;
     union<U>(validator : IsaValidator<U>) : IsaValidator<T | U>;
@@ -74,6 +74,7 @@ export interface IsaValidator<T> extends Validator<ExplicitAny, T> {
     transform<U>(transform : TransformProc<T, U>) : ConvertValidator<ExplicitAny, U>;
     defaultTo(defaultProc : DefaultProc<T>) : IsaValidator<T>;
     toConvert() : ConvertValidator<ExplicitAny, T>;
+    convert(v : ExplicitAny, path ?: string) : T;
     appendConvert(converter : ConvertValidator<ExplicitAny, T>) : void;
 }
 

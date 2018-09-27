@@ -14,6 +14,22 @@ var test_util_1 = require("../../lib/util/test-util");
 var assert = require("assert");
 var isFoo = V.isTuple(V.isNumber, V.isString, V.isBoolean);
 var convertFoo = isFoo.toConvert();
+/*
+class Bar<T> {
+    constructor(x : T) {
+
+    }
+}
+
+type BarArray<T extends any[], K extends Extract<keyof T, number> = Extract<keyof T, number>>
+    = Bar<T[K]>[];
+
+function makeTuple<T extends any[]>(...params : BarArray<T>) {
+    throw new Error()
+}
+
+let x = makeTuple<Foo>(new Bar<string>('1'), new Bar<string>('1'), new Bar<string>('1'), new Bar<string>('1'))
+//*/
 var TupleTest = /** @class */ (function () {
     function TupleTest() {
     }

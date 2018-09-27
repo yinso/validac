@@ -2,7 +2,7 @@ import { ValidationResult , ValidationError, ExplicitAny , ConvertValidator , Is
 import { BaseIsaValidator } from '../isa';
 import { BaseConvertValidator } from '../convert'
 
-class IsArrayValidator<T> extends BaseIsaValidator<T[]> {
+export class ArrayIsaValidator<T> extends BaseIsaValidator<T[]> {
     readonly inner : IsaValidator<T>;
     constructor(inner : IsaValidator<T>) {
         super();
@@ -32,8 +32,8 @@ class IsArrayValidator<T> extends BaseIsaValidator<T[]> {
         }
     }
 
-    _toConvert() : ConvertArrayValidator<T> {
-        return new ConvertArrayValidator(this.inner.toConvert())
+    _toConvert() : ArrayConvertValidator<T> {
+        return new ArrayConvertValidator(this.inner.toConvert())
     }
 
 }
@@ -42,11 +42,11 @@ export function matchArray(v : any) : v is any[] {
     return v instanceof Array
 }
 
-export function isArray<T>(item : IsaValidator<T>) : IsaValidator<T[]> {
-    return new IsArrayValidator(item);
+export function isArray<T>(item : IsaValidator<T>) : ArrayIsaValidator<T> {
+    return new ArrayIsaValidator(item);
 }
 
-class ConvertArrayValidator<T> extends BaseConvertValidator<ExplicitAny, T[]> {
+class ArrayConvertValidator<T> extends BaseConvertValidator<ExplicitAny, T[]> {
     readonly inner : ConvertValidator<ExplicitAny, T>;
     constructor(inner : ConvertValidator<ExplicitAny, T>) {
         super();
@@ -87,5 +87,5 @@ class ConvertArrayValidator<T> extends BaseConvertValidator<ExplicitAny, T[]> {
 }
 
 export function convertArray<T>(item : ConvertValidator<ExplicitAny, T>) : ConvertValidator<ExplicitAny, T[]> {
-    return new ConvertArrayValidator(item);
+    return new ArrayConvertValidator(item);
 }

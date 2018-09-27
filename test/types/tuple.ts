@@ -8,6 +8,23 @@ let isFoo = V.isTuple(V.isNumber, V.isString, V.isBoolean)
 
 let convertFoo = isFoo.toConvert()
 
+/*
+class Bar<T> {
+    constructor(x : T) {
+
+    }
+}
+
+type BarArray<T extends any[], K extends Extract<keyof T, number> = Extract<keyof T, number>>
+    = Bar<T[K]>[];
+
+function makeTuple<T extends any[]>(...params : BarArray<T>) {
+    throw new Error()
+}
+
+let x = makeTuple<Foo>(new Bar<string>('1'), new Bar<string>('1'), new Bar<string>('1'), new Bar<string>('1'))
+//*/
+
 @suite class TupleTest {
     @test canAssert() {
         isFoo.assert([1, 'a string', true])

@@ -44,7 +44,7 @@ type ImageUnion = ImageDiff & ImageExtract;
         expectError(isElement.validate({ tag: 'Test' })) // UnknownTag
         expectError(isElement.validate({ tag: 1234 }))
         isImage.assert({ tag: 'Image', title: 'test title', url : 'test link'})
-        isElement.toConvert().assert({
+        isElement.convert({
             tag: 'Image',
             title: 123456,
             url: 'test link'

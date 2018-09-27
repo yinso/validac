@@ -23,7 +23,7 @@ var ObjectFamilyTest = /** @class */ (function () {
         test_util_1.expectError(isElement.validate({ tag: 'Test' })); // UnknownTag
         test_util_1.expectError(isElement.validate({ tag: 1234 }));
         isImage.assert({ tag: 'Image', title: 'test title', url: 'test link' });
-        isElement.toConvert().assert({
+        isElement.convert({
             tag: 'Image',
             title: 123456,
             url: 'test link'

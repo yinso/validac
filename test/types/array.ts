@@ -2,6 +2,8 @@ import * as A from '../../lib/types/array';
 import * as S from '../../lib/types/string';
 import { suite, test, slow, timeout , expectError } from '../../lib/util/test-util';
 import * as D from '../../lib/types/date';
+import * as N from '../../lib/types/number';
+import * as O from '../../lib/types/object';
 import * as assert from 'assert';
 
 let isArrayOfDates = A.isArray(D.isDate)
@@ -36,6 +38,21 @@ let convertArrayOfDates = isArrayOfDates.toConvert();
             false,
             1234
         ]))
+    }
+
+    @test canDoNestedObjectArray() {
+        let isa = O.isObject({
+            result: O.isObject({
+                foo: A.isArray(N.isNumber)
+            }),
+            remainder: S.isString
+        })
+        assert.equal(true, isa.isa({
+            result: {
+                foo: [ 1, 2, 3 ],
+            },
+            remainder: 'a remainder'
+        }))
     }
 }
 

@@ -22,7 +22,7 @@ var BooleanTest = /** @class */ (function () {
     };
     BooleanTest.prototype.convertBoolean = function () {
         [true, false, 'true', 'false', 'TRUE', 'FALSE']
-            .forEach(function (v) { return B.isBoolean.toConvert().assert(v); });
+            .forEach(function (v) { return B.isBoolean.convert(v); });
     };
     BooleanTest.prototype.convertNotBoolean = function () {
         [1, new Date(), 'not a boolean']
@@ -36,7 +36,7 @@ var BooleanTest = /** @class */ (function () {
     };
     BooleanTest.prototype.convertTrue = function () {
         [true, 'true', 'TRUE']
-            .forEach(function (v) { return B.isTrue.toConvert().assert(v); });
+            .forEach(function (v) { return B.isTrue.convert(v); });
     };
     BooleanTest.prototype.convertNotTrue = function () {
         [1, new Date(), 'not a boolean']
@@ -50,7 +50,7 @@ var BooleanTest = /** @class */ (function () {
     };
     BooleanTest.prototype.convertFalse = function () {
         [false, 'false', 'FALSE']
-            .forEach(function (v) { return B.isFalse.toConvert().assert(v); });
+            .forEach(function (v) { return B.isFalse.convert(v); });
     };
     BooleanTest.prototype.convertNotFalse = function () {
         [1, new Date(), 'not a boolean']

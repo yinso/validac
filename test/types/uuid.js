@@ -10,44 +10,41 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var assert = require("assert");
-var A = require("../../lib/types/any");
+var U = require("../../lib/types/uuid");
 var test_util_1 = require("../../lib/util/test-util");
-var items = [
-    undefined,
-    null,
-    1,
-    0,
-    '',
-    'hello',
-    true,
-    false,
-    [],
-    {}
-];
-var AnyTest = /** @class */ (function () {
-    function AnyTest() {
+var uuid = require("uuid");
+// constraint should also be a combinator thing!!!
+var UuidTest = /** @class */ (function () {
+    function UuidTest() {
     }
-    AnyTest.prototype.isAny = function () {
-        items.forEach(function (item) { return A.isAny.assert(item); });
+    UuidTest.prototype.isUuid = function () {
+        U.isUuidString.assert(uuid.v1());
+        U.isUuidString.assert(uuid.v4());
+        test_util_1.expectError(U.isUuidString.validate('test'));
+        U.isUuid.assert(U.Uuid.fromJSON(uuid.v4()));
     };
-    AnyTest.prototype.convertAny = function () {
-        items.forEach(function (item) { return assert.deepEqual(item, A.isAny.convert(item)); });
+    UuidTest.prototype.convertUuid = function () {
+        var u1 = uuid.v4();
+        var result = U.convertUuid.assert(u1);
+        assert.equal(u1, result.toString());
+        assert.equal(u1, result.valueOf());
+        assert.equal(u1, result.toJSON());
     };
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], AnyTest.prototype, "isAny", null);
+    ], UuidTest.prototype, "isUuid", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], AnyTest.prototype, "convertAny", null);
-    AnyTest = __decorate([
+    ], UuidTest.prototype, "convertUuid", null);
+    UuidTest = __decorate([
         test_util_1.suite
-    ], AnyTest);
-    return AnyTest;
+    ], UuidTest);
+    return UuidTest;
 }());
-//# sourceMappingURL=any.js.map
+//# sourceMappingURL=uuid.js.map

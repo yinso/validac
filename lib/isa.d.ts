@@ -19,6 +19,8 @@ export abstract class BaseIsaValidator<T> extends BaseValidator<ExplicitAny, T> 
 
     toConvert() : ConvertValidator<ExplicitAny, T>;
 
+    convert(value : ExplicitAny, path ?: string) : T;
+
     appendConvert(converter : ConvertValidator<ExplicitAny, T>) : void;
 
     protected abstract _toConvert() : ConvertValidator<ExplicitAny, T>;

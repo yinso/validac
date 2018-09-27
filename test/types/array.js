@@ -13,6 +13,8 @@ var A = require("../../lib/types/array");
 var S = require("../../lib/types/string");
 var test_util_1 = require("../../lib/util/test-util");
 var D = require("../../lib/types/date");
+var N = require("../../lib/types/number");
+var O = require("../../lib/types/object");
 var assert = require("assert");
 var isArrayOfDates = A.isArray(D.isDate);
 var convertArrayOfDates = isArrayOfDates.toConvert();
@@ -42,6 +44,20 @@ var ArrayTest = /** @class */ (function () {
             false,
             1234
         ]));
+    };
+    ArrayTest.prototype.canDoNestedObjectArray = function () {
+        var isa = O.isObject({
+            result: O.isObject({
+                foo: A.isArray(N.isNumber)
+            }),
+            remainder: S.isString
+        });
+        assert.equal(true, isa.isa({
+            result: {
+                foo: [1, 2, 3],
+            },
+            remainder: 'a remainder'
+        }));
     };
     __decorate([
         test_util_1.test,
@@ -79,6 +95,12 @@ var ArrayTest = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], ArrayTest.prototype, "convertInvalidDates", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], ArrayTest.prototype, "canDoNestedObjectArray", null);
     ArrayTest = __decorate([
         test_util_1.suite
     ], ArrayTest);

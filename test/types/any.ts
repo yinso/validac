@@ -21,6 +21,6 @@ let items = [
     }
 
     @test convertAny() {
-        items.forEach((item) => assert.deepEqual(item, A.isAny.toConvert().assert(item)))
+        items.forEach((item) => assert.deepEqual(item, A.isAny.convert(item)))
     }
 }

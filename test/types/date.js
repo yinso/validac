@@ -22,10 +22,10 @@ var DateTest = /** @class */ (function () {
             .forEach(function (v) { return test_util_1.expectError(D.isDate.validate(v)); });
     };
     DateTest.prototype.convertDate = function () {
-        D.isDate.toConvert().assert('2000-01-01T00:00:00Z');
-        D.isDate.toConvert().assert('2000-01-01T00:00:00.000Z');
-        D.isDate.toConvert().assert('2000-01-01T00:00:00.000+00:00');
-        D.isDate.toConvert().assert('2000-01-01T00:00:00.000-08:00');
+        D.isDate.convert('2000-01-01T00:00:00Z');
+        D.isDate.convert('2000-01-01T00:00:00.000Z');
+        D.isDate.convert('2000-01-01T00:00:00.000+00:00');
+        D.isDate.convert('2000-01-01T00:00:00.000-08:00');
     };
     DateTest.prototype.convertNotDate = function () {
         ['not a date', 21304987, true, null]

@@ -17,5 +17,6 @@ export * from './types/object';
 export * from './types/string';
 export * from './types/tagged-object-factory';
 export * from './types/tuple';
-export * from './types/url';
 export * from './types/undefined';
+export * from './types/url';
+export * from './types/uuid';

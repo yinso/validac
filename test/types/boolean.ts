@@ -12,7 +12,7 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
 
     @test convertBoolean () {
         [true, false, 'true', 'false', 'TRUE', 'FALSE']
-        .forEach((v) => B.isBoolean.toConvert().assert(v))
+        .forEach((v) => B.isBoolean.convert(v))
     }
 
     @test convertNotBoolean () {
@@ -30,7 +30,7 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
 
     @test convertTrue() {
         [true, 'true', 'TRUE']
-        .forEach((v) => B.isTrue.toConvert().assert(v))
+        .forEach((v) => B.isTrue.convert(v))
     }
 
     @test convertNotTrue() {
@@ -48,7 +48,7 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
 
     @test convertFalse() {
         [false, 'false', 'FALSE']
-        .forEach((v) => B.isFalse.toConvert().assert(v))
+        .forEach((v) => B.isFalse.convert(v))
     }
 
     @test convertNotFalse() {

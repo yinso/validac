@@ -1,7 +1,7 @@
 import { ExplicitAny, ValidationResult, IsaValidator, Tagged, Omit } from '../base';
 import { BaseIsaValidator } from '../isa';
 import { BaseConvertValidator } from '../convert';
-import { ObjectIsaValidator , IsaValidatorKVMap , isObject, ObjectDiff , ConvertObjectValidator, ConvertValidatorKVMap } from './object';
+import { ObjectIsaValidator , IsaValidatorKVMap , isObject, ObjectDiff , ObjectConvertValidator, ConvertValidatorKVMap } from './object';
 import { isString } from './string';
 import { isLiteral } from './literal';
 
@@ -128,9 +128,9 @@ function _extendsMap<T extends {[key: string]: any}, U extends {[key: string]: a
 class TaggedObjectFactoryConvertValidator<KEY extends string, T extends Tagged<KEY, string>> extends BaseConvertValidator<ExplicitAny, T> {
     readonly objectKey : KEY;
     readonly validatorMap : ConvertValidatorKVMap<ExplicitAny, T>;
-    readonly inner : ConvertObjectValidator<T>;
+    readonly inner : ObjectConvertValidator<T>;
     readonly registry : TaggedObjectRegistry<KEY, T>;
-    constructor(key: KEY, validatorMap : ConvertValidatorKVMap<ExplicitAny, T>, inner : ConvertObjectValidator<T>, registry : TaggedObjectRegistry<KEY, T>) {
+    constructor(key: KEY, validatorMap : ConvertValidatorKVMap<ExplicitAny, T>, inner : ObjectConvertValidator<T>, registry : TaggedObjectRegistry<KEY, T>) {
         super();
         this.objectKey =key;
         this.validatorMap = validatorMap;
