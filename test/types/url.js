@@ -23,7 +23,7 @@ var UrlTest = /** @class */ (function () {
         U.isUrl.assert(U.Url.fromJSON('http://test'));
     };
     UrlTest.prototype.convertUrl = function () {
-        var result = U.convertUrl.assert('http://user:pass@host:8080/path1/path2?foo=test&bar=xyz');
+        var result = U.isUrl.convert('http://user:pass@host:8080/path1/path2?foo=test&bar=xyz');
         assert.equal('http:', result.protocol);
         assert.equal('user', result.username);
         assert.equal('pass', result.password);

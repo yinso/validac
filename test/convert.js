@@ -19,7 +19,7 @@ var ConvertOneOfTest = /** @class */ (function () {
     }
     ConvertOneOfTest.prototype.canAssert = function () {
         ['1234', 'a string']
-            .forEach(function (v) { return E.convertOneOf(N.convertNumber, S.convertString).assert(v); });
+            .forEach(function (v) { return E.convertOneOf(N.isNumber.toConvert(), S.isString.toConvert()).assert(v); });
     };
     __decorate([
         test_util_1.test,
@@ -36,11 +36,11 @@ var ConvertAllOfTest = /** @class */ (function () {
     function ConvertAllOfTest() {
     }
     ConvertAllOfTest.prototype.canAssert = function () {
-        var isFoo = O.convertObject({
-            foo: N.convertNumber
+        var isFoo = O.isObject({
+            foo: N.isNumber
         });
-        var isBar = O.convertObject({
-            bar: S.convertString
+        var isBar = O.isObject({
+            bar: S.isString
         });
         [
             {
@@ -49,7 +49,7 @@ var ConvertAllOfTest = /** @class */ (function () {
             {
                 foo: '10', bar: true
             },
-        ].forEach(function (v) { return E.convertAllOf(isFoo, isBar).assert(v); });
+        ].forEach(function (v) { return E.convertAllOf(isFoo.toConvert(), isBar.toConvert()).assert(v); });
     };
     __decorate([
         test_util_1.test,

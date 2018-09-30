@@ -16,17 +16,17 @@ import { suite, test, slow, timeout , expectErrorAsync, expectError } from '../.
     }
 
     @test convertInteger() {
-        I.convertInteger.assert('10')
-        I.convertInteger.assert(10)
-        I.convertInteger.assert(I.Integer.fromJSON(10))
+        I.isInteger.convert('10')
+        I.isInteger.convert(10)
+        I.isInteger.convert(I.Integer.fromJSON(10))
     }
 
     @test convertIntegerError () {
-        expectError(I.convertInteger.validate('10.5'))
+        expectError(I.isInteger.toConvert().validate('10.5'))
     }
 
     @test convertIntegerErrorFromNumber () {
-        expectError(I.convertInteger.validate(10.5))
+        expectError(I.isInteger.toConvert().validate(10.5))
     }
 
     @test fromJSON() {

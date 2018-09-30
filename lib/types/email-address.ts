@@ -54,7 +54,5 @@ class EmailAddress extends Scalar<string> {
         .transform((v) => new EmailAddress(v))
 }
 
-export let isEmailAddress = isa(EmailAddress.isEmailAddress, 'Uuid')
+export let isEmailAddress = isa(EmailAddress.isEmailAddress, 'Email')
 isEmailAddress.appendConvert(EmailAddress.convertEmailAddressString)
-
-export let convertEmailAddress = isEmailAddress.toConvert()

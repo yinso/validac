@@ -25,15 +25,15 @@ var IntegerTest = /** @class */ (function () {
         test_util_1.expectError(I.isInteger.validate(10.5));
     };
     IntegerTest.prototype.convertInteger = function () {
-        I.convertInteger.assert('10');
-        I.convertInteger.assert(10);
-        I.convertInteger.assert(I.Integer.fromJSON(10));
+        I.isInteger.convert('10');
+        I.isInteger.convert(10);
+        I.isInteger.convert(I.Integer.fromJSON(10));
     };
     IntegerTest.prototype.convertIntegerError = function () {
-        test_util_1.expectError(I.convertInteger.validate('10.5'));
+        test_util_1.expectError(I.isInteger.toConvert().validate('10.5'));
     };
     IntegerTest.prototype.convertIntegerErrorFromNumber = function () {
-        test_util_1.expectError(I.convertInteger.validate(10.5));
+        test_util_1.expectError(I.isInteger.toConvert().validate(10.5));
     };
     IntegerTest.prototype.fromJSON = function () {
         I.Integer.fromJSON('1');

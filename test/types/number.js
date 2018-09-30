@@ -60,12 +60,12 @@ var NumberTest = /** @class */ (function () {
         });
     };
     NumberTest.prototype.convertNumber = function () {
-        N.convertNumber.assert('10.5');
-        N.convertNumber.assert('10');
-        N.convertNumber.assert(10.5);
+        N.isNumber.convert('10.5');
+        N.isNumber.convert('10');
+        N.isNumber.convert(10.5);
     };
     NumberTest.prototype.convertInvalidNumber = function () {
-        test_util_1.expectError(N.convertNumber.validate('not a number'));
+        test_util_1.expectError(N.isNumber.toConvert().validate('not a number'));
     };
     __decorate([
         test_util_1.test,

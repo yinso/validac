@@ -9,7 +9,7 @@ export class Integer extends Scalar<number> {
     }
 
     static fromJSON(v : any, path : string = '$') {
-        return convertInteger.assert(v, path);
+        return isInteger.convert(v, path);
     }
 
     static convertIntegerString = isString
@@ -31,5 +31,3 @@ export let isInteger = isa(Integer.isInteger, 'Integer')
 isInteger.appendConvert(Integer.convertIntegerNumber)
 
 isInteger.appendConvert(Integer.convertIntegerString)
-
-export let convertInteger = isInteger.toConvert()

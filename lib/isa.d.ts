@@ -17,13 +17,13 @@ export abstract class BaseIsaValidator<T> extends BaseValidator<ExplicitAny, T> 
 
     defaultTo(defaultProc : DefaultProc<T>) : IsaValidator<T>;
 
-    toConvert() : ConvertValidator<ExplicitAny, T>;
+    toConvert(options ?: ExplicitAny) : ConvertValidator<ExplicitAny, T>;
 
     convert(value : ExplicitAny, path ?: string) : T;
 
     appendConvert(converter : ConvertValidator<ExplicitAny, T>) : void;
 
-    protected abstract _toConvert() : ConvertValidator<ExplicitAny, T>;
+    protected abstract _toConvert(options ?: ExplicitAny) : ConvertValidator<ExplicitAny, T>;
 }
 
 export class TypeofIsaValidator<T> extends BaseIsaValidator<T> {
@@ -32,7 +32,7 @@ export class TypeofIsaValidator<T> extends BaseIsaValidator<T> {
     constructor(isa : IsaPredicate<T>, typeName : string);
 
     validate(value : any, path ?: string) : ValidationResult<T>;
-    protected _toConvert(): ConvertValidator<ExplicitAny, T>;
+    protected _toConvert(options ?: ExplicitAny): ConvertValidator<ExplicitAny, T>;
 }
 
 export function isa<T>(test : IsaPredicate<T>, typeName : string) : IsaValidator<T>;
@@ -43,7 +43,7 @@ export class ConstraintIsaValidator<T> extends BaseIsaValidator<T> {
     constructor(validator : IsaValidator<T>, constraint : Constraint<T> | ConstraintPredicate<T>);
  
     validate(value : ExplicitAny, path ?: string) : ValidationResult<T>;
-    protected _toConvert(): ConvertValidator<ExplicitAny, T>;
+    protected _toConvert(options ?: ExplicitAny): ConvertValidator<ExplicitAny, T>;
 }
 
 export function isOneOf<T1>(v1 : IsaValidator<T1>) : IsaValidator<T1>;

@@ -14,5 +14,3 @@ export let isNumber = isa(Number.isNumber, 'number');
 isNumber.appendConvert(isString
     .where(match(/^[+-]?\d+(\.\d+)?$/))
     .transform((v: string) => parseFloat(v)))
-
-export let convertNumber = isNumber.toConvert()

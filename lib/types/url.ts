@@ -81,7 +81,7 @@ export class Url extends Scalar<string> {
     }
 
     static fromJSON(v : any, path : string = '$') {
-        return isUrl.toConvert().assert(v, path);
+        return isUrl.convert(v, path);
     }
 
     static convertUrlString = isUrlString
@@ -90,5 +90,3 @@ export class Url extends Scalar<string> {
 
 export let isUrl = isa(Url.isUrl, 'Url')
 isUrl.appendConvert(Url.convertUrlString)
-
-export let convertUrl = isUrl.toConvert()

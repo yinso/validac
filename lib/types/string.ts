@@ -13,8 +13,6 @@ isString.appendConvert(isa((v) : v is Date => v instanceof Date, 'Date').transfo
 
 isString.appendConvert(isAny.transform<string>((v) => v.toString()))
 
-export let convertString = isString.toConvert()
-
 class MatchConstraint extends BaseConstraint<string> {
     readonly pattern : RegExp;
     constructor(pattern : RegExp) {

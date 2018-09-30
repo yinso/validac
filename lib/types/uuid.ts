@@ -8,7 +8,7 @@ export let isUuidString = isString
 
 export class Uuid extends Scalar<string> {
     constructor(inner ?: string) {
-        super(isUuidString.toConvert().assert(inner || uuid.v4()));
+        super(isUuidString.convert(inner || uuid.v4()));
     }
 
     static isUuid(v : any) : v is Uuid {
@@ -16,7 +16,7 @@ export class Uuid extends Scalar<string> {
     }
 
     static fromJSON(v : any, path : string = '$') {
-        return isUuid.toConvert().assert(v, path);
+        return isUuid.convert(v, path);
     }
 
     static convertUrlString = isUuidString
@@ -25,5 +25,3 @@ export class Uuid extends Scalar<string> {
 
 export let isUuid = isa(Uuid.isUuid, 'Uuid')
 isUuid.appendConvert(Uuid.convertUrlString)
-
-export let convertUuid = isUuid.toConvert()

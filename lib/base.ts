@@ -73,7 +73,7 @@ export interface IsaValidator<T> extends Validator<ExplicitAny, T> {
     isOptional() : IsaValidator<T | undefined>;
     transform<U>(transform : TransformProc<T, U>) : ConvertValidator<ExplicitAny, U>;
     defaultTo(defaultProc : DefaultProc<T>) : IsaValidator<T>;
-    toConvert() : ConvertValidator<ExplicitAny, T>;
+    toConvert(options ?: ExplicitAny) : ConvertValidator<ExplicitAny, T>;
     convert(v : ExplicitAny, path ?: string) : T;
     appendConvert(converter : ConvertValidator<ExplicitAny, T>) : void;
 }

@@ -15,9 +15,3 @@ isTrue.appendConvert(convertTrueString)
 let convertFalseString = isString.where(match(/^false$/i)).transform<false>(() => false)
 isFalse.appendConvert(convertFalseString)
 isBoolean.appendConvert(convertFalseString)
-
-export let convertTrue = isTrue.toConvert()
-
-export let convertFalse = isFalse.toConvert()
-
-export let convertBoolean = isBoolean.toConvert()

@@ -16,7 +16,7 @@ import * as uuid from 'uuid';
 
     @test convertUuid() {
         let u1 = uuid.v4()
-        let result = U.convertUuid.assert(u1)
+        let result = U.isUuid.convert(u1)
         assert.equal(u1, result.toString())
         assert.equal(u1, result.valueOf())
         assert.equal(u1, result.toJSON())

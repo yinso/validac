@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var E = require("../../lib/types/enum");
 var test_util_1 = require("../../lib/util/test-util");
 var isFoo = E.isEnum('hello', 'world', 'foo');
-var convertFoo = E.convertEnum('hello', 'world', 'foo');
+var convertFoo = isFoo.toConvert();
 var EnumTest = /** @class */ (function () {
     function EnumTest() {
     }

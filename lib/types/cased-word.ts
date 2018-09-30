@@ -21,7 +21,6 @@ export class CasedWord extends Scalar<string> {
     }
 
     toCamelCase() {
-        console.log('***** toCamelCase', this.words, this.words[0], this.words.slice(1))
         return [ this.words[0] ].concat(this.words.slice(1).map((w) => w[0].toUpperCase() + w.substring(1))).join('');
     }
 

@@ -56,9 +56,8 @@ import { suite, test, slow, timeout , expectError } from '../lib/util/test-util'
         let isDefaultString = S.isString.defaultTo(() => 'hello world')
         isDefaultString.assert('a string')
         expectError(isDefaultString.validate(undefined)) // the Isa version doesn't convert.
-        let convertDefaultString = isDefaultString.toConvert();
-        convertDefaultString.assert('a string')
-        convertDefaultString.assert(undefined)
+        isDefaultString.convert('a string')
+        isDefaultString.convert(undefined)
     }
 
     @test testAllOf() {

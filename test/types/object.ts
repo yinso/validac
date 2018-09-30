@@ -20,20 +20,12 @@ let isBar = isFoo.extends<Bar>({
     bar: V.isString
 });
 
-let convertBar = convertFoo.extends<Bar>({
-    bar: V.convertString
-})
-
 interface Baz {
     xyz: boolean;
 }
 
 let isBaz = V.isObject<Baz>({
     xyz: V.isBoolean
-})
-
-let convertBaz = V.convertObject<Baz>({
-    xyz: V.convertBoolean
 })
 
 let date1S = '2001-01-01T00:00:00Z'
@@ -45,12 +37,6 @@ interface Baw extends Bar {
 
 let isBaw = isBar.extends<Baw>({
     nested: V.isArray(V.isString)
-})
-
-let convertStringArray = V.convertArray(V.convertString)
-
-let convertBaw = convertBar.extends<Baw>({
-    nested: convertStringArray
 })
 
 @suite class ObjectTest {
@@ -119,13 +105,13 @@ let convertBaw = convertBar.extends<Baw>({
         }))
         assert.deepEqual({
            xyz: true 
-        }, convertBaz.assert({
+        }, isBaz.convert({
             xyz: 'true'
         }))
     }
 
     @test canEmbedNestedArray() {
-        convertBaw.assert({
+        isBaw.convert({
             foo: date1S,
             bar: 'a string',
             nested: [1 , true, null, undefined ]

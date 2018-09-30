@@ -11,7 +11,7 @@ export type ObjectIntersect<U, T> = Pick<U, Extract<keyof U, keyof T>>;
 export interface ObjectIsaValidator<T extends object> extends IsaValidator<T> {
     readonly validatorMap: IsaValidatorKVMap<T>;
     extends<U extends T>(validatorMap : IsaValidatorKVMap<ObjectDiff<U, T>>) : ObjectIsaValidator<U>;
-    toConvert() : ObjectConvertValidator<T>;
+    toConvert(options ?: ExplicitAny) : ObjectConvertValidator<T>;
 }
 
 export function isObject<T extends object>(validatorMap : IsaValidatorKVMap<T>) : ObjectIsaValidator<T>;
@@ -24,8 +24,6 @@ export type ConvertValidatorKVMap<ExplicitAny, T> = {
 export interface ObjectConvertValidator<T extends object> extends ConvertValidator<ExplicitAny, T> {
     extends<U extends T>(validatorMap : ConvertValidatorKVMap<ExplicitAny, ObjectDiff<U, T>>) : ObjectConvertValidator<U>;
 }
-
-export function convertObject<T extends object>(validatorMap : ConvertValidatorKVMap<ExplicitAny, T>) : ObjectConvertValidator<T>;
 
 // think of something called objectFactory.
 

@@ -25,7 +25,7 @@ var UuidTest = /** @class */ (function () {
     };
     UuidTest.prototype.convertUuid = function () {
         var u1 = uuid.v4();
-        var result = U.convertUuid.assert(u1);
+        var result = U.isUuid.convert(u1);
         assert.equal(u1, result.toString());
         assert.equal(u1, result.valueOf());
         assert.equal(u1, result.toJSON());

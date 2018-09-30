@@ -9,17 +9,17 @@ import { suite, test, slow, timeout , expectError } from '../lib/util/test-util'
 @suite class ConvertOneOfTest {
     @test canAssert() {
         ['1234', 'a string']
-            .forEach((v) => E.convertOneOf(N.convertNumber, S.convertString).assert(v))
+            .forEach((v) => E.convertOneOf(N.isNumber.toConvert(), S.isString.toConvert()).assert(v))
     }
 }
 
 @suite class ConvertAllOfTest {
     @test canAssert() {
-        let isFoo = O.convertObject({
-            foo: N.convertNumber
+        let isFoo = O.isObject({
+            foo: N.isNumber
         });
-        let isBar = O.convertObject({
-            bar: S.convertString
+        let isBar = O.isObject({
+            bar: S.isString
         });
         [
             {
@@ -28,6 +28,6 @@ import { suite, test, slow, timeout , expectError } from '../lib/util/test-util'
             {
                 foo: '10', bar: true
             },
-        ].forEach((v) => E.convertAllOf(isFoo, isBar).assert(v))
+        ].forEach((v) => E.convertAllOf(isFoo.toConvert(), isBar.toConvert()).assert(v))
     }
 }

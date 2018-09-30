@@ -19,23 +19,13 @@ var convertFoo = isFoo.toConvert();
 var isBar = isFoo.extends({
     bar: V.isString
 });
-var convertBar = convertFoo.extends({
-    bar: V.convertString
-});
 var isBaz = V.isObject({
     xyz: V.isBoolean
-});
-var convertBaz = V.convertObject({
-    xyz: V.convertBoolean
 });
 var date1S = '2001-01-01T00:00:00Z';
 var date1 = new Date(date1S);
 var isBaw = isBar.extends({
     nested: V.isArray(V.isString)
-});
-var convertStringArray = V.convertArray(V.convertString);
-var convertBaw = convertBar.extends({
-    nested: convertStringArray
 });
 var ObjectTest = /** @class */ (function () {
     function ObjectTest() {
@@ -99,12 +89,12 @@ var ObjectTest = /** @class */ (function () {
         }));
         assert.deepEqual({
             xyz: true
-        }, convertBaz.assert({
+        }, isBaz.convert({
             xyz: 'true'
         }));
     };
     ObjectTest.prototype.canEmbedNestedArray = function () {
-        convertBaw.assert({
+        isBaw.convert({
             foo: date1S,
             bar: 'a string',
             nested: [1, true, null, undefined]

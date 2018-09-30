@@ -32,8 +32,8 @@ export class ArrayIsaValidator<T> extends BaseIsaValidator<T[]> {
         }
     }
 
-    _toConvert() : ArrayConvertValidator<T> {
-        return new ArrayConvertValidator(this.inner.toConvert())
+    _toConvert(options ?: ExplicitAny) : ArrayConvertValidator<T> {
+        return new ArrayConvertValidator(this.inner.toConvert(options))
     }
 
 }
@@ -84,8 +84,4 @@ class ArrayConvertValidator<T> extends BaseConvertValidator<ExplicitAny, T[]> {
             return ValidationResult.resolve(result)
         }
     }
-}
-
-export function convertArray<T>(item : ConvertValidator<ExplicitAny, T>) : ConvertValidator<ExplicitAny, T[]> {
-    return new ArrayConvertValidator(item);
 }

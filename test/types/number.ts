@@ -11,12 +11,12 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
     }
 
     @test convertNumber() {
-        N.convertNumber.assert('10.5');
-        N.convertNumber.assert('10');
-        N.convertNumber.assert(10.5);
+        N.isNumber.convert('10.5');
+        N.isNumber.convert('10');
+        N.isNumber.convert(10.5);
     }
 
     @test convertInvalidNumber() {
-        expectError(N.convertNumber.validate('not a number'))
+        expectError(N.isNumber.toConvert().validate('not a number'))
     }
 }

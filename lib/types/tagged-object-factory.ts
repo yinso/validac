@@ -109,8 +109,8 @@ class TaggedObjectFactoryIsaValidator<KEY extends string, T extends Tagged<KEY, 
         return result as IsaValidatorKVMap<Omit<U, KEY>>;
     }
 
-    _toConvert() : TaggedObjectFactoryConvertValidator<KEY, T> {
-        return new TaggedObjectFactoryConvertValidator(this.objectKey, {[this.objectKey]: isString.toConvert() } as ConvertValidatorKVMap<ExplicitAny, T>, this.inner.toConvert(), this.registry);
+    _toConvert(options ?: ExplicitAny) : TaggedObjectFactoryConvertValidator<KEY, T> {
+        return new TaggedObjectFactoryConvertValidator(this.objectKey, {[this.objectKey]: isString.toConvert(options) } as ConvertValidatorKVMap<ExplicitAny, T>, this.inner.toConvert(options), this.registry, options);
     }
 }
 
@@ -130,19 +130,21 @@ class TaggedObjectFactoryConvertValidator<KEY extends string, T extends Tagged<K
     readonly validatorMap : ConvertValidatorKVMap<ExplicitAny, T>;
     readonly inner : ObjectConvertValidator<T>;
     readonly registry : TaggedObjectRegistry<KEY, T>;
-    constructor(key: KEY, validatorMap : ConvertValidatorKVMap<ExplicitAny, T>, inner : ObjectConvertValidator<T>, registry : TaggedObjectRegistry<KEY, T>) {
+    readonly convertOptions : ExplicitAny;
+    constructor(key: KEY, validatorMap : ConvertValidatorKVMap<ExplicitAny, T>, inner : ObjectConvertValidator<T>, registry : TaggedObjectRegistry<KEY, T>, options ?: ExplicitAny) {
         super();
         this.objectKey =key;
         this.validatorMap = validatorMap;
         this.inner = inner;
         this.registry = registry;
+        this.convertOptions = options;
     }
 
     validate(value : ExplicitAny, path : string = '$') : ValidationResult<T> {
         return this.inner.validate(value, path)
             .cata((v) => {
                 if (v.hasOwnProperty(this.objectKey) && this.registry.has(v[this.objectKey])) {
-                    return this.registry.get(v[this.objectKey]).toConvert().validate(v, path);
+                    return this.registry.get(v[this.objectKey]).toConvert(this.convertOptions).validate(v, path);
                 } else {
                     return ValidationResult.reject({
                         error: 'UnknownTag',

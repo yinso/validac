@@ -6,7 +6,7 @@ type Foo = 'hello' | 'world' | 'foo';
 
 let isFoo = E.isEnum('hello', 'world', 'foo')
 
-let convertFoo = E.convertEnum('hello', 'world', 'foo')
+let convertFoo = isFoo.toConvert();
 
 @suite class EnumTest {
     @test isEnum() {
