@@ -42,20 +42,20 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
     }
 
     @test isUpperSnakeCaseString() {
-        S.isUpperSnakeCaseString.assert('IS_SNAKE_CASE_UPPER')
-        expectError(S.isUpperSnakeCaseString.validate('notSnakeCaseUpper'))
-        expectError(S.isUpperSnakeCaseString.validate('NotSnakeCaseUpper'))
-        expectError(S.isUpperSnakeCaseString.validate('not-snake-case-upper'))
-        expectError(S.isUpperSnakeCaseString.validate('not_snake_case_upper'))
+        S.isMacroCaseString.assert('IS_MACRO_CASE')
+        expectError(S.isMacroCaseString.validate('notMacroCase'))
+        expectError(S.isMacroCaseString.validate('NotMacroCase'))
+        expectError(S.isMacroCaseString.validate('not-macro-case'))
+        expectError(S.isMacroCaseString.validate('not_macro_case'))
     }
 
     @test canConvertCases() {
         let c1 = new S.CasedWord('isCasedWord');
         assert.equal('isCasedWord', c1.toString())
-        assert.equal('isCasedWord', c1.toCamelCase())
-        assert.equal('IsCasedWord', c1.toPascalCase())
-        assert.equal('is-cased-word', c1.toKababCase())
-        assert.equal('is_cased_word', c1.toSnakeCase())
-        assert.equal('IS_CASED_WORD', c1.toUpperSnakeCase())
+        assert.equal('isCasedWord', c1.toCase('Camel'))
+        assert.equal('IsCasedWord', c1.toCase('Pascal'))
+        assert.equal('is-cased-word', c1.toCase('Kabab'))
+        assert.equal('is_cased_word', c1.toCase('Snake'))
+        assert.equal('IS_CASED_WORD', c1.toCase('Macro'))
     }
 }

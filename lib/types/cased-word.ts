@@ -1,7 +1,7 @@
 import * as S from './string';
 import * as I from '../isa';
 import { Scalar } from '../scalar';
-import { ExplicitAny, Casing } from '../base';
+import { ExplicitAny, CaseNames, CaseNameKeys } from '../base';
 
 const camelCaseRegex = /^([a-z][a-z0-9]*)([A-Z][a-z0-9]+)*$/
 
@@ -11,89 +11,94 @@ const kababCaseRegex = /^([a-z][a-z0-9]*)(-[a-z0-9]+)*$/
 
 const snakeCaseRegex = /^([a-z][a-z0-9]*)(_[a-z0-9]+)*$/
 
-const upperSnakeCaseRegex = /^([A-Z][A-Z0-9]*)(_[A-Z0-9]+)*$/
+const macroCaseRegex = /^([A-Z][A-Z0-9]*)(_[A-Z0-9]+)*$/
+
+export type IsCaseProc = (word : string) => boolean;
+
+export type FromCaseProc = (word : string) => string[];
+
+export type ToCaseProc = (words: string[]) => string;
+
+export type CaseRegistryOptions = {
+    caseName : CaseNameKeys;
+    isCase : IsCaseProc;
+    fromCase : FromCaseProc;
+    toCase : ToCaseProc;
+};
+
+const caseRegistry : {[key in CaseNameKeys] ?: CaseRegistryOptions } = {};
+
+export function registerCase(options : CaseRegistryOptions) {
+    if (caseRegistry.hasOwnProperty(options.caseName)) {
+        throw new Error(`DuplicateCasing: ${options.caseName}`)
+    }
+    caseRegistry[options.caseName] = options;
+}
+
+function fromCase(str : string) : string[] {
+    for (var key in caseRegistry) {
+        if (caseRegistry.hasOwnProperty(key)) {
+            let options = (caseRegistry as ExplicitAny)[key] as CaseRegistryOptions;
+            if (options.isCase(str)) {
+                return options.fromCase(str);
+            }
+        }
+    }
+    throw new Error(`StringWithUnknownCasing: ${str}`)
+}
+
+registerCase({
+    caseName: 'Camel',
+    isCase: (v) => camelCaseRegex.test(v),
+    fromCase: (str) => str.split(/(?=[A-Z])/).map((v) => v.toLowerCase()),
+    toCase: (words) => [ words[0] ].concat(words.slice(1).map((w) => w[0].toUpperCase() + w.substring(1))).join('')
+})
+
+registerCase({
+    caseName: 'Pascal',
+    isCase: (v) => pascalCaseRegex.test(v),
+    fromCase: (str) => str.split(/(?=[A-Z])/).map((v) => v.toLowerCase()),
+    toCase: (words) => words.map((w) => w[0].toUpperCase() + w.substring(1)).join('')
+})
+
+registerCase({
+    caseName: 'Kabab',
+    isCase: (v) => kababCaseRegex.test(v),
+    fromCase: (str) => str.split('-'),
+    toCase: (words) => words.join('-')
+})
+
+registerCase({
+    caseName: 'Snake',
+    isCase: (v) => snakeCaseRegex.test(v),
+    fromCase: (str) => str.split('_'),
+    toCase: (words) => words.join('_')
+})
+
+registerCase({
+    caseName: 'Macro',
+    isCase: (v) => macroCaseRegex.test(v),
+    fromCase: (str) => str.split('_').map((v) => v.toLowerCase()),
+    toCase: (words) => words.map((v) => v.toUpperCase()).join('_')
+})
 
 export class CasedWord extends Scalar<string> {
     readonly words : string[];
     constructor(word : string) {
         super(word);
-        this.words = this._toWords(word);
+        this.words = fromCase(word);
     }
 
-    toCase(casing : keyof typeof Casing) {
-        switch (Casing[casing]) {
-            case 'Camel':
-                return this.toCamelCase();
-            case 'Pascal':
-                return this.toPascalCase();
-            case 'Kabab':
-                return this.toKababCase();
-            case 'Snake':
-                return this.toSnakeCase();
-            case 'UpperSnake':
-                return this.toUpperSnakeCase();
-            default:
-                throw new Error(`InvalidCasing: ${casing}`)
+    toCase(casing : CaseNameKeys) {
+        let options = caseRegistry[casing];
+        if (options) {
+            return options.toCase(this.words);
+        } else {
+            throw new Error(`UnknownCasing: ${casing}`);
         }
-    }
-
-    toCamelCase() {
-        return [ this.words[0] ].concat(this.words.slice(1).map((w) => w[0].toUpperCase() + w.substring(1))).join('');
-    }
-
-    toPascalCase() {
-        return this.words.map((w) => w[0].toUpperCase() + w.substring(1)).join('');
-    }
-
-    toSnakeCase() {
-        return this.words.join('_');
-    }
-
-    toUpperSnakeCase() {
-        return this.words.map((v) => v.toUpperCase()).join('_');
-    }
-
-    toKababCase() {
-        return this.words.join('-');
     }
 
     static isCasedWord = I.isa((v : ExplicitAny) : v is CasedWord => v instanceof CasedWord, 'CasedWord')
-
-    private _toWords(str : string) : string[] {
-        if (camelCaseRegex.test(str)) {
-            return this._camelToWords(str);
-        } else if (pascalCaseRegex.test(str)) {
-            return this._pascalToWords(str);
-        } else if (snakeCaseRegex.test(str)) {
-            return this._snakeToWords(str);
-        } else if (kababCaseRegex.test(str)) {
-            return this._kababToWords(str);
-        } else if (upperSnakeCaseRegex.test(str)) {
-            return this._upperSnakeToWords(str);
-        } else {
-            throw new Error(`InvalidCaseWord: ${str}`);
-        }
-    }
-
-    private _snakeToWords(str : string) : string[] {
-        return str.split('_');
-    }
-
-    private _upperSnakeToWords(str : string) : string[] {
-        return str.split('_').map((w) => w.toLowerCase());
-    }
-
-    private _kababToWords(str : string) : string[] {
-        return str.split('-');
-    }
-
-    private _camelToWords(str : string) : string[] {
-        return str.split(/(?=[A-Z])/).map((v) => v.toLowerCase());
-    }
-
-    private _pascalToWords(str : string) : string[] {
-        return str.split(/(?=[A-Z])/).map((v) => v.toLowerCase());
-    }
 }
 
 export let isCasedWord = CasedWord.isCasedWord;
@@ -106,7 +111,7 @@ export let isKababCaseString = S.isString.where(S.match(kababCaseRegex))
 
 export let isSnakeCaseString = S.isString.where(S.match(snakeCaseRegex))
 
-export let isUpperSnakeCaseString = S.isString.where(S.match(upperSnakeCaseRegex))
+export let isMacroCaseString = S.isString.where(S.match(macroCaseRegex))
 
 isCasedWord.appendConvert(isCamelCaseString
     .transform((v) => new CasedWord(v)))
@@ -120,5 +125,5 @@ isCasedWord.appendConvert(isKababCaseString
 isCasedWord.appendConvert(isSnakeCaseString
     .transform((v) => new CasedWord(v)))
 
-isCasedWord.appendConvert(isUpperSnakeCaseString
+isCasedWord.appendConvert(isMacroCaseString
     .transform((v) => new CasedWord(v)))

@@ -48,20 +48,20 @@ var CasedWordTest = /** @class */ (function () {
         test_util_1.expectError(S.isSnakeCaseString.validate('NOT_SNAKE_CASE'));
     };
     CasedWordTest.prototype.isUpperSnakeCaseString = function () {
-        S.isUpperSnakeCaseString.assert('IS_SNAKE_CASE_UPPER');
-        test_util_1.expectError(S.isUpperSnakeCaseString.validate('notSnakeCaseUpper'));
-        test_util_1.expectError(S.isUpperSnakeCaseString.validate('NotSnakeCaseUpper'));
-        test_util_1.expectError(S.isUpperSnakeCaseString.validate('not-snake-case-upper'));
-        test_util_1.expectError(S.isUpperSnakeCaseString.validate('not_snake_case_upper'));
+        S.isMacroCaseString.assert('IS_MACRO_CASE');
+        test_util_1.expectError(S.isMacroCaseString.validate('notMacroCase'));
+        test_util_1.expectError(S.isMacroCaseString.validate('NotMacroCase'));
+        test_util_1.expectError(S.isMacroCaseString.validate('not-macro-case'));
+        test_util_1.expectError(S.isMacroCaseString.validate('not_macro_case'));
     };
     CasedWordTest.prototype.canConvertCases = function () {
         var c1 = new S.CasedWord('isCasedWord');
         assert.equal('isCasedWord', c1.toString());
-        assert.equal('isCasedWord', c1.toCamelCase());
-        assert.equal('IsCasedWord', c1.toPascalCase());
-        assert.equal('is-cased-word', c1.toKababCase());
-        assert.equal('is_cased_word', c1.toSnakeCase());
-        assert.equal('IS_CASED_WORD', c1.toUpperSnakeCase());
+        assert.equal('isCasedWord', c1.toCase('Camel'));
+        assert.equal('IsCasedWord', c1.toCase('Pascal'));
+        assert.equal('is-cased-word', c1.toCase('Kabab'));
+        assert.equal('is_cased_word', c1.toCase('Snake'));
+        assert.equal('IS_CASED_WORD', c1.toCase('Macro'));
     };
     __decorate([
         test_util_1.test,

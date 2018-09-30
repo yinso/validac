@@ -65,16 +65,18 @@ export function isConvertValidator<T, U>(v : any) : v is ConvertValidator<T, U> 
         && isFunction((v as any).transform) && isFunction((v as any).defaultTo);
 }
 
-export enum Casing {
+export enum CaseNames {
     Camel = 'Camel',
     Pascal = 'Pascal',
     Kabab = 'Kabab',
     Snake = 'Snake',
-    UpperSnake = 'UpperSnake',
+    Macro = 'Macro',
 }
 
+export type CaseNameKeys = keyof typeof CaseNames;
+
 export interface ConvertOptions {
-    fromKeyCasing ?: keyof typeof Casing;
+    fromKeyCasing ?: CaseNameKeys;
 }
 
 export interface IsaValidator<T> extends Validator<ExplicitAny, T> {
