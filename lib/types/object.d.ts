@@ -1,4 +1,4 @@
-import { ExplicitAny , Constraint, ConvertValidator , IsaValidator } from '../base';
+import { ExplicitAny , Constraint, ConvertValidator , IsaValidator, ConvertOptions } from '../base';
 
 export type IsaValidatorKVMap<T extends object> = {
     [P in keyof T]: IsaValidator<T[P]>;
@@ -11,7 +11,7 @@ export type ObjectIntersect<U, T> = Pick<U, Extract<keyof U, keyof T>>;
 export interface ObjectIsaValidator<T extends object> extends IsaValidator<T> {
     readonly validatorMap: IsaValidatorKVMap<T>;
     extends<U extends T>(validatorMap : IsaValidatorKVMap<ObjectDiff<U, T>>) : ObjectIsaValidator<U>;
-    toConvert(options ?: ExplicitAny) : ObjectConvertValidator<T>;
+    toConvert(options ?: ConvertOptions) : ObjectConvertValidator<T>;
 }
 
 export function isObject<T extends object>(validatorMap : IsaValidatorKVMap<T>) : ObjectIsaValidator<T>;

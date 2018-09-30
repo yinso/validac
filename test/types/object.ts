@@ -1,6 +1,7 @@
 import * as V from '../../lib'
 import { suite, test, slow, timeout , expectError } from '../../lib/util/test-util';
 import * as assert from 'assert';
+import * as uuid from 'uuid';
 
 interface Foo {
     foo: Date;
@@ -37,6 +38,24 @@ interface Baw extends Bar {
 
 let isBaw = isBar.extends<Baw>({
     nested: V.isArray(V.isString)
+})
+
+interface User {
+    userId: V.Uuid,
+    userName: V.EmailAddress
+}
+
+let isUser = V.isObject<User>({
+    userId: V.isUuid,
+    userName: V.isEmailAddress,
+})
+
+interface UserProfile extends User {
+    phoneNumber: string;
+}
+
+let isUserProfile = isUser.extends<UserProfile>({
+    phoneNumber: V.isString
 })
 
 @suite class ObjectTest {
@@ -116,5 +135,34 @@ let isBaw = isBar.extends<Baw>({
             bar: 'a string',
             nested: [1 , true, null, undefined ]
         })
+    }
+
+    @test canConvertFromDifferentKeyCasing() {
+        let id = uuid.v4()
+        let emailAddress = 'test@test.com'
+        let result = isUser.toConvert({
+            fromKeyCasing: 'Snake'
+        }).assert({
+            user_id: id,
+            user_name: emailAddress
+        });
+        assert.deepEqual({
+            userId: new V.Uuid(id),
+            userName: new V.EmailAddress(emailAddress)
+        }, result)
+
+        let phone = '555-555-1212'
+        let result2 = isUserProfile.toConvert({
+            fromKeyCasing: 'Snake'
+        }).assert({
+            user_id: id,
+            user_name: emailAddress,
+            phone_number: phone
+        });
+        assert.deepEqual({
+            userId: new V.Uuid(id),
+            userName: new V.EmailAddress(emailAddress),
+            phoneNumber: phone
+        }, result2)
     }
 }

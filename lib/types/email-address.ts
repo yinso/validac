@@ -10,7 +10,7 @@ function _isParsedMailbox(mailboxOrGroup: emailAddresses.ParsedMailbox | emailAd
     return mailboxOrGroup.type === 'mailbox';
 }
 
-class EmailAddress extends Scalar<string> {
+export class EmailAddress extends Scalar<string> {
     private _parsed : E.ParsedMailbox;
     constructor(inner ?: string) {
         super(isEmailAddressString.convert(inner));

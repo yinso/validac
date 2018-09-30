@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var V = require("../../lib");
 var test_util_1 = require("../../lib/util/test-util");
 var assert = require("assert");
+var uuid = require("uuid");
 var isFoo = V.isObject({
     foo: V.isDate
 });
@@ -26,6 +27,13 @@ var date1S = '2001-01-01T00:00:00Z';
 var date1 = new Date(date1S);
 var isBaw = isBar.extends({
     nested: V.isArray(V.isString)
+});
+var isUser = V.isObject({
+    userId: V.isUuid,
+    userName: V.isEmailAddress,
+});
+var isUserProfile = isUser.extends({
+    phoneNumber: V.isString
 });
 var ObjectTest = /** @class */ (function () {
     function ObjectTest() {
@@ -100,6 +108,33 @@ var ObjectTest = /** @class */ (function () {
             nested: [1, true, null, undefined]
         });
     };
+    ObjectTest.prototype.canConvertFromDifferentKeyCasing = function () {
+        var id = uuid.v4();
+        var emailAddress = 'test@test.com';
+        var result = isUser.toConvert({
+            fromKeyCasing: 'Snake'
+        }).assert({
+            user_id: id,
+            user_name: emailAddress
+        });
+        assert.deepEqual({
+            userId: new V.Uuid(id),
+            userName: new V.EmailAddress(emailAddress)
+        }, result);
+        var phone = '555-555-1212';
+        var result2 = isUserProfile.toConvert({
+            fromKeyCasing: 'Snake'
+        }).assert({
+            user_id: id,
+            user_name: emailAddress,
+            phone_number: phone
+        });
+        assert.deepEqual({
+            userId: new V.Uuid(id),
+            userName: new V.EmailAddress(emailAddress),
+            phoneNumber: phone
+        }, result2);
+    };
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
@@ -142,6 +177,12 @@ var ObjectTest = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], ObjectTest.prototype, "canEmbedNestedArray", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], ObjectTest.prototype, "canConvertFromDifferentKeyCasing", null);
     ObjectTest = __decorate([
         test_util_1.suite
     ], ObjectTest);

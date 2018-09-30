@@ -1,4 +1,4 @@
-import { ValidationResult , ValidationError, ExplicitAny , ConvertValidator , IsaValidator } from '../base';
+import { ValidationResult , ValidationError, ExplicitAny , ConvertValidator , IsaValidator, ConvertOptions } from '../base';
 import { BaseIsaValidator } from '../isa';
 import { BaseConvertValidator } from '../convert'
 
@@ -32,8 +32,8 @@ export class ArrayIsaValidator<T> extends BaseIsaValidator<T[]> {
         }
     }
 
-    _toConvert(options ?: ExplicitAny) : ArrayConvertValidator<T> {
-        return new ArrayConvertValidator(this.inner.toConvert(options))
+    _toConvert(options : ConvertOptions) : ArrayConvertValidator<T> {
+        return new ArrayConvertValidator(this.inner.toConvert(options), options)
     }
 
 }
@@ -48,8 +48,8 @@ export function isArray<T>(item : IsaValidator<T>) : ArrayIsaValidator<T> {
 
 class ArrayConvertValidator<T> extends BaseConvertValidator<ExplicitAny, T[]> {
     readonly inner : ConvertValidator<ExplicitAny, T>;
-    constructor(inner : ConvertValidator<ExplicitAny, T>) {
-        super();
+    constructor(inner : ConvertValidator<ExplicitAny, T>, convertOptions : ConvertOptions) {
+        super(convertOptions);
         this.inner = inner;
     }
 

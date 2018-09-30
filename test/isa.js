@@ -61,9 +61,8 @@ var IsaTest = /** @class */ (function () {
         var isDefaultString = S.isString.defaultTo(function () { return 'hello world'; });
         isDefaultString.assert('a string');
         test_util_1.expectError(isDefaultString.validate(undefined)); // the Isa version doesn't convert.
-        var convertDefaultString = isDefaultString.toConvert();
-        convertDefaultString.assert('a string');
-        convertDefaultString.assert(undefined);
+        isDefaultString.convert('a string');
+        isDefaultString.convert(undefined);
     };
     IsaTest.prototype.testAllOf = function () {
         var validator = I.isAllOf(S.isString, L.isLiteral('test'));

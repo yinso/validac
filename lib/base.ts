@@ -65,6 +65,18 @@ export function isConvertValidator<T, U>(v : any) : v is ConvertValidator<T, U> 
         && isFunction((v as any).transform) && isFunction((v as any).defaultTo);
 }
 
+export enum Casing {
+    Camel = 'Camel',
+    Pascal = 'Pascal',
+    Kabab = 'Kabab',
+    Snake = 'Snake',
+    UpperSnake = 'UpperSnake',
+}
+
+export interface ConvertOptions {
+    fromKeyCasing ?: keyof typeof Casing;
+}
+
 export interface IsaValidator<T> extends Validator<ExplicitAny, T> {
     isa(v : ExplicitAny, path ?: string) : v is T;
     where(constraint : Constraint<T> | ConstraintPredicate<T>) : IsaValidator<T>;
@@ -73,7 +85,7 @@ export interface IsaValidator<T> extends Validator<ExplicitAny, T> {
     isOptional() : IsaValidator<T | undefined>;
     transform<U>(transform : TransformProc<T, U>) : ConvertValidator<ExplicitAny, U>;
     defaultTo(defaultProc : DefaultProc<T>) : IsaValidator<T>;
-    toConvert(options ?: ExplicitAny) : ConvertValidator<ExplicitAny, T>;
+    toConvert(options ?: ConvertOptions) : ConvertValidator<ExplicitAny, T>;
     convert(v : ExplicitAny, path ?: string) : T;
     appendConvert(converter : ConvertValidator<ExplicitAny, T>) : void;
 }

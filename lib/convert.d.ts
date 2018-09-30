@@ -1,6 +1,10 @@
-import { Validator, BaseValidator, ConvertValidator, Constraint, ValidationResult, ConstraintPredicate, TransformProc, DefaultProc, ExplicitAny, IsaPredicate } from './base';
+import { Validator, BaseValidator, ConvertValidator, Constraint, ValidationResult, ConstraintPredicate, TransformProc, DefaultProc, ExplicitAny, IsaPredicate, ConvertOptions } from './base';
 
 export abstract class BaseConvertValidator<T, U> extends BaseValidator<T, U> implements ConvertValidator<T, U> {
+    readonly convertOptions : ConvertOptions;
+
+    constructor(convertOptions : ConvertOptions);
+
     abstract validate(value : T, path ?: string) : ValidationResult<U>;
 
     where(constraint : Constraint<U> | ConstraintPredicate<U>) : ConvertValidator<T, U>;

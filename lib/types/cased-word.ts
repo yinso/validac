@@ -1,7 +1,7 @@
 import * as S from './string';
 import * as I from '../isa';
 import { Scalar } from '../scalar';
-import { ExplicitAny } from '../base';
+import { ExplicitAny, Casing } from '../base';
 
 const camelCaseRegex = /^([a-z][a-z0-9]*)([A-Z][a-z0-9]+)*$/
 
@@ -18,6 +18,23 @@ export class CasedWord extends Scalar<string> {
     constructor(word : string) {
         super(word);
         this.words = this._toWords(word);
+    }
+
+    toCase(casing : keyof typeof Casing) {
+        switch (Casing[casing]) {
+            case 'Camel':
+                return this.toCamelCase();
+            case 'Pascal':
+                return this.toPascalCase();
+            case 'Kabab':
+                return this.toKababCase();
+            case 'Snake':
+                return this.toSnakeCase();
+            case 'UpperSnake':
+                return this.toUpperSnakeCase();
+            default:
+                throw new Error(`InvalidCasing: ${casing}`)
+        }
     }
 
     toCamelCase() {
