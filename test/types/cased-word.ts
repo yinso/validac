@@ -3,6 +3,12 @@ import * as L from '../../lib/types/literal';
 import * as assert from 'assert';
 import { suite, test, slow, timeout , expectError } from '../../lib/util/test-util';
 
+declare module '../../lib/base' { // for custom test below.
+    enum CaseNames {
+        Custom = 'Custom'
+    }
+}
+
 @suite class CasedWordTest {
     @test isCasedWord () {
         let c1 = new S.CasedWord('isCasedWord');
@@ -57,5 +63,24 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
         assert.equal('is-cased-word', c1.toCase('Kabab'))
         assert.equal('is_cased_word', c1.toCase('Snake'))
         assert.equal('IS_CASED_WORD', c1.toCase('Macro'))
+    }
+
+    @test canAddCustomCase() {
+        // what does our custom case do?
+        // it uses '$' as delimiter, and capitalize the first word.
+        S.registerCase({
+            caseName: 'Custom',
+            isCase: (v) => /^([A-Z][a-z0-9]*)(\$[A-Z][a-z0-9]*)*$/.test(v),
+            fromCase: (str) => str.split('$').map((s) => s.toLowerCase()),
+            toCase: (words) => words.map((str) => str[0].toUpperCase() + str.substring(1)).join('$')
+        })
+        let c1 = new S.CasedWord('Is$Cased$Word');        
+        assert.equal('Is$Cased$Word', c1.toString())
+        assert.equal('isCasedWord', c1.toCase('Camel'))
+        assert.equal('IsCasedWord', c1.toCase('Pascal'))
+        assert.equal('is-cased-word', c1.toCase('Kabab'))
+        assert.equal('is_cased_word', c1.toCase('Snake'))
+        assert.equal('IS_CASED_WORD', c1.toCase('Macro'))
+        assert.equal('Is$Cased$Word', c1.toCase('Custom'))
     }
 }

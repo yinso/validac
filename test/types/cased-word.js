@@ -63,6 +63,24 @@ var CasedWordTest = /** @class */ (function () {
         assert.equal('is_cased_word', c1.toCase('Snake'));
         assert.equal('IS_CASED_WORD', c1.toCase('Macro'));
     };
+    CasedWordTest.prototype.canAddCustomCase = function () {
+        // what does our custom case do?
+        // it uses '$' as delimiter, and capitalize the first word.
+        S.registerCase({
+            caseName: 'Custom',
+            isCase: function (v) { return /^([A-Z][a-z0-9]*)(\$[A-Z][a-z0-9]*)*$/.test(v); },
+            fromCase: function (str) { return str.split('$').map(function (s) { return s.toLowerCase(); }); },
+            toCase: function (words) { return words.map(function (str) { return str[0].toUpperCase() + str.substring(1); }).join('$'); }
+        });
+        var c1 = new S.CasedWord('Is$Cased$Word');
+        assert.equal('Is$Cased$Word', c1.toString());
+        assert.equal('isCasedWord', c1.toCase('Camel'));
+        assert.equal('IsCasedWord', c1.toCase('Pascal'));
+        assert.equal('is-cased-word', c1.toCase('Kabab'));
+        assert.equal('is_cased_word', c1.toCase('Snake'));
+        assert.equal('IS_CASED_WORD', c1.toCase('Macro'));
+        assert.equal('Is$Cased$Word', c1.toCase('Custom'));
+    };
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
@@ -105,6 +123,12 @@ var CasedWordTest = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], CasedWordTest.prototype, "canConvertCases", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], CasedWordTest.prototype, "canAddCustomCase", null);
     CasedWordTest = __decorate([
         test_util_1.suite
     ], CasedWordTest);
