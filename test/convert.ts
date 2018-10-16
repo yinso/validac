@@ -4,7 +4,11 @@ import * as E from '../lib/convert';
 import * as S from '../lib/types/string';
 import * as N from '../lib/types/number';
 import * as O from '../lib/types/object';
+import * as A from '../lib/types/array';
 import { suite, test, slow, timeout , expectError } from '../lib/util/test-util';
+import { ConvertValidator } from '../lib';
+
+type RecursiveOneOf = string | { foo : RecursiveOneOf };
 
 @suite class ConvertOneOfTest {
     @test canAssert() {

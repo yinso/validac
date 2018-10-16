@@ -1,6 +1,7 @@
 import * as V from '../../lib'
 import { suite, test, slow, timeout , expectError } from '../../lib/util/test-util';
 import * as assert from 'assert';
+import { IsaValidator } from '../../lib';
 
 type Foo = [ number, string, boolean ]
 
@@ -25,6 +26,8 @@ function makeTuple<T extends any[]>(...params : BarArray<T>) {
 let x = makeTuple<Foo>(new Bar<string>('1'), new Bar<string>('1'), new Bar<string>('1'), new Bar<string>('1'))
 //*/
 
+type RecursiveTuple = [ number , string , { foo : RecursiveTuple[] } ]
+
 @suite class TupleTest {
     @test canAssert() {
         isFoo.assert([1, 'a string', true])
@@ -39,5 +42,22 @@ let x = makeTuple<Foo>(new Bar<string>('1'), new Bar<string>('1'), new Bar<strin
 
     @test canConvertTuple() {
         convertFoo.assert(['10', 'a string', 'true'])
+    }
+
+    @test canConvertRecursiveTuple() {
+        let isRecursiveTuple = V.isTuple(V.isNumber, V.isString, V.isObject<{ foo : RecursiveTuple[] }>({
+            foo: () : IsaValidator<RecursiveTuple[]> => V.isArray(isRecursiveTuple)
+        }));
+        assert.deepEqual(true, isRecursiveTuple.isa([1, 'string', { foo: [
+                    [ 2 , 'test', { foo : [] } ],
+                    [ 3 , 'foo', {
+                            foo: [
+                                [ 4, 'bar', { foo: [] } ]
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]));
     }
 }

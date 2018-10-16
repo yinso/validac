@@ -135,6 +135,26 @@ var ObjectTest = /** @class */ (function () {
             phoneNumber: phone
         }, result2);
     };
+    ObjectTest.prototype.canDoRecursiveObjectType = function () {
+        var isRecursiveFoo = V.isObject({
+            foo: V.isString,
+            inner: function () { return V.isArray(isRecursiveFoo); }
+        });
+        assert.deepEqual(true, isRecursiveFoo.isa({
+            foo: 'a string',
+            inner: [
+                {
+                    foo: 'test',
+                    inner: [
+                        {
+                            foo: 'test 2',
+                            inner: []
+                        }
+                    ]
+                }
+            ]
+        }));
+    };
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
@@ -183,6 +203,12 @@ var ObjectTest = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], ObjectTest.prototype, "canConvertFromDifferentKeyCasing", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], ObjectTest.prototype, "canDoRecursiveObjectType", null);
     ObjectTest = __decorate([
         test_util_1.suite
     ], ObjectTest);

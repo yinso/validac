@@ -1,10 +1,10 @@
-import { ValidationResult , ValidationError, ExplicitAny , ConvertValidator , IsaValidator, ConvertOptions } from '../base';
+import { ValidationResult , ValidationError, ExplicitAny , ConvertValidator , ConvertValidatorCompat, isConvertValidator, IsaValidator, IsaValidatorCompat, ConvertOptions, isIsaValidator } from '../base';
 import { BaseIsaValidator } from '../isa';
 import { BaseConvertValidator } from '../convert'
 
 export class ArrayIsaValidator<T> extends BaseIsaValidator<T[]> {
-    readonly inner : IsaValidator<T>;
-    constructor(inner : IsaValidator<T>) {
+    readonly inner : IsaValidatorCompat<T>;
+    constructor(inner : IsaValidatorCompat<T>) {
         super();
         this.inner = inner;
     }
@@ -20,7 +20,7 @@ export class ArrayIsaValidator<T> extends BaseIsaValidator<T[]> {
         }
         let errors : ValidationError[] = [];
         arg.forEach((item, i) => {
-            this.inner.validate(item, path + '[' + i + ']')
+            (isIsaValidator<T>(this.inner) ? this.inner : this.inner()).validate(item, path + '[' + i + ']')
                 .cata(() => {}, (errs) => {
                     errors = errors.concat(errs)
                 })
@@ -33,7 +33,7 @@ export class ArrayIsaValidator<T> extends BaseIsaValidator<T[]> {
     }
 
     _toConvert(options : ConvertOptions) : ArrayConvertValidator<T> {
-        return new ArrayConvertValidator(this.inner.toConvert(options), options)
+        return new ArrayConvertValidator((isIsaValidator(this.inner) ? this.inner : this.inner()).toConvert(options), options)
     }
 
 }
@@ -47,8 +47,8 @@ export function isArray<T>(item : IsaValidator<T>) : ArrayIsaValidator<T> {
 }
 
 class ArrayConvertValidator<T> extends BaseConvertValidator<ExplicitAny, T[]> {
-    readonly inner : ConvertValidator<ExplicitAny, T>;
-    constructor(inner : ConvertValidator<ExplicitAny, T>, convertOptions : ConvertOptions) {
+    readonly inner : ConvertValidatorCompat<ExplicitAny, T>;
+    constructor(inner : ConvertValidatorCompat<ExplicitAny, T>, convertOptions : ConvertOptions) {
         super(convertOptions);
         this.inner = inner;
     }
@@ -66,7 +66,7 @@ class ArrayConvertValidator<T> extends BaseConvertValidator<ExplicitAny, T[]> {
         let changed : boolean = false;
         let errors : ValidationError[] = [];
         arg.forEach((item, i) => {
-            this.inner.validate(item, path + '[' + i + ']')
+            (isConvertValidator(this.inner) ? this.inner : this.inner()).validate(item, path + '[' + i + ']')
                 .cata((value) => {
                     if (value !== item) {
                         changed = true

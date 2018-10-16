@@ -17,6 +17,7 @@ var _N = require("../lib/types/null");
 var L = require("../lib/types/literal");
 var E = require("../lib/isa");
 var O = require("../lib/types/object");
+var A = require("../lib/types/array");
 var test_util_1 = require("../lib/util/test-util");
 var IsaTest = /** @class */ (function () {
     function IsaTest() {
@@ -146,12 +147,25 @@ var IsOneOfTest = /** @class */ (function () {
         [null, 'a string']
             .forEach(function (v) { return E.isOneOf(_N.isNull, S.isString).assert(v); });
     };
+    IsOneOfTest.prototype.canTestRecursiveOneOf = function () {
+        var isRecursiveOneOf = E.isOneOf(S.isString, O.isObject({
+            foo: function () { return isRecursiveOneOf; }
+        }));
+        assert.equal(true, isRecursiveOneOf.isa('a recursive oneof'));
+        assert.equal(true, isRecursiveOneOf.isa({ foo: 'a recursive one of' }));
+    };
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], IsOneOfTest.prototype, "canAssert", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], IsOneOfTest.prototype, "canTestRecursiveOneOf", null);
     IsOneOfTest = __decorate([
         test_util_1.suite
     ], IsOneOfTest);
@@ -171,12 +185,31 @@ var IsAllOfTest = /** @class */ (function () {
                 foo: 1, bar: 'a string'
             }].forEach(function (v) { return E.isAllOf(isFoo, isBar).assert(v); });
     };
+    IsAllOfTest.prototype.canTestRecurisveAllOf = function () {
+        var isRecursiveAllOf = E.isAllOf(O.isObject({
+            bar: S.isString
+        }), O.isObject({
+            foo: function () { return A.isArray(isRecursiveAllOf); }
+        }));
+        assert.equal(true, isRecursiveAllOf.isa({ bar: 'a recursive allof', foo: [
+                {
+                    bar: 'a nested recursive allof',
+                    foo: []
+                }
+            ] }));
+    };
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], IsAllOfTest.prototype, "canAssert", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], IsAllOfTest.prototype, "canTestRecurisveAllOf", null);
     IsAllOfTest = __decorate([
         test_util_1.suite
     ], IsAllOfTest);

@@ -1,7 +1,7 @@
-import { ExplicitAny , Constraint, ConvertValidator , IsaValidator, ConvertOptions } from '../base';
+import { ExplicitAny , Constraint, ConvertValidator , ConvertValidatorCompat, IsaValidator, ConvertOptions, IsaValidatorCompat } from '../base';
 
 export type IsaValidatorKVMap<T extends object> = {
-    [P in keyof T]: IsaValidator<T[P]>;
+    [P in keyof T]: IsaValidatorCompat<T[P]>;
 };
 
 export type ObjectDiff<U, T> = Pick<U, Exclude<keyof U, keyof T>>;
@@ -18,7 +18,7 @@ export function isObject<T extends object>(validatorMap : IsaValidatorKVMap<T>) 
 
 // this is a very difficult thing to specify...!!! hmm...
 export type ConvertValidatorKVMap<ExplicitAny, T> = {
-    [P in keyof T]: ConvertValidator<ExplicitAny, T[P]>;
+    [P in keyof T]: ConvertValidatorCompat<ExplicitAny, T[P]>;
 };
 
 export interface ObjectConvertValidator<T extends object> extends ConvertValidator<ExplicitAny, T> {

@@ -5,9 +5,16 @@ import * as D from '../../lib/types/date';
 import * as N from '../../lib/types/number';
 import * as O from '../../lib/types/object';
 import * as assert from 'assert';
+import { IsaValidator } from '../../lib';
 
 let isArrayOfDates = A.isArray(D.isDate)
 let convertArrayOfDates = isArrayOfDates.toConvert();
+
+interface RecursiveFoo {
+    foo: string;
+    nested : RecursiveFoo[];
+}
+
 @suite class ArrayTest {
     @test isArrayOfString () {
         A.isArray(S.isString).assert(['hello', 'world']);
@@ -53,6 +60,24 @@ let convertArrayOfDates = isArrayOfDates.toConvert();
             },
             remainder: 'a remainder'
         }))
+    }
+
+    @test canDoRecursiveArray() {
+        let isRecursiveFooArray = A.isArray(O.isObject<RecursiveFoo>({
+            foo: S.isString,
+            nested: () : IsaValidator<RecursiveFoo[]> => isRecursiveFooArray
+        }))
+        assert.equal(true, isRecursiveFooArray.isa([
+            {
+                foo: 'string',
+                nested: [
+                    {
+                        foo: 'string',
+                        nested: []
+                    }
+                ]
+            }
+        ]))
     }
 }
 

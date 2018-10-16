@@ -59,6 +59,23 @@ var ArrayTest = /** @class */ (function () {
             remainder: 'a remainder'
         }));
     };
+    ArrayTest.prototype.canDoRecursiveArray = function () {
+        var isRecursiveFooArray = A.isArray(O.isObject({
+            foo: S.isString,
+            nested: function () { return isRecursiveFooArray; }
+        }));
+        assert.equal(true, isRecursiveFooArray.isa([
+            {
+                foo: 'string',
+                nested: [
+                    {
+                        foo: 'string',
+                        nested: []
+                    }
+                ]
+            }
+        ]));
+    };
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
@@ -101,6 +118,12 @@ var ArrayTest = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], ArrayTest.prototype, "canDoNestedObjectArray", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], ArrayTest.prototype, "canDoRecursiveArray", null);
     ArrayTest = __decorate([
         test_util_1.suite
     ], ArrayTest);

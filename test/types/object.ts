@@ -2,6 +2,7 @@ import * as V from '../../lib'
 import { suite, test, slow, timeout , expectError } from '../../lib/util/test-util';
 import * as assert from 'assert';
 import * as uuid from 'uuid';
+import { IsaValidator } from '../../lib';
 
 interface Foo {
     foo: Date;
@@ -57,6 +58,11 @@ interface UserProfile extends User {
 let isUserProfile = isUser.extends<UserProfile>({
     phoneNumber: V.isString
 })
+
+interface RecursiveFoo {
+    foo: string;
+    inner : RecursiveFoo[];
+}
 
 @suite class ObjectTest {
     @test canAssert() {
@@ -164,5 +170,26 @@ let isUserProfile = isUser.extends<UserProfile>({
             userName: new V.EmailAddress(emailAddress),
             phoneNumber: phone
         }, result2)
+    }
+
+    @test canDoRecursiveObjectType() {
+        let isRecursiveFoo = V.isObject<RecursiveFoo>({
+            foo: V.isString,
+            inner: () :V.IsaValidator<RecursiveFoo[]> => { return V.isArray(isRecursiveFoo) }
+        })
+        assert.deepEqual(true, isRecursiveFoo.isa({
+            foo: 'a string',
+            inner: [
+                {
+                    foo: 'test',
+                    inner: [
+                        {
+                            foo: 'test 2',
+                            inner: []
+                        }
+                    ]
+                }
+            ]
+        }))
     }
 }

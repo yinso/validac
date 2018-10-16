@@ -1,4 +1,4 @@
-import { Validator, BaseValidator, ConvertValidator, Constraint, ValidationResult, ConstraintPredicate, TransformProc, DefaultProc, ExplicitAny, IsaPredicate, ConvertOptions } from './base';
+import { Validator, BaseValidator, ConvertValidator, ConvertValidatorCompat, Constraint, ValidationResult, ConstraintPredicate, TransformProc, DefaultProc, ExplicitAny, IsaPredicate, ConvertOptions } from './base';
 
 export abstract class BaseConvertValidator<T, U> extends BaseValidator<T, U> implements ConvertValidator<T, U> {
     readonly convertOptions : ConvertOptions;
@@ -54,170 +54,170 @@ export class DefaultToConvertValidator<T, U> extends BaseConvertValidator<T, U> 
     validate(value: T, path ?: string) : ValidationResult<U>;
 }
 
-export function convertOneOf<T, T1>(v1 : ConvertValidator<T, T1>) : ConvertValidator<T, T1>;
+export function convertOneOf<T, T1>(v1 : ConvertValidatorCompat<T, T1>) : ConvertValidator<T, T1>;
 export function convertOneOf<T, T1, T2>
-    (v1 : ConvertValidator<T, T1>
-    , v2: ConvertValidator<T, T2>
+    (v1 : ConvertValidatorCompat<T, T1>
+    , v2: ConvertValidatorCompat<T, T2>
     )
 : ConvertValidator<T, T1 | T2>;
 export function convertOneOf<T, T1, T2, T3>
-    (v1 : ConvertValidator<T, T1>
-    , v2: ConvertValidator<T, T2>
-    , v3: ConvertValidator<T, T3>
+    (v1 : ConvertValidatorCompat<T, T1>
+    , v2: ConvertValidatorCompat<T, T2>
+    , v3: ConvertValidatorCompat<T, T3>
     )
 : ConvertValidator<T, T1 | T2 | T3>;
 export function convertOneOf<T, T1, T2, T3, T4>
-    (v1 : ConvertValidator<T, T1>
-    , v2: ConvertValidator<T, T2>
-    , v3: ConvertValidator<T, T3>
-    , v4: ConvertValidator<T, T4>
+    (v1 : ConvertValidatorCompat<T, T1>
+    , v2: ConvertValidatorCompat<T, T2>
+    , v3: ConvertValidatorCompat<T, T3>
+    , v4: ConvertValidatorCompat<T, T4>
     )
 : ConvertValidator<T, T1 | T2 | T3 | T4>;
 export function convertOneOf<T, T1, T2, T3, T4, T5>
-    (v1 : ConvertValidator<T, T1>
-    , v2: ConvertValidator<T, T2>
-    , v3: ConvertValidator<T, T3>
-    , v4: ConvertValidator<T, T4>
-    , v5: ConvertValidator<T, T5>
+    (v1 : ConvertValidatorCompat<T, T1>
+    , v2: ConvertValidatorCompat<T, T2>
+    , v3: ConvertValidatorCompat<T, T3>
+    , v4: ConvertValidatorCompat<T, T4>
+    , v5: ConvertValidatorCompat<T, T5>
     )
 : ConvertValidator<T, T1 | T2 | T3 | T4 | T5>;
 export function convertOneOf<T, T1, T2, T3, T4, T5, T6>
-    (v1 : ConvertValidator<T, T1>
-    , v2: ConvertValidator<T, T2>
-    , v3: ConvertValidator<T, T3>
-    , v4: ConvertValidator<T, T4>
-    , v5: ConvertValidator<T, T5>
-    , v6: ConvertValidator<T, T6>
+    (v1 : ConvertValidatorCompat<T, T1>
+    , v2: ConvertValidatorCompat<T, T2>
+    , v3: ConvertValidatorCompat<T, T3>
+    , v4: ConvertValidatorCompat<T, T4>
+    , v5: ConvertValidatorCompat<T, T5>
+    , v6: ConvertValidatorCompat<T, T6>
     )
 : ConvertValidator<T, T1 | T2 | T3 | T4 | T5  | T6>;
 export function convertOneOf<T, T1, T2, T3, T4, T5, T6, T7>
-    (v1 : ConvertValidator<T, T1>
-    , v2: ConvertValidator<T, T2>
-    , v3: ConvertValidator<T, T3>
-    , v4: ConvertValidator<T, T4>
-    , v5: ConvertValidator<T, T5>
-    , v6: ConvertValidator<T, T6>
-    , v7: ConvertValidator<T, T7>
+    (v1 : ConvertValidatorCompat<T, T1>
+    , v2: ConvertValidatorCompat<T, T2>
+    , v3: ConvertValidatorCompat<T, T3>
+    , v4: ConvertValidatorCompat<T, T4>
+    , v5: ConvertValidatorCompat<T, T5>
+    , v6: ConvertValidatorCompat<T, T6>
+    , v7: ConvertValidatorCompat<T, T7>
     )
 : ConvertValidator<T, T1 | T2 | T3 | T4 | T5  | T6 | T7>;
 export function convertOneOf<T, T1, T2, T3, T4, T5, T6, T7, T8>
-    (v1 : ConvertValidator<T, T1>
-    , v2: ConvertValidator<T, T2>
-    , v3: ConvertValidator<T, T3>
-    , v4: ConvertValidator<T, T4>
-    , v5: ConvertValidator<T, T5>
-    , v6: ConvertValidator<T, T6>
-    , v7: ConvertValidator<T, T7>
-    , v8: ConvertValidator<T, T8>
+    (v1 : ConvertValidatorCompat<T, T1>
+    , v2: ConvertValidatorCompat<T, T2>
+    , v3: ConvertValidatorCompat<T, T3>
+    , v4: ConvertValidatorCompat<T, T4>
+    , v5: ConvertValidatorCompat<T, T5>
+    , v6: ConvertValidatorCompat<T, T6>
+    , v7: ConvertValidatorCompat<T, T7>
+    , v8: ConvertValidatorCompat<T, T8>
     )
 : ConvertValidator<T, T1 | T2 | T3 | T4 | T5  | T6 | T7 | T8>;
 export function convertOneOf<T, T1, T2, T3, T4, T5, T6, T7, T8, T9>
-    (v1 : ConvertValidator<T, T1>
-    , v2: ConvertValidator<T, T2>
-    , v3: ConvertValidator<T, T3>
-    , v4: ConvertValidator<T, T4>
-    , v5: ConvertValidator<T, T5>
-    , v6: ConvertValidator<T, T6>
-    , v7: ConvertValidator<T, T7>
-    , v8: ConvertValidator<T, T8>
-    , v9: ConvertValidator<T, T9>
+    (v1 : ConvertValidatorCompat<T, T1>
+    , v2: ConvertValidatorCompat<T, T2>
+    , v3: ConvertValidatorCompat<T, T3>
+    , v4: ConvertValidatorCompat<T, T4>
+    , v5: ConvertValidatorCompat<T, T5>
+    , v6: ConvertValidatorCompat<T, T6>
+    , v7: ConvertValidatorCompat<T, T7>
+    , v8: ConvertValidatorCompat<T, T8>
+    , v9: ConvertValidatorCompat<T, T9>
     )
 : ConvertValidator<T, T1 | T2 | T3 | T4 | T5  | T6 | T7 | T8 | T9>;
 export function convertOneOf<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
-    (v1 : ConvertValidator<T, T1>
-    , v2: ConvertValidator<T, T2>
-    , v3: ConvertValidator<T, T3>
-    , v4: ConvertValidator<T, T4>
-    , v5: ConvertValidator<T, T5>
-    , v6: ConvertValidator<T, T6>
-    , v7: ConvertValidator<T, T7>
-    , v8: ConvertValidator<T, T8>
-    , v9: ConvertValidator<T, T9>
-    , v10: ConvertValidator<T, T10>
+    (v1 : ConvertValidatorCompat<T, T1>
+    , v2: ConvertValidatorCompat<T, T2>
+    , v3: ConvertValidatorCompat<T, T3>
+    , v4: ConvertValidatorCompat<T, T4>
+    , v5: ConvertValidatorCompat<T, T5>
+    , v6: ConvertValidatorCompat<T, T6>
+    , v7: ConvertValidatorCompat<T, T7>
+    , v8: ConvertValidatorCompat<T, T8>
+    , v9: ConvertValidatorCompat<T, T9>
+    , v10: ConvertValidatorCompat<T, T10>
     )
 : ConvertValidator<T, T1 | T2 | T3 | T4 | T5  | T6 | T7 | T8 | T9 | T10>;
 
 export function convertAllOf<T, T1>
-    (v1 : ConvertValidator<T, T1>)
+    (v1 : ConvertValidatorCompat<T, T1>)
 : ConvertValidator<T, T1>;
 export function convertAllOf<T, T1, T2>
-    (v1 : ConvertValidator<T, T1>
-    , v2 : ConvertValidator<T, T2>
+    (v1 : ConvertValidatorCompat<T, T1>
+    , v2 : ConvertValidatorCompat<T, T2>
     )
 : ConvertValidator<T, T1 & T2>;
 export function convertAllOf<T, T1, T2, T3>
-    (v1 : ConvertValidator<T, T1>
-    , v2 : ConvertValidator<T, T2>
-    , v3 : ConvertValidator<T, T3>
+    (v1 : ConvertValidatorCompat<T, T1>
+    , v2 : ConvertValidatorCompat<T, T2>
+    , v3 : ConvertValidatorCompat<T, T3>
     )
 : ConvertValidator<T, T1 & T2 & T3>;
 export function convertAllOf<T, T1, T2, T3, T4>
-    (v1 : ConvertValidator<T, T1>
-    , v2 : ConvertValidator<T, T2>
-    , v3 : ConvertValidator<T, T3>
-    , v4 : ConvertValidator<T, T4>
+    (v1 : ConvertValidatorCompat<T, T1>
+    , v2 : ConvertValidatorCompat<T, T2>
+    , v3 : ConvertValidatorCompat<T, T3>
+    , v4 : ConvertValidatorCompat<T, T4>
     )
 : ConvertValidator<T, T1 & T2 & T3 & T4>;
 export function convertAllOf<T, T1, T2, T3, T4, T5>
-    (v1 : ConvertValidator<T, T1>
-    , v2 : ConvertValidator<T, T2>
-    , v3 : ConvertValidator<T, T3>
-    , v4 : ConvertValidator<T, T4>
-    , v5 : ConvertValidator<T, T5>
+    (v1 : ConvertValidatorCompat<T, T1>
+    , v2 : ConvertValidatorCompat<T, T2>
+    , v3 : ConvertValidatorCompat<T, T3>
+    , v4 : ConvertValidatorCompat<T, T4>
+    , v5 : ConvertValidatorCompat<T, T5>
     )
 : ConvertValidator<T, T1 & T2 & T3 & T4 & T5>;
 export function convertAllOf<T, T1, T2, T3, T4, T5, T6>
-    (v1 : ConvertValidator<T, T1>
-    , v2 : ConvertValidator<T, T2>
-    , v3 : ConvertValidator<T, T3>
-    , v4 : ConvertValidator<T, T4>
-    , v5 : ConvertValidator<T, T5>
-    , v6 : ConvertValidator<T, T6>
+    (v1 : ConvertValidatorCompat<T, T1>
+    , v2 : ConvertValidatorCompat<T, T2>
+    , v3 : ConvertValidatorCompat<T, T3>
+    , v4 : ConvertValidatorCompat<T, T4>
+    , v5 : ConvertValidatorCompat<T, T5>
+    , v6 : ConvertValidatorCompat<T, T6>
     )
 : ConvertValidator<T, T1 & T2 & T3 & T4 & T5 & T6>;
 export function convertAllOf<T, T1, T2, T3, T4, T5, T6, T7>
-    (v1 : ConvertValidator<T, T1>
-    , v2 : ConvertValidator<T, T2>
-    , v3 : ConvertValidator<T, T3>
-    , v4 : ConvertValidator<T, T4>
-    , v5 : ConvertValidator<T, T5>
-    , v6 : ConvertValidator<T, T6>
-    , v7 : ConvertValidator<T, T7>
+    (v1 : ConvertValidatorCompat<T, T1>
+    , v2 : ConvertValidatorCompat<T, T2>
+    , v3 : ConvertValidatorCompat<T, T3>
+    , v4 : ConvertValidatorCompat<T, T4>
+    , v5 : ConvertValidatorCompat<T, T5>
+    , v6 : ConvertValidatorCompat<T, T6>
+    , v7 : ConvertValidatorCompat<T, T7>
     )
 : ConvertValidator<T, T1 & T2 & T3 & T4 & T5 & T6 & T7>;
 export function convertAllOf<T, T1, T2, T3, T4, T5, T6, T7, T8>
-    (v1 : ConvertValidator<T, T1>
-    , v2 : ConvertValidator<T, T2>
-    , v3 : ConvertValidator<T, T3>
-    , v4 : ConvertValidator<T, T4>
-    , v5 : ConvertValidator<T, T5>
-    , v6 : ConvertValidator<T, T6>
-    , v7 : ConvertValidator<T, T7>
-    , v8 : ConvertValidator<T, T8>
+    (v1 : ConvertValidatorCompat<T, T1>
+    , v2 : ConvertValidatorCompat<T, T2>
+    , v3 : ConvertValidatorCompat<T, T3>
+    , v4 : ConvertValidatorCompat<T, T4>
+    , v5 : ConvertValidatorCompat<T, T5>
+    , v6 : ConvertValidatorCompat<T, T6>
+    , v7 : ConvertValidatorCompat<T, T7>
+    , v8 : ConvertValidatorCompat<T, T8>
     )
 : ConvertValidator<T, T1 & T2 & T3 & T4 & T5 & T6 & T7 & T8>;
 export function convertAllOf<T, T1, T2, T3, T4, T5, T6, T7, T8, T9>
-    (v1 : ConvertValidator<T, T1>
-    , v2 : ConvertValidator<T, T2>
-    , v3 : ConvertValidator<T, T3>
-    , v4 : ConvertValidator<T, T4>
-    , v5 : ConvertValidator<T, T5>
-    , v6 : ConvertValidator<T, T6>
-    , v7 : ConvertValidator<T, T7>
-    , v8 : ConvertValidator<T, T8>
-    , v9 : ConvertValidator<T, T9>
+    (v1 : ConvertValidatorCompat<T, T1>
+    , v2 : ConvertValidatorCompat<T, T2>
+    , v3 : ConvertValidatorCompat<T, T3>
+    , v4 : ConvertValidatorCompat<T, T4>
+    , v5 : ConvertValidatorCompat<T, T5>
+    , v6 : ConvertValidatorCompat<T, T6>
+    , v7 : ConvertValidatorCompat<T, T7>
+    , v8 : ConvertValidatorCompat<T, T8>
+    , v9 : ConvertValidatorCompat<T, T9>
     )
 : ConvertValidator<T, T1 & T2 & T3 & T4 & T5 & T6 & T7 & T8 & T9>;
 export function convertAllOf<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
-    (v1 : ConvertValidator<T, T1>
-    , v2 : ConvertValidator<T, T2>
-    , v3 : ConvertValidator<T, T3>
-    , v4 : ConvertValidator<T, T4>
-    , v5 : ConvertValidator<T, T5>
-    , v6 : ConvertValidator<T, T6>
-    , v7 : ConvertValidator<T, T7>
-    , v8 : ConvertValidator<T, T8>
-    , v9 : ConvertValidator<T, T9>
-    , v10 : ConvertValidator<T, T10>
+    (v1 : ConvertValidatorCompat<T, T1>
+    , v2 : ConvertValidatorCompat<T, T2>
+    , v3 : ConvertValidatorCompat<T, T3>
+    , v4 : ConvertValidatorCompat<T, T4>
+    , v5 : ConvertValidatorCompat<T, T5>
+    , v6 : ConvertValidatorCompat<T, T6>
+    , v7 : ConvertValidatorCompat<T, T7>
+    , v8 : ConvertValidatorCompat<T, T8>
+    , v9 : ConvertValidatorCompat<T, T9>
+    , v10 : ConvertValidatorCompat<T, T10>
     )
 : ConvertValidator<T, T1 & T2 & T3 & T4 & T5 & T6 & T7 & T8 & T9 & T10>;

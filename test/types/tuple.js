@@ -14,22 +14,6 @@ var test_util_1 = require("../../lib/util/test-util");
 var assert = require("assert");
 var isFoo = V.isTuple(V.isNumber, V.isString, V.isBoolean);
 var convertFoo = isFoo.toConvert();
-/*
-class Bar<T> {
-    constructor(x : T) {
-
-    }
-}
-
-type BarArray<T extends any[], K extends Extract<keyof T, number> = Extract<keyof T, number>>
-    = Bar<T[K]>[];
-
-function makeTuple<T extends any[]>(...params : BarArray<T>) {
-    throw new Error()
-}
-
-let x = makeTuple<Foo>(new Bar<string>('1'), new Bar<string>('1'), new Bar<string>('1'), new Bar<string>('1'))
-//*/
 var TupleTest = /** @class */ (function () {
     function TupleTest() {
     }
@@ -44,6 +28,22 @@ var TupleTest = /** @class */ (function () {
     };
     TupleTest.prototype.canConvertTuple = function () {
         convertFoo.assert(['10', 'a string', 'true']);
+    };
+    TupleTest.prototype.canConvertRecursiveTuple = function () {
+        var isRecursiveTuple = V.isTuple(V.isNumber, V.isString, V.isObject({
+            foo: function () { return V.isArray(isRecursiveTuple); }
+        }));
+        assert.deepEqual(true, isRecursiveTuple.isa([1, 'string', { foo: [
+                    [2, 'test', { foo: [] }],
+                    [3, 'foo', {
+                            foo: [
+                                [4, 'bar', { foo: [] }]
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]));
     };
     __decorate([
         test_util_1.test,
@@ -63,6 +63,12 @@ var TupleTest = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], TupleTest.prototype, "canConvertTuple", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], TupleTest.prototype, "canConvertRecursiveTuple", null);
     TupleTest = __decorate([
         test_util_1.suite
     ], TupleTest);

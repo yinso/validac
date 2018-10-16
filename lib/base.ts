@@ -49,6 +49,10 @@ export interface ConvertValidator<T, U> extends Validator<T, U> {
     defaultTo(defaultProc : DefaultProc<U>) : ConvertValidator<T, U>;
 }
 
+export type ConvertValidatorProc<T, U> = () => ConvertValidator<T, U>;
+
+export type ConvertValidatorCompat<T, U> = ConvertValidator<T, U> | ConvertValidatorProc<T, U>;
+
 function isFunction(v : any) : v is Function {
     return typeof(v) === 'function' || v instanceof Function;
 }
@@ -63,6 +67,10 @@ export function isConvertValidator<T, U>(v : any) : v is ConvertValidator<T, U> 
     return isValidator(v) && isFunction((v as any).where)
         && isFunction((v as any).intersect) && isFunction((v as any).union) && isFunction((v as any).isOptional)
         && isFunction((v as any).transform) && isFunction((v as any).defaultTo);
+}
+
+export function isConvertValidatorCompat<T, U>(v : any) : v is ConvertValidatorCompat<T, U> {
+    return isConvertValidator<T, U>(v) || isFunction(v);
 }
 
 export enum CaseNames {
@@ -97,6 +105,14 @@ export function isIsaValidator<T>(v : any) : v is IsaValidator<T> {
         && isFunction((v as any).intersect) && isFunction((v as any).union) && isFunction((v as any).isOptional)
         && isFunction((v as any).transform) && isFunction((v as any).defaultTo) && isFunction((v as any).toConvert);
 }
+
+export function isIsaValidatorCompat<T>(v : any) : v is IsaValidatorCompat<T> {
+    return isIsaValidator<T>(v) || isFunction(v);
+}
+
+export type IsaValidatorProc<T> = () => IsaValidator<T>;
+
+export type IsaValidatorCompat<T> = IsaValidator<T> | IsaValidatorProc<T>;
 
 export type IsaPredicate<T> = (v : any) => v is T;
 
