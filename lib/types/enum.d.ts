@@ -1,4 +1,6 @@
 import { ExplicitAny , ConvertValidator , IsaValidator } from '../base';
+import { BaseIsaValidator } from '../isa';
+
 
 export function isEnum<
     T1 extends string,

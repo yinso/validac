@@ -107,14 +107,6 @@ export interface ValidationError {
     readonly actual: any;
 }
 
-export function isValidationError(arg : any) : arg is ValidationError {
-    return !!arg && typeof(arg.error) === 'string' && typeof(arg.path) === 'string';
-}
-
-export function isValidationErrorArray(arg : any) : arg is ValidationError[] {
-    return arg instanceof Array && arg.every(isValidationError);
-}
-
 export type SuccessDB<T, U> = (v : T, res : ValidationResult<T>) => U;
 export type ErrorCB<T, U> = (errors : ValidationError[], res : ValidationResult<T>) => U;
 
@@ -237,5 +229,13 @@ class FailResult<T> extends ValidationResult<T> {
 }
 
 export function isValidationResult<T>(item : any) : item is ValidationResult<T> {
-    return !!item && item.hasOwnProperty('isValid'); 
+    return item instanceof ValidationResult;
+}
+
+export function isValidationSuccess<T>(item : any) : item is SuccessResult<T> {
+    return item instanceof SuccessResult;
+}
+
+export function isValidationError<T>(item : any) : item is FailResult<T> {
+    return item instanceof FailResult;
 }
