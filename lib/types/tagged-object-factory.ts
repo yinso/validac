@@ -1,4 +1,4 @@
-import { ExplicitAny, ValidationResult, IsaValidator, Tagged, Omit, ConvertOptions } from '../base';
+import { ExplicitAny, ValidationResult, resolve, reject, IsaValidator, Tagged, Omit, ConvertOptions } from '../base';
 import { BaseIsaValidator } from '../isa';
 import { BaseConvertValidator } from '../convert';
 import { ObjectIsaValidator , IsaValidatorKVMap , isObject, ObjectDiff , ObjectConvertValidator, ConvertValidatorKVMap } from './object';
@@ -82,7 +82,7 @@ class TaggedObjectFactoryIsaValidator<KEY extends string, T extends Tagged<KEY, 
                 if (v.hasOwnProperty(this.objectKey) && this.registry.has(v[this.objectKey])) {
                     return this.registry.get(v[this.objectKey]).validate(v, path);
                 } else {
-                    return ValidationResult.reject({
+                    return reject({
                         error: 'UnknownTag',
                         expected: 'A Registered Tag',
                         path,
@@ -144,7 +144,7 @@ class TaggedObjectFactoryConvertValidator<KEY extends string, T extends Tagged<K
                 if (v.hasOwnProperty(this.objectKey) && this.registry.has(v[this.objectKey])) {
                     return this.registry.get(v[this.objectKey]).toConvert(this.convertOptions).validate(v, path);
                 } else {
-                    return ValidationResult.reject({
+                    return reject({
                         error: 'UnknownTag',
                         expected: 'A Registered Tag',
                         path,

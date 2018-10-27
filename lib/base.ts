@@ -133,93 +133,81 @@ export type CreateRejectCB<T> = (errors: ValidationError[]) => void;
 
 export type ValidationCreateCallback<T> = (resolve : CreateResolveCB<T>, reject: CreateRejectCB<T>) => void;
 
-export abstract class ValidationResult<T> {
-    abstract cata<U>(onSuccess: SuccessDB<T, U>, onError ?: ErrorCB<T, U>) : U;
+export interface ValidationResult<T> {
+    cata<U>(onSuccess : SuccessDB<T, U>, onError ?: ErrorCB<T, U>) : U;
+}
 
-    toPromise() : Promise<T> {
-        return new Promise<T>((resolve, reject) => {
-            this.cata((res, _) => resolve(res),
-                (errors, _) => reject(errors)); 
-        })
-    }
+export function resolve<U>(value : U) {
+    return new SuccessResult<U>(value);
+}
 
-    then<U>(onSuccess: SuccessPromiseCB<T, U>, onError ?: ErrorPromiseCB<T, U>) : Promise<U> {
-        return this.toPromise().then(onSuccess, onError);
-    }
-
-    static resolve<U>(value : U) {
-        return new SuccessResult<U>(value);
-    }
-
-    static reject<U>(e : ValidationError | ValidationError[]) {
-        if (e instanceof Array) {
-            return new FailResult<U>(e);
-        } else {
-            return new FailResult<U>([e]);
-        }
-    }
-
-    static allOf<U>(results : ValidationResult<U>[]) : ValidationResult<U[]> {
-        // what is the outcome fo the 
-        let result : U[] = [];
-        let errors : ValidationError[] = [];
-        results.forEach((res) => {
-            res.cata(
-                (value, _) => {
-                    result.push(value)
-                },
-                (errs, _) => {
-                    errors = errors.concat(errs)
-                })
-        });
-        if (errors.length > 0) {
-            return ValidationResult.reject(errors);
-        } else {
-            return ValidationResult.resolve(result);
-        }
-    }
-
-    static oneOf<U>(results : ValidationResult<U>[]) : ValidationResult<U> {
-        let isValid = false;
-        let index = -1;
-        let errors : ValidationError[] = [];
-        results.forEach((res, i) => {
-            res.cata(
-                (r, _) => {
-                    isValid = true,
-                    index = i
-                },
-                (errs, _) => {
-                    errors = errors.concat(errs)
-                }
-            )
-        })
-        if (isValid) {
-            return results[index];
-        } else {
-            return ValidationResult.reject(errors);
-        }
-    }
-
-    static filterErrors(results : ValidationResult<ExplicitAny>[]) : ValidationError[] {
-        let errors : ValidationError[] = [];
-        results.forEach((res, i) => {
-            res.cata(
-                (r, _) => {
-                },
-                (errs, _) => {
-                    errors = errors.concat(errs)
-                }
-            )
-        })
-        return errors;
+export function reject<U>(e : ValidationError | ValidationError[]) {
+    if (e instanceof Array) {
+        return new FailResult<U>(e);
+    } else {
+        return new FailResult<U>([e]);
     }
 }
 
-class SuccessResult<T> extends ValidationResult<T> {
+export function allOf<U>(results : ValidationResult<U>[]) : ValidationResult<U[]> {
+    // what is the outcome fo the 
+    let result : U[] = [];
+    let errors : ValidationError[] = [];
+    results.forEach((res) => {
+        res.cata(
+            (value, _) => {
+                result.push(value)
+            },
+            (errs, _) => {
+                errors = errors.concat(errs)
+            })
+    });
+    if (errors.length > 0) {
+        return reject(errors);
+    } else {
+        return resolve(result);
+    }
+}
+
+export function oneOf<U>(results : ValidationResult<U>[]) : ValidationResult<U> {
+    let isValid = false;
+    let index = -1;
+    let errors : ValidationError[] = [];
+    results.forEach((res, i) => {
+        res.cata(
+            (r, _) => {
+                isValid = true,
+                index = i
+            },
+            (errs, _) => {
+                errors = errors.concat(errs)
+            }
+        )
+    })
+    if (isValid) {
+        return results[index];
+    } else {
+        return reject(errors);
+    }
+}
+
+export function filterErrors(results : ValidationResult<ExplicitAny>[]) : ValidationError[] {
+    let errors : ValidationError[] = [];
+    results.forEach((res, i) => {
+        res.cata(
+            (r, _) => {
+            },
+            (errs, _) => {
+                errors = errors.concat(errs)
+            }
+        )
+    })
+    return errors;
+}
+
+class SuccessResult<T> implements ValidationResult<T> {
     readonly value : T;
     constructor(value : T) {
-        super();
         this.value = value;
     }
 
@@ -228,10 +216,9 @@ class SuccessResult<T> extends ValidationResult<T> {
     }
 }
 
-class FailResult<T> extends ValidationResult<T> {
+class FailResult<T> implements ValidationResult<T> {
     readonly errors : ValidationError[];
     constructor(errors: ValidationError[]) {
-        super();
         this.errors = errors;
     }
 
@@ -245,7 +232,7 @@ class FailResult<T> extends ValidationResult<T> {
 }
 
 export function isValidationResult<T>(item : any) : item is ValidationResult<T> {
-    return item instanceof ValidationResult;
+    return !!item && typeof(item.cata) === 'function';
 }
 
 export function isValidationSuccess<T>(item : any) : item is SuccessResult<T> {

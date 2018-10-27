@@ -1,4 +1,4 @@
-import { ValidationResult , ValidationError, ExplicitAny , ConvertValidator , ConvertValidatorCompat, isConvertValidator, IsaValidator, IsaValidatorCompat, ConvertOptions, isIsaValidator } from '../base';
+import { ValidationResult , ValidationError, resolve, reject, ExplicitAny , ConvertValidator , ConvertValidatorCompat, isConvertValidator, IsaValidator, IsaValidatorCompat, ConvertOptions, isIsaValidator } from '../base';
 import { BaseIsaValidator } from '../isa';
 import { BaseConvertValidator } from '../convert'
 
@@ -11,7 +11,7 @@ export class ArrayIsaValidator<T> extends BaseIsaValidator<T[]> {
 
     validate(arg : ExplicitAny, path : string = '$') : ValidationResult<T[]> {
         if (!(arg instanceof Array)) {
-            return ValidationResult.reject([{
+            return reject([{
                 error: 'TypeError',
                 path: path,
                 expected: 'Array',
@@ -26,9 +26,9 @@ export class ArrayIsaValidator<T> extends BaseIsaValidator<T[]> {
                 })
         });
         if (errors.length > 0) {
-            return ValidationResult.reject(errors)
+            return reject(errors)
         } else {
-            return ValidationResult.resolve(arg)
+            return resolve(arg)
         }
     }
 
@@ -55,7 +55,7 @@ class ArrayConvertValidator<T> extends BaseConvertValidator<ExplicitAny, T[]> {
 
     validate(arg : any, path : string = '$') : ValidationResult<T[]> {
         if (!(arg instanceof Array)) {
-            return ValidationResult.reject([{
+            return reject([{
                 error: 'TypeError',
                 path: path,
                 expected: 'Array',
@@ -77,11 +77,11 @@ class ArrayConvertValidator<T> extends BaseConvertValidator<ExplicitAny, T[]> {
                 })
         });
         if (errors.length > 0) {
-            return ValidationResult.reject(errors)
+            return reject(errors)
         } else if (!changed) {
-            return ValidationResult.resolve(arg)
+            return resolve(arg)
         } else {
-            return ValidationResult.resolve(result)
+            return resolve(result)
         }
     }
 }
