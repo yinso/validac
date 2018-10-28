@@ -89,7 +89,7 @@ class TaggedObjectFactoryIsaValidator<KEY extends string, T extends Tagged<KEY, 
                         actual: v[this.objectKey]
                     })
                 }
-            }, (_, _res) => _res)
+            }, (err) => err)
     }
 
     extends<U extends T>(validatorMap : IsaValidatorKVMap<ObjectDiff<U, T>>) : TaggedObjectFactoryIsaValidator<KEY, U> {
@@ -151,7 +151,7 @@ class TaggedObjectFactoryConvertValidator<KEY extends string, T extends Tagged<K
                         actual: v[this.objectKey]
                     })
                 }
-            }, (_, _res) => _res)
+            }, (err) => err)
     }
 }
 

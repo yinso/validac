@@ -95,12 +95,16 @@ interface RecursiveFoo {
         let data = 'not an object'
         V.isObject({}).validate(data)
             .cata(() => {}, (errors) => {
-                assert.deepEqual([{
-                    error: 'TypeError',
-                    path: '$',
-                    expected: 'Object',
-                    actual: data
-                }], errors)
+                assert.deepEqual({
+                    error: 'ValidationError',
+                    errors:
+                    [{
+                        error: 'TypeError',
+                        path: '$',
+                        expected: 'Object',
+                        actual: data
+                    }]
+                }, errors.toJSON())
             })
     }
 
@@ -115,7 +119,7 @@ interface RecursiveFoo {
                     path: '$.foo',
                     expected: 'Date',
                     actual: undefined
-                }], errors)
+                }], errors.errors)
             })
     }
 

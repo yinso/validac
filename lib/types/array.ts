@@ -21,8 +21,8 @@ export class ArrayIsaValidator<T> extends BaseIsaValidator<T[]> {
         let errors : ValidationError[] = [];
         arg.forEach((item, i) => {
             (isIsaValidator<T>(this.inner) ? this.inner : this.inner()).validate(item, path + '[' + i + ']')
-                .cata(() => {}, (errs) => {
-                    errors = errors.concat(errs)
+                .cata(() => {}, (err) => {
+                    errors = errors.concat(err.errors)
                 })
         });
         if (errors.length > 0) {
@@ -72,8 +72,8 @@ class ArrayConvertValidator<T> extends BaseConvertValidator<ExplicitAny, T[]> {
                         changed = true
                     }
                     result[i] = value
-                }, (errs) => {
-                    errors = errors.concat(errs)
+                }, (err) => {
+                    errors = errors.concat(err.errors)
                 })
         });
         if (errors.length > 0) {

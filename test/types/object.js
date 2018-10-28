@@ -66,12 +66,15 @@ var ObjectTest = /** @class */ (function () {
         var data = 'not an object';
         V.isObject({}).validate(data)
             .cata(function () { }, function (errors) {
-            assert.deepEqual([{
-                    error: 'TypeError',
-                    path: '$',
-                    expected: 'Object',
-                    actual: data
-                }], errors);
+            assert.deepEqual({
+                error: 'ValidationError',
+                errors: [{
+                        error: 'TypeError',
+                        path: '$',
+                        expected: 'Object',
+                        actual: data
+                    }]
+            }, errors.toJSON());
         });
     };
     ObjectTest.prototype.assertKeyTypeError = function () {
@@ -83,7 +86,7 @@ var ObjectTest = /** @class */ (function () {
                     path: '$.foo',
                     expected: 'Date',
                     actual: undefined
-                }], errors);
+                }], errors.errors);
         });
     };
     ObjectTest.prototype.canConvertObject = function () {

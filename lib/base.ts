@@ -124,14 +124,7 @@ export interface ValidationError {
 }
 
 export type SuccessDB<T, U> = (v : T, res : ValidationResult<T>) => U;
-export type ErrorCB<T, U> = (errors : ValidationError[], res : ValidationResult<T>) => U;
-
-export type SuccessPromiseCB<T, U> = (v: T) => U | Promise<U>;
-export type ErrorPromiseCB<T, U> = (errors: ValidationError[]) => U | Promise<U>;
-export type CreateResolveCB<T> = (v : T) => void;
-export type CreateRejectCB<T> = (errors: ValidationError[]) => void;
-
-export type ValidationCreateCallback<T> = (resolve : CreateResolveCB<T>, reject: CreateRejectCB<T>) => void;
+export type ErrorCB<T, U> = (error : ValidationErrorResult<T>) => U;
 
 export interface ValidationResult<T> {
     cata<U>(onSuccess : SuccessDB<T, U>, onError ?: ErrorCB<T, U>) : U;
@@ -141,11 +134,13 @@ export function resolve<U>(value : U) {
     return new SuccessResult<U>(value);
 }
 
-export function reject<U>(e : ValidationError | ValidationError[]) {
+export function reject<U>(e : ValidationError | ValidationError[] | ValidationErrorResult<U>) {
+    if (isValidationError<U>(e))
+        return e;
     if (e instanceof Array) {
-        return new FailResult<U>(e);
+        return new ValidationErrorResult<U>(e);
     } else {
-        return new FailResult<U>([e]);
+        return new ValidationErrorResult<U>([e]);
     }
 }
 
@@ -154,13 +149,11 @@ export function allOf<U>(results : ValidationResult<U>[]) : ValidationResult<U[]
     let result : U[] = [];
     let errors : ValidationError[] = [];
     results.forEach((res) => {
-        res.cata(
-            (value, _) => {
-                result.push(value)
-            },
-            (errs, _) => {
-                errors = errors.concat(errs)
-            })
+        res.cata((value) => {
+            result.push(value)
+        }, (err) => {
+            errors = errors.concat(err.errors)
+        })
     });
     if (errors.length > 0) {
         return reject(errors);
@@ -174,15 +167,12 @@ export function oneOf<U>(results : ValidationResult<U>[]) : ValidationResult<U> 
     let index = -1;
     let errors : ValidationError[] = [];
     results.forEach((res, i) => {
-        res.cata(
-            (r, _) => {
-                isValid = true,
-                index = i
-            },
-            (errs, _) => {
-                errors = errors.concat(errs)
-            }
-        )
+        res.cata((r) => {
+            isValid = true,
+            index = i
+        }, (err) => {
+            errors = errors.concat(err.errors)
+        })
     })
     if (isValid) {
         return results[index];
@@ -194,13 +184,10 @@ export function oneOf<U>(results : ValidationResult<U>[]) : ValidationResult<U> 
 export function filterErrors(results : ValidationResult<ExplicitAny>[]) : ValidationError[] {
     let errors : ValidationError[] = [];
     results.forEach((res, i) => {
-        res.cata(
-            (r, _) => {
-            },
-            (errs, _) => {
-                errors = errors.concat(errs)
-            }
-        )
+        res.cata((r) => {
+            },(err) => {
+                errors = errors.concat(err.errors)
+            })
     })
     return errors;
 }
@@ -216,9 +203,12 @@ class SuccessResult<T> implements ValidationResult<T> {
     }
 }
 
-class FailResult<T> implements ValidationResult<T> {
+export class ValidationErrorResult<T> extends Error implements ValidationResult<T> {
     readonly errors : ValidationError[];
     constructor(errors: ValidationError[]) {
+        super();
+        Object.setPrototypeOf(this, ValidationErrorResult.prototype);
+        this.name = 'ValidationError';
         this.errors = errors;
     }
 
@@ -226,10 +216,19 @@ class FailResult<T> implements ValidationResult<T> {
         if (!onError) {
             throw this;
         } else {
-            return onError(this.errors, this);
+            return onError(this);
+        }
+    }
+
+    toJSON() {
+        return {
+            error: this.name,
+            errors: this.errors
         }
     }
 }
+
+(<any>Object).setPrototypeOf(ValidationErrorResult.prototype, Error.prototype); // this is the magic line that saves effort from extending objects.
 
 export function isValidationResult<T>(item : any) : item is ValidationResult<T> {
     return !!item && typeof(item.cata) === 'function';
@@ -239,6 +238,6 @@ export function isValidationSuccess<T>(item : any) : item is SuccessResult<T> {
     return item instanceof SuccessResult;
 }
 
-export function isValidationError<T>(item : any) : item is FailResult<T> {
-    return item instanceof FailResult;
+export function isValidationError<T>(item : any) : item is ValidationErrorResult<T> {
+    return item instanceof ValidationErrorResult;
 }
