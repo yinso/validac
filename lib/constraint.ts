@@ -1,4 +1,5 @@
-import { ValidationError , BaseValidator, ExplicitAny, ValidationResult , Constraint, ConstraintPredicate , isConstraint } from './base';
+import { ValidationError , BaseValidator, ExplicitAny, ValidationResult , Constraint, ConstraintPredicate } from './base';
+import { isConstraint } from './_isa'; 
 
 /**
  * Constraint is a limited type of validation that basically deal with the following question.

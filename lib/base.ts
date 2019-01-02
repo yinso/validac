@@ -9,10 +9,6 @@ export interface Validator<T, U> {
     validate(v : T, path ?: string) : ValidationResult<U>;
 }
 
-export function isValidator<T, U>(v : any) : v is Validator<T, U> {
-    return !!v && typeof(v.assert) === 'function' && typeof(v.validate) === 'function';
-}
-
 export abstract class BaseValidator<T, U> implements Validator<T, U> {
     abstract validate(value : T, path ?: string) : ValidationResult<U>;
     assert(value : T, path : string = '$') : U {
@@ -27,13 +23,6 @@ export interface Constraint<T> {
     and(constraint : Constraint<T>) : Constraint<T>;
     or(constraint: Constraint<T>) : Constraint<T>;
     not() : Constraint<T>;
-}
-
-export function isConstraint<T>(x : any) : x is Constraint<T> {
-    return !!x && typeof(x.satisfy) === 'function'
-        && typeof(x.and) === 'function'
-        && typeof(x.or) === 'function'
-        && typeof(x.not) === 'function'
 }
 
 export type DefaultProc<T> = () => T;
@@ -52,26 +41,6 @@ export interface ConvertValidator<T, U> extends Validator<T, U> {
 export type ConvertValidatorProc<T, U> = () => ConvertValidator<T, U>;
 
 export type ConvertValidatorCompat<T, U> = ConvertValidator<T, U> | ConvertValidatorProc<T, U>;
-
-function isFunction(v : any) : v is Function {
-    return typeof(v) === 'function' || v instanceof Function;
-}
-
-export function isArrayOf<T>(isa : (v : any) => v is T) : (v : any) => v is T[] {
-    return (v : any) : v is T[] => {
-        return !!v && (v instanceof Array) && v.map(isa).filter((v) => v === false).length === 0;
-    };
-}
-
-export function isConvertValidator<T, U>(v : any) : v is ConvertValidator<T, U> {
-    return isValidator(v) && isFunction((v as any).where)
-        && isFunction((v as any).intersect) && isFunction((v as any).union) && isFunction((v as any).isOptional)
-        && isFunction((v as any).transform) && isFunction((v as any).defaultTo);
-}
-
-export function isConvertValidatorCompat<T, U>(v : any) : v is ConvertValidatorCompat<T, U> {
-    return isConvertValidator<T, U>(v) || isFunction(v);
-}
 
 export enum CaseNames {
     Camel = 'Camel',
@@ -98,16 +67,6 @@ export interface IsaValidator<T> extends Validator<ExplicitAny, T> {
     toConvert(options ?: ConvertOptions) : ConvertValidator<ExplicitAny, T>;
     convert(v : ExplicitAny, path ?: string) : T;
     appendConvert(converter : ConvertValidator<ExplicitAny, T>) : void;
-}
-
-export function isIsaValidator<T>(v : any) : v is IsaValidator<T> {
-    return isValidator(v) && isFunction((v as any).isa) && isFunction((v as any).where)
-        && isFunction((v as any).intersect) && isFunction((v as any).union) && isFunction((v as any).isOptional)
-        && isFunction((v as any).transform) && isFunction((v as any).defaultTo) && isFunction((v as any).toConvert);
-}
-
-export function isIsaValidatorCompat<T>(v : any) : v is IsaValidatorCompat<T> {
-    return isIsaValidator<T>(v) || isFunction(v);
 }
 
 export type IsaValidatorProc<T> = () => IsaValidator<T>;
@@ -192,7 +151,7 @@ export function filterErrors(results : ValidationResult<ExplicitAny>[]) : Valida
     return errors;
 }
 
-class SuccessResult<T> implements ValidationResult<T> {
+export class SuccessResult<T> implements ValidationResult<T> {
     readonly value : T;
     constructor(value : T) {
         this.value = value;

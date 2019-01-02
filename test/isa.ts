@@ -74,6 +74,12 @@ import { IsaValidator } from '../lib';
         validator.assert(null)
         validator.assert(15.1)
     }
+
+    @test testIsIsaValidator() {
+        let validator = I.isOneOf(S.isString, _N.isNull, N.isNumber)
+        let isIsaValidator1 = I.isIsaValidator<string | number | null>();
+        assert.equal(true, isIsaValidator1.isa(validator));
+    }
 }
 
 type RecursiveOneOf = string | { foo : RecursiveOneOf };

@@ -75,6 +75,11 @@ var IsaTest = /** @class */ (function () {
         validator.assert(null);
         validator.assert(15.1);
     };
+    IsaTest.prototype.testIsIsaValidator = function () {
+        var validator = I.isOneOf(S.isString, _N.isNull, N.isNumber);
+        var isIsaValidator1 = I.isIsaValidator();
+        assert.equal(true, isIsaValidator1.isa(validator));
+    };
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
@@ -135,6 +140,12 @@ var IsaTest = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], IsaTest.prototype, "testOneOf", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], IsaTest.prototype, "testIsIsaValidator", null);
     IsaTest = __decorate([
         test_util_1.suite
     ], IsaTest);

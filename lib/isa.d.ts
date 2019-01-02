@@ -37,6 +37,10 @@ export class TypeofIsaValidator<T> extends BaseIsaValidator<T> {
 
 export function isa<T>(test : IsaPredicate<T>, typeName : string) : IsaValidator<T>;
 
+export function isIsaValidator<T>() : IsaValidator<IsaValidator<T>>;
+
+export function isIsaValidatorCompat<T>() : IsaValidator<IsaValidatorCompat<T>>;
+
 export class ConstraintIsaValidator<T> extends BaseIsaValidator<T> {
     readonly validator : IsaValidator<T>;
     readonly constraint : Constraint<T>;

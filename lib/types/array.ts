@@ -1,6 +1,7 @@
-import { ValidationResult , ValidationError, resolve, reject, ExplicitAny , ConvertValidator , ConvertValidatorCompat, isConvertValidator, IsaValidator, IsaValidatorCompat, ConvertOptions, isIsaValidator } from '../base';
+import { ValidationResult , ValidationError, resolve, reject, ExplicitAny , ConvertValidator , ConvertValidatorCompat, IsaValidator, IsaValidatorCompat, ConvertOptions } from '../base';
 import { BaseIsaValidator } from '../isa';
 import { BaseConvertValidator } from '../convert'
+import { isIsaValidator, isConvertValidator } from '../_isa';
 
 export class ArrayIsaValidator<T> extends BaseIsaValidator<T[]> {
     readonly inner : IsaValidatorCompat<T>;
