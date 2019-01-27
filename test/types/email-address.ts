@@ -8,7 +8,7 @@ let email1 = 'foo@bar.com';
 let email2 = 'John Smith <foo@bar.com>';
 let invalidEmail1 = 'not an email';
 
-@suite class UuidTest {
+@suite class EmailAddressTest {
     @test isEmailAddress() {
         E.isEmailAddressString.assert(email1);
         E.isEmailAddressString.assert(email2);

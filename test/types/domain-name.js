@@ -10,46 +10,40 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var assert = require("assert");
-var E = require("../../lib/types/email-address");
+var D = require("../../lib/types/domain-name");
 var test_util_1 = require("../../lib/util/test-util");
-var email1 = 'foo@bar.com';
-var email2 = 'John Smith <foo@bar.com>';
-var invalidEmail1 = 'not an email';
-var EmailAddressTest = /** @class */ (function () {
-    function EmailAddressTest() {
+var domain1 = 'localhost';
+var domain2 = 'foobar.com';
+var invalidDomain = 'not-a-domain';
+var DomainNameTest = /** @class */ (function () {
+    function DomainNameTest() {
     }
-    EmailAddressTest.prototype.isEmailAddress = function () {
-        E.isEmailAddressString.assert(email1);
-        E.isEmailAddressString.assert(email2);
-        test_util_1.expectError(E.isEmailAddressString.validate(invalidEmail1));
+    DomainNameTest.prototype.isDomainNameString = function () {
+        D.isDomainNameString.assert(domain1);
+        D.isDomainNameString.assert(domain2);
+        test_util_1.expectError(D.isDomainNameString.validate(invalidDomain));
     };
-    EmailAddressTest.prototype.convertEmailAddress = function () {
-        var result1 = E.isEmailAddress.convert(email1);
-        assert.equal(null, result1.name);
-        assert.equal('foo@bar.com', result1.address);
-        assert.equal('foo', result1.localPart);
-        assert.equal('bar.com', result1.domain);
-        var result2 = E.isEmailAddress.convert(email2);
-        assert.equal('John Smith', result2.name);
-        assert.equal('foo@bar.com', result2.address);
-        assert.equal('foo', result2.localPart);
-        assert.equal('bar.com', result2.domain);
+    DomainNameTest.prototype.convertDomainName = function () {
+        var result1 = D.isDomainName.convert(domain1);
+        assert.equal('localhost', result1.toString());
+        var result2 = D.isDomainName.convert(domain2);
+        assert.equal('foobar.com', result2.toString());
     };
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], EmailAddressTest.prototype, "isEmailAddress", null);
+    ], DomainNameTest.prototype, "isDomainNameString", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], EmailAddressTest.prototype, "convertEmailAddress", null);
-    EmailAddressTest = __decorate([
+    ], DomainNameTest.prototype, "convertDomainName", null);
+    DomainNameTest = __decorate([
         test_util_1.suite
-    ], EmailAddressTest);
-    return EmailAddressTest;
+    ], DomainNameTest);
+    return DomainNameTest;
 }());
-//# sourceMappingURL=email-address.js.map
+//# sourceMappingURL=domain-name.js.map
