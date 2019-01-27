@@ -9,6 +9,7 @@ export * from './types/array';
 export * from './types/boolean';
 export * from './types/cased-word';
 export * from './types/date';
+export * from './types/domain-name';
 export * from './types/email-address';
 export * from './types/enum';
 export * from './types/integer';
