@@ -158,6 +158,10 @@ var ObjectTest = /** @class */ (function () {
             ]
         }));
     };
+    ObjectTest.prototype.canMatchEmptyObject = function () {
+        assert.equal(true, V.isEmptyObject.isa({}));
+        assert.equal(false, V.isEmptyObject.isa({ foo: 1 }));
+    };
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),
@@ -212,6 +216,12 @@ var ObjectTest = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], ObjectTest.prototype, "canDoRecursiveObjectType", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], ObjectTest.prototype, "canMatchEmptyObject", null);
     ObjectTest = __decorate([
         test_util_1.suite
     ], ObjectTest);

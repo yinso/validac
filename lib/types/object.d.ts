@@ -30,3 +30,5 @@ export interface ObjectConvertValidator<T extends object> extends ConvertValidat
 export interface IsObjectFactory<T extends object, KEY extends keyof T> extends ObjectIsaValidator<T> {
     readonly key : KEY;
 }
+
+export let isEmptyObject : ObjectIsaValidator<{}>;

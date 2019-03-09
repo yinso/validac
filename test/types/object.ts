@@ -196,4 +196,9 @@ interface RecursiveFoo {
             ]
         }))
     }
+
+    @test canMatchEmptyObject() {
+        assert.equal(true, V.isEmptyObject.isa({}));
+        assert.equal(false, V.isEmptyObject.isa({ foo: 1 }));
+    }
 }
