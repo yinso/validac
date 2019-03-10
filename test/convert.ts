@@ -34,4 +34,10 @@ type RecursiveOneOf = string | { foo : RecursiveOneOf };
             },
         ].forEach((v) => E.convertAllOf(isFoo.toConvert(), isBar.toConvert()).assert(v))
     }
+
+    @test canConvertIsOptional() {
+        let validator = S.isString.isOptional();
+        assert.equal('this is a string', validator.toConvert().assert('this is a string'))
+        assert.equal(undefined, validator.toConvert().assert(undefined))
+    }
 }
