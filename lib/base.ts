@@ -45,7 +45,7 @@ export type ConvertValidatorCompat<T, U> = ConvertValidator<T, U> | ConvertValid
 export enum CaseNames {
     Camel = 'Camel',
     Pascal = 'Pascal',
-    Kabab = 'Kabab',
+    Kebab = 'Kebab',
     Snake = 'Snake',
     Macro = 'Macro',
 }

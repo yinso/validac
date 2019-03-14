@@ -33,12 +33,12 @@ var CasedWordTest = /** @class */ (function () {
         test_util_1.expectError(S.isPascalCaseString.validate('not-pascal-case'));
         test_util_1.expectError(S.isPascalCaseString.validate('NOT_PASCAL_CASE'));
     };
-    CasedWordTest.prototype.isKababCaseString = function () {
-        S.isKababCaseString.assert('is-kabab-case');
-        test_util_1.expectError(S.isKababCaseString.validate('notKababCase'));
-        test_util_1.expectError(S.isKababCaseString.validate('NotKababCase'));
-        test_util_1.expectError(S.isKababCaseString.validate('not_kabab_case'));
-        test_util_1.expectError(S.isKababCaseString.validate('NOT_KABAB_CASE'));
+    CasedWordTest.prototype.isKebabCaseString = function () {
+        S.isKebabCaseString.assert('is-kebab-case');
+        test_util_1.expectError(S.isKebabCaseString.validate('notKebabCase'));
+        test_util_1.expectError(S.isKebabCaseString.validate('NotKebabCase'));
+        test_util_1.expectError(S.isKebabCaseString.validate('not_kebab_case'));
+        test_util_1.expectError(S.isKebabCaseString.validate('NOT_KEBAB_CASE'));
     };
     CasedWordTest.prototype.isSnakeCaseString = function () {
         S.isSnakeCaseString.assert('is_snake_case');
@@ -59,7 +59,7 @@ var CasedWordTest = /** @class */ (function () {
         assert.equal('isCasedWord', c1.toString());
         assert.equal('isCasedWord', c1.toCase('Camel'));
         assert.equal('IsCasedWord', c1.toCase('Pascal'));
-        assert.equal('is-cased-word', c1.toCase('Kabab'));
+        assert.equal('is-cased-word', c1.toCase('Kebab'));
         assert.equal('is_cased_word', c1.toCase('Snake'));
         assert.equal('IS_CASED_WORD', c1.toCase('Macro'));
     };
@@ -76,7 +76,7 @@ var CasedWordTest = /** @class */ (function () {
         assert.equal('Is$Cased$Word', c1.toString());
         assert.equal('isCasedWord', c1.toCase('Camel'));
         assert.equal('IsCasedWord', c1.toCase('Pascal'));
-        assert.equal('is-cased-word', c1.toCase('Kabab'));
+        assert.equal('is-cased-word', c1.toCase('Kebab'));
         assert.equal('is_cased_word', c1.toCase('Snake'));
         assert.equal('IS_CASED_WORD', c1.toCase('Macro'));
         assert.equal('Is$Cased$Word', c1.toCase('Custom'));
@@ -104,7 +104,7 @@ var CasedWordTest = /** @class */ (function () {
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], CasedWordTest.prototype, "isKababCaseString", null);
+    ], CasedWordTest.prototype, "isKebabCaseString", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),

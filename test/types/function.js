@@ -18,7 +18,7 @@ var FunctionTest = /** @class */ (function () {
     }
     FunctionTest.prototype.isFunction = function () {
         var foo = F.isFunction(N.isNumber, N.isNumber, N.isNumber).attach(function (a, b) { return a + b; });
-        console.log("************ functionSignature", foo.__$v);
+        // console.log(`************ functionSignature`, (foo as ExplicitAny).__$v)
     };
     FunctionTest.prototype.canCallWithValidation = function () {
         var foo = F.isFunction(N.isNumber, N.isNumber, N.isNumber);

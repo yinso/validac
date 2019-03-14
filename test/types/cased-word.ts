@@ -31,12 +31,12 @@ declare module '../../lib/base' { // for custom test below.
         expectError(S.isPascalCaseString.validate('NOT_PASCAL_CASE'))
     }
 
-    @test isKababCaseString() {
-        S.isKababCaseString.assert('is-kabab-case')
-        expectError(S.isKababCaseString.validate('notKababCase'))
-        expectError(S.isKababCaseString.validate('NotKababCase'))
-        expectError(S.isKababCaseString.validate('not_kabab_case'))
-        expectError(S.isKababCaseString.validate('NOT_KABAB_CASE'))
+    @test isKebabCaseString() {
+        S.isKebabCaseString.assert('is-kebab-case')
+        expectError(S.isKebabCaseString.validate('notKebabCase'))
+        expectError(S.isKebabCaseString.validate('NotKebabCase'))
+        expectError(S.isKebabCaseString.validate('not_kebab_case'))
+        expectError(S.isKebabCaseString.validate('NOT_KEBAB_CASE'))
     }
 
     @test isSnakeCaseString() {
@@ -60,7 +60,7 @@ declare module '../../lib/base' { // for custom test below.
         assert.equal('isCasedWord', c1.toString())
         assert.equal('isCasedWord', c1.toCase('Camel'))
         assert.equal('IsCasedWord', c1.toCase('Pascal'))
-        assert.equal('is-cased-word', c1.toCase('Kabab'))
+        assert.equal('is-cased-word', c1.toCase('Kebab'))
         assert.equal('is_cased_word', c1.toCase('Snake'))
         assert.equal('IS_CASED_WORD', c1.toCase('Macro'))
     }
@@ -78,7 +78,7 @@ declare module '../../lib/base' { // for custom test below.
         assert.equal('Is$Cased$Word', c1.toString())
         assert.equal('isCasedWord', c1.toCase('Camel'))
         assert.equal('IsCasedWord', c1.toCase('Pascal'))
-        assert.equal('is-cased-word', c1.toCase('Kabab'))
+        assert.equal('is-cased-word', c1.toCase('Kebab'))
         assert.equal('is_cased_word', c1.toCase('Snake'))
         assert.equal('IS_CASED_WORD', c1.toCase('Macro'))
         assert.equal('Is$Cased$Word', c1.toCase('Custom'))

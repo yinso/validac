@@ -8,7 +8,7 @@ import { ExplicitAny } from '../../lib';
 @suite class FunctionTest {
     @test isFunction() {
         let foo = F.isFunction(N.isNumber, N.isNumber, N.isNumber).attach((a : number, b : number) => a + b); 
-        console.log(`************ functionSignature`, (foo as ExplicitAny).__$v)
+        // console.log(`************ functionSignature`, (foo as ExplicitAny).__$v)
     }
 
     @test canCallWithValidation() {

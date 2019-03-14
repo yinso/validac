@@ -7,7 +7,7 @@ const camelCaseRegex = /^([a-z][a-z0-9]*)([A-Z][a-z0-9]+)*$/
 
 const pascalCaseRegex = /^([A-Z][a-z0-9]+)+$/
 
-const kababCaseRegex = /^([a-z][a-z0-9]*)(-[a-z0-9]+)*$/
+const kebabCaseRegex = /^([a-z][a-z0-9]*)(-[a-z0-9]+)*$/
 
 const snakeCaseRegex = /^([a-z][a-z0-9]*)(_[a-z0-9]+)*$/
 
@@ -62,8 +62,8 @@ registerCase({
 })
 
 registerCase({
-    caseName: 'Kabab',
-    isCase: (v) => kababCaseRegex.test(v),
+    caseName: 'Kebab',
+    isCase: (v) => kebabCaseRegex.test(v),
     fromCase: (str) => str.split('-'),
     toCase: (words) => words.join('-')
 })
@@ -107,7 +107,7 @@ export let isCamelCaseString = S.isString.where(S.match(camelCaseRegex))
 
 export let isPascalCaseString = S.isString.where(S.match(pascalCaseRegex))
 
-export let isKababCaseString = S.isString.where(S.match(kababCaseRegex))
+export let isKebabCaseString = S.isString.where(S.match(kebabCaseRegex))
 
 export let isSnakeCaseString = S.isString.where(S.match(snakeCaseRegex))
 
@@ -119,7 +119,7 @@ isCasedWord.appendConvert(isCamelCaseString
 isCasedWord.appendConvert(isPascalCaseString
     .transform((v) => new CasedWord(v)))
 
-isCasedWord.appendConvert(isKababCaseString
+isCasedWord.appendConvert(isKebabCaseString
     .transform((v) => new CasedWord(v)))
 
 isCasedWord.appendConvert(isSnakeCaseString
