@@ -19,7 +19,10 @@
     "typescript": "^3.0.3"
   },
   "dependencies": {
+    "@types/bluebird": "^3.5.26",
+    "bluebird": "^3.5.4",
     "email-addresses": "^3.0.2",
+    "reflect-metadata": "^0.1.13",
     "uuid": "^3.3.2"
   }
 }

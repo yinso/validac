@@ -37,6 +37,10 @@ export class TypeofIsaValidator<T> extends BaseIsaValidator<T> {
 
 export function isa<T>(test : IsaPredicate<T>, typeName : string) : IsaValidator<T>;
 
+export type Constructor<T> = Function & { prototype : T };
+
+export function isInstanceof<T>(obj : Constructor<T>, typeName : string) : IsaValidator<T>;
+
 export function isIsaValidator<T>() : IsaValidator<IsaValidator<T>>;
 
 export function isIsaValidatorCompat<T>() : IsaValidator<IsaValidatorCompat<T>>;

@@ -27,6 +27,10 @@ var IsaTest = /** @class */ (function () {
             .assert(new Date());
         assert.deepEqual(true, S.isString.isa('a string'));
     };
+    IsaTest.prototype.isInstanceof = function () {
+        I.isInstanceof(Date, 'date')
+            .assert(new Date());
+    };
     IsaTest.prototype.invalidIsa = function () {
         test_util_1.expectError(I.isa(function (v) { return typeof (v) === 'number'; }, 'number')
             .validate(new Date()));
@@ -86,6 +90,12 @@ var IsaTest = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], IsaTest.prototype, "isa", null);
+    __decorate([
+        test_util_1.test,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], IsaTest.prototype, "isInstanceof", null);
     __decorate([
         test_util_1.test,
         __metadata("design:type", Function),

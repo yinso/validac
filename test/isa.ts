@@ -17,6 +17,11 @@ import { IsaValidator } from '../lib';
         assert.deepEqual(true, S.isString.isa('a string'))
     }
 
+    @test isInstanceof() {
+        I.isInstanceof(Date, 'date')
+            .assert(new Date())
+    }
+
     @test invalidIsa() {
         expectError(I.isa((v : number) : v is number => typeof(v) === 'number', 'number')
             .validate(new Date()))

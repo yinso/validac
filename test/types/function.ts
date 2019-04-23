@@ -15,7 +15,24 @@ import { ExplicitAny } from '../../lib';
         let foo = F.isFunction(N.isNumber, N.isNumber, N.isNumber);
         assert.ok(foo.run((a : number, b : number) => a + b, 1 , 2));
         assert.throws(() => {
-            foo.run<number>((a : number, b : number) => a + b, 'foo', 'bar');
+            foo.run((a : number, b : number) => a + b, ('foo' as any) as number, ('bar' as any) as number);
         })
+    }
+
+    @test cannotConvertToConvertValidator() {
+        let foo = F.isFunction(N.isNumber, N.isNumber, N.isNumber);
+        assert.throws(() => {
+            foo.toConvert();
+        });
+    }
+
+    @test isAsyncFunction() {
+        let foo = F.isAsyncFunction(N.isNumber, N.isNumber, N.isNumber).attach((a : number, b : number) => Promise.resolve(a + b)); 
+    }
+
+    @test canCallAsyncWithValidation() {
+        let foo = F.isAsyncFunction(N.isNumber, N.isNumber, N.isNumber);
+        foo.run((a : number, b: number) => Promise.resolve(a + b), 1, 2)
+            .then((res) => assert.ok(res === 3))
     }
 }
