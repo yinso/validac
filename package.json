@@ -6,7 +6,7 @@
   "scripts": {
     "build": "./node_modules/.bin/tsc-util",
     "install": "./node_modules/.bin/tsc-util",
-    "test": "./node_modules/.bin/mocha --require source-map-support/register --recursive dist/test"
+    "test": "./node_modules/.bin/mocha --require source-map-support/register --recursive dist/test/**/*.js"
   },
   "author": "Yinso Chen <yinso.chen@gmail.com>",
   "license": "MIT",
@@ -19,13 +19,13 @@
     "mocha": "^5.2.0",
     "mocha-typescript": "^1.1.17",
     "source-map-support": "^0.5.9",
-    "tsc-util": "^1.0.0",
-    "typescript": "^3.0.3"
+    "tsc-util": "^1.1.0"
   },
   "dependencies": {
     "bluebird": "^3.5.4",
     "email-addresses": "^3.0.2",
     "reflect-metadata": "^0.1.13",
+    "typescript": "^3.0.3",
     "uuid": "^3.3.2"
   }
 }
