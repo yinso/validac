@@ -26,12 +26,12 @@ V.isString.validate(1234) // throws an error
 V.isNumber.assert(1234) // => 1234, type => number
 V.isNumber.assert('not number') // throws the FailedResult error.
 
-// Parse & transform. Note that you should always use the returned result from validac, rather than use the original value, as some of the validac combinators need to re-create values in order to truly validate.
-V.parseNumber.assert('1234') // => 1234, type => number (which is different from the passed in value that has the type of string)
-V.parseNumber.assert('not a number') // => error
+// convert
+V.isNumber.convert('1234') // ==> 1234
+V.isNumber.convert('not a number') // ==> Error
 
 // Value object pattern. V.Integer is a built-in value object that wraps numbers that are integers.
-V.parseInteger.assert('1234') // => V.Integer { _value: 1234 }, type => V.Integer
+V.isInteger.convert('1234') // => V.Integer { _value: 1234 }, type => V.Integer
 
 // Validating an array of a particular type.
 V.isArray(V.isNumber).assert([1, 2, 3, 4]) // => [1, 2, 3, 4], type => number[]
@@ -89,13 +89,13 @@ V.isDate.assert(new Date()) // => Date
 V.isDate.assert('not a date') // throws
 
 // parsing, this converts the type.
-V.parseDate.assert('2000-01-01T00:00:00Z') // => Date
-V.parseDate.assert('not a date') // throws
+V.isDate.convert('2000-01-01T00:00:00Z') // => Date
+V.isDate.convert('not a date') // throws
 ```
 
 ### `.validate(v : any) : ValidationResult<T>`
 
-Both `.isa` and `.assert` are built on top of `.validate`, which returns a `ValidationResult<T>` object that contains either the result of type `T`, or an array of error of the type `ValidationError[]`.
+Both `.isa` and `.convert` are built on top of `.validate`, which returns a `ValidationResult<T>` object that contains either the result of type `T`, or an array of error of the type `ValidationError[]`.
 
 Use `.validate` when you want to handle the result yourself (a scenario would be when you are writing your own combinators, or trying to integrate into other frameworks).
 
@@ -206,6 +206,62 @@ let isVector = V.isObject<Vector>({
 isVector.assert({x: 0, y: 0, z: 0}) // { x: 0, y: 0, z: 0}, type => Vector
 ```
 
+### `V.isTaggedObjectFactory<key, Type>(key, { ... })
+
+`isTaggedObjectFactory` models after a family of classes that shares a tag as a key - for exmaple below is the family of `Element` interfaces:
+
+```typescript
+// an Element as a tag property as the key.
+interface Element {
+    tag: string;
+}
+
+interface Image extends Element {
+    tag: 'Image';
+    title: string;
+    url: string;
+}
+
+interface LineElement extends Element { }
+
+interface LineElementWithChildren extends LineElement {
+    children: Element[];
+}
+
+interface LineBreak extends LineElement {
+    tag: 'LineBreak';
+}
+
+interface Bold extends LineElementWithChildren {
+    tag: 'Bold';
+}
+
+```
+
+To represent them in `validac`, you use `isTaggedObjectFactory` as follows:
+
+```typescript
+let isElement = V.isTaggedObjectFactory<'tag', Element>('tag', {
+});
+let isImage = isElement.register<'Image', Image>('Image', {
+    title: V.isString,
+    url: V.isString
+})
+// isElement can validate `Image` element now.
+isElement.assert({ tag: 'Image', title: 'test image', url: 'http://test/test.png' }) // OK
+
+let isLineElement = isElement.extends<LineElement>({}); // a new factory.
+let isLineBreak = isLineElement.register<'LineBreak', LineBreak>('LineBreak', {});
+
+// another factory.
+let isLineElementWithChildren = isLineElement.extends<LineElementWithChildren>({
+    children: V.isArray<Element>(isElement)
+});
+
+let isBold = isLineElementWithChildren.register<'Bold', Bold>('Bold', {});
+
+// isElement can be used to validate LineBreak and Bold as well.
+```
 
 ## Building Blocks
 
