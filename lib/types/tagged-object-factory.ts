@@ -51,7 +51,7 @@ export class TaggedObjectRegistry<KEY extends string, T extends Tagged<KEY, stri
     }
 }
 
-class TaggedObjectFactoryIsaValidator<KEY extends string, T extends Tagged<KEY, string>> extends BaseIsaValidator<T> {
+export class TaggedObjectFactoryIsaValidator<KEY extends string, T extends Tagged<KEY, string>> extends BaseIsaValidator<T> {
     readonly objectKey : KEY;
     readonly validatorMap : IsaValidatorKVMap<Omit<T, KEY>>;
     readonly inner : ObjectIsaValidator<T>;
@@ -114,7 +114,7 @@ class TaggedObjectFactoryIsaValidator<KEY extends string, T extends Tagged<KEY, 
     }
 }
 
-function _extendsMap<T extends {[key: string]: any}, U extends {[key: string]: any}, V extends T & U = T & U>(obj : IsaValidatorKVMap<T>, obj2 : IsaValidatorKVMap<U>) : IsaValidatorKVMap<V> {
+export function _extendsMap<T extends {[key: string]: any}, U extends {[key: string]: any}, V extends T & U = T & U>(obj : IsaValidatorKVMap<T>, obj2 : IsaValidatorKVMap<U>) : IsaValidatorKVMap<V> {
     let result : {[key: string]: any} = {};
     Object.keys(obj).forEach(key => {
         result[key] = obj[key];

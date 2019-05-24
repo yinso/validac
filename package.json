@@ -7,7 +7,7 @@
   "scripts": {
     "build": "node ./bin/install.js",
     "prepare": "node ./bin/install.js",
-    "test": "./node_modules/.bin/mocha --require source-map-support/register --recursive dist/test/**/*.js"
+    "test": "./node_modules/.bin/mocha --require source-map-support/register --recursive dist/test/"
   },
   "author": "Yinso Chen <yinso.chen@gmail.com>",
   "license": "MIT",
