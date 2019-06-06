@@ -1,6 +1,6 @@
 {
   "name": "validac",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Validation Combinator",
   "main": "dist/lib/index.js",
   "typings": "dist/lib/index.d.ts",
