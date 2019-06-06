@@ -1,6 +1,6 @@
 import { Scalar } from '../scalar';
-import { isString , match } from './string';
-import * as url from 'url';
+import { isString } from './string';
+import * as url from 'whatwg-url';
 import { isa } from '../isa';
 import { ExplicitAny } from '../base';
 
@@ -105,13 +105,13 @@ export class Url extends Scalar<string> {
     static convertUrlString = isUrlString
         .transform((v) => new Url(v))
 
-    static format(options : UrlOptions) {
-        return url.format({ ...options, query : flatten(options.query || {}, '') });
-    }
+    // static format(options : UrlOptions) {
+    //     return url.format({ ...options, query : flatten(options.query || {}, '') });
+    // }
 
     private _parseSearch() {
         let query : {[key: string]: ExplicitAny }= {};
-        this.searchParams.forEach((value, key) => {
+        Array.from(this._inner.searchParams).forEach((value, key) => {
             query[key] = value;
         })
         return unflatten(query);

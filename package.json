@@ -16,6 +16,7 @@
     "@types/mocha": "^2.2.48",
     "@types/node": "^9.6.30",
     "@types/uuid": "^3.4.4",
+    "@types/whatwg-url": "^6.4.0",
     "@types/yargs": "^13.0.0",
     "mocha": "^5.2.0",
     "mocha-typescript": "^1.1.17",
@@ -28,6 +29,7 @@
     "reflect-metadata": "^0.1.13",
     "typescript": "^3.0.3",
     "uuid": "^3.3.2",
+    "whatwg-url": "^7.0.0",
     "yargs": "^13.2.2"
   }
 }

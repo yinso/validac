@@ -1,5 +1,4 @@
 import { IsaValidator , IsaValidatorCompat, BaseValidator, ExplicitAny, Constraint, ConstraintPredicate, ValidationResult, ConvertValidator, TransformProc, DefaultProc, Validator, IsaPredicate, ConvertOptions } from './base';
-import { ExecFileOptions } from 'child_process';
 
 export abstract class BaseIsaValidator<T> extends BaseValidator<ExplicitAny, T> implements IsaValidator<T> {
     abstract validate(value : ExplicitAny, path ?: string) : ValidationResult<T>;
