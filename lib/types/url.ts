@@ -78,9 +78,9 @@ export class Url extends Scalar<string> {
         return this._inner.search
     }
 
-    get searchParams() {
-        return this._inner.searchParams
-    }
+    // get searchParams() {
+    //     return this._inner.searchParams
+    // }
 
     get username() {
         return this._inner.username
