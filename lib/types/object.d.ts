@@ -32,3 +32,5 @@ export interface IsObjectFactory<T extends object, KEY extends keyof T> extends 
 }
 
 export let isEmptyObject : ObjectIsaValidator<{}>;
+
+export function isObjectMap<T>(inner : IsaValidator<T>) : IsaValidator<{[key: string]: T}>;

@@ -3,6 +3,7 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
 import * as assert from 'assert';
 import * as uuid from 'uuid';
 import { IsaValidator } from '../../lib';
+import { stringify } from 'querystring';
 
 interface Foo {
     foo: Date;
@@ -200,5 +201,41 @@ interface RecursiveFoo {
     @test canMatchEmptyObject() {
         assert.equal(true, V.isEmptyObject.isa({}));
         assert.equal(false, V.isEmptyObject.isa({ foo: 1 }));
+    }
+}
+
+let isFooObjectMap : V.IsaValidator<{[key: string]: Foo}>;
+
+@suite class ObjectMapTest {
+
+    @test canCreateObjectMap() {
+        isFooObjectMap = V.isObjectMap(isFoo);
+    }
+
+    @test canValidateObjectMap() {
+        assert.equal(true, isFooObjectMap.isa({
+            test: {
+                foo: new Date(),
+                bar: 'hello'
+            },
+            test2: {
+                foo: new Date(),
+                bar: 'stuff'
+            }
+        }))
+    }
+
+    @test canConvertObjectMap() {
+        let result = isFooObjectMap.toConvert().assert({
+            test: {
+                foo: (new Date()).toISOString(),
+                bar: 'hello'
+            },
+            test2: {
+                foo: (new Date()).toISOString(),
+                bar: 'hello'
+            }
+        })
+        isFooObjectMap.assert(result);
     }
 }

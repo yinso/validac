@@ -206,7 +206,22 @@ let isVector = V.isObject<Vector>({
 isVector.assert({x: 0, y: 0, z: 0}) // { x: 0, y: 0, z: 0}, type => Vector
 ```
 
-### `V.isTaggedObjectFactory<key, Type>(key, { ... })
+### `V.isObjectMap<T>(inner : V.IsaValidator<T>) => V.IsaValidator<{[key: string], T}>`
+
+`V.isObjectMap` takes in an inner validator and returns a validator of type `T` that can be used to vaildate values of the type `{[key: string]: T}`.
+
+```typescript
+let isVectorObjectMap = V.isObjectMap(isVector);
+
+isVector.assert({
+    origin: { x: 0, y: 0, z: 0},
+    topLeft : { x: -10, y: -10, z: 0},
+    bottomRight: { x: 10, y: 10, z: 10}
+})
+```
+
+
+### `V.isTaggedObjectFactory<key, Type>(key, { ... })`
 
 `isTaggedObjectFactory` models after a family of classes that shares a tag as a key - for exmaple below is the family of `Element` interfaces:
 
