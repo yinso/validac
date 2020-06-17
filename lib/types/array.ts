@@ -43,7 +43,7 @@ export function matchArray(v : any) : v is any[] {
     return v instanceof Array
 }
 
-export function isArray<T>(item : IsaValidator<T>) : ArrayIsaValidator<T> {
+export function isArray<T>(item : IsaValidatorCompat<T>) : ArrayIsaValidator<T> {
     return new ArrayIsaValidator(item);
 }
 

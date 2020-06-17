@@ -29,6 +29,12 @@ let x = makeTuple<Foo>(new Bar<string>('1'), new Bar<string>('1'), new Bar<strin
 type RecursiveTuple = [ number , string , { foo : RecursiveTuple[] } ]
 
 @suite class TupleTest {
+    @test canAssertEmptyTuple() {
+        V.isTuple().assert([]);
+        assert.equal(V.isTuple().isa([]), true)
+        assert.equal(V.isTuple().isa(5), false)
+    }
+
     @test canAssert() {
         isFoo.assert([1, 'a string', true])
     }

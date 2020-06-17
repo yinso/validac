@@ -85,6 +85,29 @@ import { IsaValidator } from '../lib';
         let isIsaValidator1 = I.isIsaValidator<string | number | null>();
         assert.equal(true, isIsaValidator1.isa(validator));
     }
+
+    @test testIsChoiceValidator() {
+        interface Foo {
+
+        }
+        let isFoo = I.isChoice<Foo>();
+
+        class Foo2 implements Foo {
+
+        }
+        let isFoo2 = I.isInstanceof(Foo2, 'Foo2');
+        isFoo2.appendConvert(L.isLiteral('Foo2').transform((v) => new Foo2()))
+        isFoo.push(isFoo2);
+
+        class Foo3 implements Foo {
+
+        }
+        let isFoo3 = I.isInstanceof(Foo3, 'Foo3');
+        isFoo3.appendConvert(L.isLiteral('Foo3').transform((v) => new Foo3()))
+        isFoo.push(isFoo3);
+        assert.equal(isFoo.convert('Foo2') instanceof Foo2, true)
+        assert.equal(isFoo.convert('Foo3') instanceof Foo3, true)
+    }
 }
 
 type RecursiveOneOf = string | { foo : RecursiveOneOf };

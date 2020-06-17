@@ -136,6 +136,15 @@ export function isOneOf<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
     )
 : IsaValidator<T1 | T2 | T3 | T4 | T5  | T6 | T7 | T8 | T9 | T10>;
 
+export class ChoiceValidator<T> extends BaseIsaValidator<T> {
+    push<T1 extends T>(validator: IsaValidator<T1>) : void;
+    unshift<T1 extends T>(validator: IsaValidator<T1>) : void;
+    validate(value : any, path ?: string) : ValidationResult<T>;
+    protected _toConvert(options : ConvertOptions): ConvertValidator<ExplicitAny, T>;
+}
+
+export function isChoice<T>() : ChoiceValidator<T>;
+
 export function isAllOf<T1>
     (v1 : IsaValidatorCompat<T1>)
 : IsaValidator<T1>;

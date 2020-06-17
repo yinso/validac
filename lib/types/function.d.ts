@@ -1,6 +1,8 @@
 import { BaseIsaValidator } from '../isa';
 import { IsaValidator } from '../base';
 
+export let isFunction : IsaValidator<Function>;
+
 export interface FunctionIsaValidator0<TR> extends IsaValidator<Function> {
     attach(proc : Function) : Function;
     run(proc : Function) : TR;
@@ -89,56 +91,56 @@ export interface FunctionIsaValidator12
         ) : TR;
 }
 
-export function isFunction
+export function bindFunction
     <TR>
     (r : IsaValidator<TR>)
 : FunctionIsaValidator0<TR>;
-export function isFunction
+export function bindFunction
     <T1, TR>
     (p1 : IsaValidator<T1>, r : IsaValidator<TR>)
 : FunctionIsaValidator1<T1, TR>;
-export function isFunction
+export function bindFunction
     <T1, T2, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, r : IsaValidator<TR>)
 : FunctionIsaValidator2<T1, T2, TR>;
-export function isFunction
+export function bindFunction
     <T1, T2, T3, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>, r : IsaValidator<TR>)
 : FunctionIsaValidator3<T1, T2, T3, TR>;
-export function isFunction
+export function bindFunction
     <T1, T2, T3, T4, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>, p4: IsaValidator<T4>, r : IsaValidator<TR>)
 : FunctionIsaValidator4<T1, T2, T3, T4, TR>;
-export function isFunction
+export function bindFunction
     <T1, T2, T3, T4, T5, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>, p4: IsaValidator<T4>, p5 : IsaValidator<T5>, r : IsaValidator<TR>)
 : FunctionIsaValidator5<T1, T2, T3, T4, T5, TR>;
-export function isFunction
+export function bindFunction
     <T1, T2, T3, T4, T5, T6, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>, p4: IsaValidator<T4>, p5 : IsaValidator<T5>, p6 : IsaValidator<T6>, r : IsaValidator<TR>)
 : FunctionIsaValidator6<T1, T2, T3, T4, T5, T6, TR>;
-export function isFunction
+export function bindFunction
     <T1, T2, T3, T4, T5, T6, T7, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>
     , p4: IsaValidator<T4>, p5 : IsaValidator<T5>, p6 : IsaValidator<T6>
     , p7: IsaValidator<T7>
     , r : IsaValidator<TR>)
 : FunctionIsaValidator7<T1, T2, T3, T4, T5, T6, T7, TR>;
-export function isFunction
+export function bindFunction
     <T1, T2, T3, T4, T5, T6, T7, T8, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>
     , p4: IsaValidator<T4>, p5 : IsaValidator<T5>, p6 : IsaValidator<T6>
     , p7: IsaValidator<T7>, p8 : IsaValidator<T8>
     , r : IsaValidator<TR>)
 : FunctionIsaValidator8<T1, T2, T3, T4, T5, T6, T7, T8, TR>;
-export function isFunction
+export function bindFunction
     <T1, T2, T3, T4, T5, T6, T7, T8, T9, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>
     , p4: IsaValidator<T4>, p5 : IsaValidator<T5>, p6 : IsaValidator<T6>
     , p7: IsaValidator<T7>, p8 : IsaValidator<T8>, p9 : IsaValidator<T9>
     , r : IsaValidator<TR>)
 : FunctionIsaValidator9<T1, T2, T3, T4, T5, T6, T7, T8, T9, TR>;
-export function isFunction
+export function bindFunction
     <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>
     , p4: IsaValidator<T4>, p5 : IsaValidator<T5>, p6 : IsaValidator<T6>
@@ -146,7 +148,7 @@ export function isFunction
     , p10: IsaValidator<T10>
     , r : IsaValidator<TR>)
 : FunctionIsaValidator10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TR>;
-export function isFunction
+export function bindFunction
     <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>
     , p4: IsaValidator<T4>, p5 : IsaValidator<T5>, p6 : IsaValidator<T6>
@@ -154,7 +156,7 @@ export function isFunction
     , p10: IsaValidator<T10>, p11: IsaValidator<T11>
     , r : IsaValidator<TR>)
 : FunctionIsaValidator11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TR>;
-export function isFunction
+export function bindFunction
     <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>
     , p4: IsaValidator<T4>, p5 : IsaValidator<T5>, p6 : IsaValidator<T6>
@@ -258,56 +260,56 @@ export interface AsyncFunctionIsaValidator12
     ) : Promise<TR>;
 }
 
-export function isAsyncFunction
+export function bindAsyncFunction
     <TR>
     (r : IsaValidator<TR>)
 : AsyncFunctionIsaValidator0<TR>;
-export function isAsyncFunction
+export function bindAsyncFunction
     <T1, TR>
     (p1 : IsaValidator<T1>, r : IsaValidator<TR>)
 : AsyncFunctionIsaValidator1<T1, TR>;
-export function isAsyncFunction
+export function bindAsyncFunction
     <T1, T2, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, r : IsaValidator<TR>)
 : AsyncFunctionIsaValidator2<T1, T2, TR>;
-export function isAsyncFunction
+export function bindAsyncFunction
     <T1, T2, T3, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>, r : IsaValidator<TR>)
 : AsyncFunctionIsaValidator3<T1, T2, T3, TR>;
-export function isAsyncFunction
+export function bindAsyncFunction
     <T1, T2, T3, T4, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>, p4: IsaValidator<T4>, r : IsaValidator<TR>)
 : AsyncFunctionIsaValidator4<T1, T2, T3, T4, TR>;
-export function isAsyncFunction
+export function bindAsyncFunction
     <T1, T2, T3, T4, T5, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>, p4: IsaValidator<T4>, p5 : IsaValidator<T5>, r : IsaValidator<TR>)
 : AsyncFunctionIsaValidator5<T1, T2, T3, T4, T5, TR>;
-export function isAsyncFunction
+export function bindAsyncFunction
     <T1, T2, T3, T4, T5, T6, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>, p4: IsaValidator<T4>, p5 : IsaValidator<T5>, p6 : IsaValidator<T6>, r : IsaValidator<TR>)
 : AsyncFunctionIsaValidator6<T1, T2, T3, T4, T5, T6, TR>;
-export function isAsyncFunction
+export function bindAsyncFunction
     <T1, T2, T3, T4, T5, T6, T7, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>
     , p4: IsaValidator<T4>, p5 : IsaValidator<T5>, p6 : IsaValidator<T6>
     , p7: IsaValidator<T7>
     , r : IsaValidator<TR>)
 : AsyncFunctionIsaValidator7<T1, T2, T3, T4, T5, T6, T7, TR>;
-export function isAsyncFunction
+export function bindAsyncFunction
     <T1, T2, T3, T4, T5, T6, T7, T8, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>
     , p4: IsaValidator<T4>, p5 : IsaValidator<T5>, p6 : IsaValidator<T6>
     , p7: IsaValidator<T7>, p8 : IsaValidator<T8>
     , r : IsaValidator<TR>)
 : AsyncFunctionIsaValidator8<T1, T2, T3, T4, T5, T6, T7, T8, TR>;
-export function isAsyncFunction
+export function bindAsyncFunction
     <T1, T2, T3, T4, T5, T6, T7, T8, T9, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>
     , p4: IsaValidator<T4>, p5 : IsaValidator<T5>, p6 : IsaValidator<T6>
     , p7: IsaValidator<T7>, p8 : IsaValidator<T8>, p9 : IsaValidator<T9>
     , r : IsaValidator<TR>)
 : AsyncFunctionIsaValidator9<T1, T2, T3, T4, T5, T6, T7, T8, T9, TR>;
-export function isAsyncFunction
+export function bindAsyncFunction
     <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>
     , p4: IsaValidator<T4>, p5 : IsaValidator<T5>, p6 : IsaValidator<T6>
@@ -315,7 +317,7 @@ export function isAsyncFunction
     , p10: IsaValidator<T10>
     , r : IsaValidator<TR>)
 : AsyncFunctionIsaValidator10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TR>;
-export function isAsyncFunction
+export function bindAsyncFunction
     <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>
     , p4: IsaValidator<T4>, p5 : IsaValidator<T5>, p6 : IsaValidator<T6>
@@ -323,7 +325,7 @@ export function isAsyncFunction
     , p10: IsaValidator<T10>, p11: IsaValidator<T11>
     , r : IsaValidator<TR>)
 : AsyncFunctionIsaValidator11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TR>;
-export function isAsyncFunction
+export function bindAsyncFunction
     <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TR>
     (p1 : IsaValidator<T1>, p2 : IsaValidator<T2>, p3 : IsaValidator<T3>
     , p4: IsaValidator<T4>, p5 : IsaValidator<T5>, p6 : IsaValidator<T6>

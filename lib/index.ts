@@ -12,6 +12,7 @@ export * from './types/date';
 export * from './types/domain-name';
 export * from './types/email-address';
 export * from './types/enum';
+export * from './types/function';
 export * from './types/integer';
 export * from './types/literal';
 export * from './types/number';

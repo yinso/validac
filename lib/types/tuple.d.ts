@@ -1,5 +1,6 @@
 import { IsaValidatorCompat, IsaValidator } from '../base';
 
+export function isTuple() : IsaValidator<[]>;
 export function isTuple<T1>(
     v1 : IsaValidatorCompat<T1>,
 ) : IsaValidator<[T1]>;
