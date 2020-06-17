@@ -144,7 +144,7 @@ interface RecursiveFoo {
         isBaw.convert({
             foo: date1S,
             bar: 'a string',
-            nested: [1 , true, null, undefined ]
+            nested: [1 , true ]
         })
     }
 
