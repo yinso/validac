@@ -5,6 +5,7 @@ export * from './convert';
 export * from './isa';
 
 export * from './types/any';
+export * from './types/buffer';
 export * from './types/array';
 export * from './types/boolean';
 export * from './types/cased-word';

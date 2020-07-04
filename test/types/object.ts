@@ -2,7 +2,7 @@ import * as V from '../../lib'
 import { suite, test, slow, timeout , expectError } from '../../lib/util/test-util';
 import * as assert from 'assert';
 import * as uuid from 'uuid';
-import { IsaValidator } from '../../lib';
+import { IsaValidator, isObjectMap } from '../../lib';
 import { stringify } from 'querystring';
 
 interface Foo {
@@ -237,5 +237,11 @@ let isFooObjectMap : V.IsaValidator<{[key: string]: Foo}>;
             }
         })
         isFooObjectMap.assert(result);
+    }
+
+    @test
+    wontValidateBuffer() {
+        const isNumberMap = isObjectMap(V.isNumber);
+        assert.equal(isNumberMap.isa(Buffer.from('test buffer is not map')), false);
     }
 }
