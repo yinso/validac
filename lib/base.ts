@@ -19,7 +19,7 @@ export abstract class BaseValidator<T, U> implements Validator<T, U> {
 export type ConstraintPredicate<T> = (v : T) => boolean;
 
 export interface Constraint<T> {
-    satisfy(v : T, path : string) : ValidationError[];
+    satisfy(v : T, path ?: string) : ValidationError[];
     and(constraint : Constraint<T>) : Constraint<T>;
     or(constraint: Constraint<T>) : Constraint<T>;
     not() : Constraint<T>;

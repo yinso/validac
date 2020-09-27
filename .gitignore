@@ -10,3 +10,6 @@ css/*.css
 .idea/
 .vscode/
 dist/
+*.js
+*.d.ts
+*.js.map

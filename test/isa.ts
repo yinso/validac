@@ -4,7 +4,6 @@ import * as S from '../lib/types/string';
 import * as N from '../lib/types/number';
 import * as _N from '../lib/types/null';
 import * as L from '../lib/types/literal';
-import * as E from '../lib/isa';
 import * as O from '../lib/types/object';
 import * as A from '../lib/types/array';
 import { suite, test, slow, timeout , expectError } from '../lib/util/test-util';
@@ -115,11 +114,11 @@ type RecursiveOneOf = string | { foo : RecursiveOneOf };
 @suite class IsOneOfTest {
     @test canAssert() {
         [null, 'a string']
-            .forEach((v) => E.isOneOf(_N.isNull, S.isString).assert(v))
+            .forEach((v) => I.isOneOf(_N.isNull, S.isString).assert(v))
     }
 
     @test canTestRecursiveOneOf() {
-        let isRecursiveOneOf = E.isOneOf(S.isString, O.isObject({
+        let isRecursiveOneOf = I.isOneOf(S.isString, O.isObject({
             foo: () : IsaValidator<RecursiveOneOf> => isRecursiveOneOf
         }))
         assert.equal(true, isRecursiveOneOf.isa('a recursive oneof'))
@@ -139,11 +138,11 @@ type RecursiveAllOf = { bar : string } & { foo : RecursiveAllOf[] }
         });
         [{
             foo: 1, bar: 'a string'
-        }].forEach((v) => E.isAllOf(isFoo, isBar).assert(v))
+        }].forEach((v) => I.isAllOf(isFoo, isBar).assert(v))
     }
 
     @test canTestRecurisveAllOf() {
-        let isRecursiveAllOf = E.isAllOf(O.isObject({
+        let isRecursiveAllOf = I.isAllOf(O.isObject({
             bar: S.isString
         }), O.isObject({
             foo: () : IsaValidator<RecursiveAllOf[]> => A.isArray(isRecursiveAllOf)

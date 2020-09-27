@@ -101,10 +101,10 @@ export class TaggedObjectFactoryIsaValidator<KEY extends string, T extends Tagge
     private _extendMap<U extends T>(validatorMap : IsaValidatorKVMap<ObjectDiff<U, T>>) : IsaValidatorKVMap<Omit<U, KEY>> {
         let result : {[key: string]: any} = {};
         Object.keys(this.validatorMap).forEach(key => {
-            result[key] = this.validatorMap[key];
+            result[key] = (this.validatorMap as any)[key];
         });
         Object.keys(validatorMap).forEach(key => {
-            result[key] = validatorMap[key];
+            result[key] = (validatorMap as any)[key];
         });
         return result as IsaValidatorKVMap<Omit<U, KEY>>;
     }

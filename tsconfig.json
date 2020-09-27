@@ -5,7 +5,7 @@
     "emitDecoratorMetadata": true,
     "declaration": true,
     "rootDir": ".",
-    "outDir": "dist",
+    "outDir": ".",
     "lib": [
       "es5",
       "es2015.promise",
@@ -20,4 +20,8 @@
     "lib",
     "test"
   ],
+  "exclude": [
+    "dist",
+    "doc"
+  ]
 }

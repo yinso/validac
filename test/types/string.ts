@@ -18,4 +18,12 @@ import { suite, test, slow, timeout , expectError } from '../../lib/util/test-ut
     @test isInvalidStringLiteral() {
         return expectError(L.isLiteral('test').validate('wrong'))
     }
+
+    @test willRejectNull() {
+        return expectError(S.isString.validate(null))
+    }
+
+    @test willRejectNullWithLengthCheck() {
+        return expectError(S.isString.where((v: string) => v.length < 10).validate(null))
+    }
 }

@@ -17,4 +17,3 @@ dist: tsc-only js
 	cp package.json package-lock.json
 	rm -rf ./dist/node_modules
 	cd dist && npm ci
-

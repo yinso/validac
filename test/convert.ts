@@ -1,17 +1,17 @@
 import * as assert from 'assert';
-import * as I from '../lib/convert';
 import * as E from '../lib/convert';
 import * as S from '../lib/types/string';
 import * as N from '../lib/types/number';
 import * as O from '../lib/types/object';
 import * as A from '../lib/types/array';
 import { suite, test, slow, timeout , expectError } from '../lib/util/test-util';
-import { ConvertValidator, isLiteral, isOneOf } from '../lib';
+import { isOneOf } from '../lib/isa';
+import { isLiteral } from '../lib/types/literal';
 
 type RecursiveOneOf = string | { foo : RecursiveOneOf };
 
 @suite class ConvertOneOfTest {
-    @test canAssert() {
+    @test canAssertNumberOrString() {
         ['1234', 'a string']
             .forEach((v) => E.convertOneOf(N.isNumber.toConvert(), S.isString.toConvert()).assert(v))
     }
@@ -81,7 +81,7 @@ type RecursiveOneOf = string | { foo : RecursiveOneOf };
 }
 
 @suite class ConvertAllOfTest {
-    @test canAssert() {
+    @test canAssertFooAndBar() {
         let isFoo = O.isObject({
             foo: N.isNumber
         });
