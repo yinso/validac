@@ -1,6 +1,6 @@
 import { IsaValidator , IsaValidatorCompat, BaseValidator, ExplicitAny, Constraint, ConstraintPredicate, ValidationResult, ConvertValidator, TransformProc, DefaultProc, Validator, IsaPredicate, ConvertOptions, ConvertValidatorCompat, resolve, reject } from './base';
 import { TransformConvertValidator, convertOneOf, TypeofConvertValidator, ConstraintConvertValidator, convertAllOf, _convertOneOf, _convertAllOf } from './convert';
-import { isConvertValidator, isIsaValidator as _isIsaValidator, isIsaValidatorCompat as _isIsaValidatorCompat, isConstraint } from './_isa';
+import { isConvertValidator, isIsaValidator as _isIsaValidator, isIsaValidatorCompat as _isIsaValidatorCompat, isConstraint, isFunction } from './_isa';
 import { pass } from './constraint';
 import { OptionalConvertValidator, DefaultToConvertValidator } from './convert';
 
@@ -263,17 +263,17 @@ export function isOneOf(...validators: IsaValidatorCompat<ExplicitAny>[]): IsaVa
 }
 
 class UnionIsaValidator extends BaseIsaValidator<ExplicitAny> {
-    readonly validators: IsaValidator<ExplicitAny>[];
+    readonly validators: IsaValidatorCompat<ExplicitAny>[];
     constructor(validators: IsaValidatorCompat<ExplicitAny>[]) {
         super();
-        this.validators = validators.map((v) => _isIsaValidator(v) ? v : v());
+        this.validators = validators;
     }
 
     validate(value: ExplicitAny, path?: string): ValidationResult<ExplicitAny> {
         return this.validators.reduce((result: ValidationResult<ExplicitAny>, validator, i) => {
             return result.cata((v) => {
                 return result;
-            }, (e) => validator.validate(value, path));
+            }, (e) => (isFunction(validator) ? validator() : validator).validate(value, path));
         }, reject({
             error: 'UnionIsaError',
             path: path || '$',
@@ -283,7 +283,7 @@ class UnionIsaValidator extends BaseIsaValidator<ExplicitAny> {
     };
 
     _toConvert(options: ConvertOptions) {
-        return _convertOneOf(this.validators.map((v) => v.toConvert(options)));
+        return _convertOneOf(this.validators.map((v) => (isFunction(v) ? v() : v).toConvert(options)));
     }
 }
 
