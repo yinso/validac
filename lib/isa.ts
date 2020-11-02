@@ -63,7 +63,7 @@ export abstract class BaseIsaValidator<T> extends BaseValidator<ExplicitAny, T> 
     protected abstract _toConvert(options : ConvertOptions) : ConvertValidator<ExplicitAny, T>;
 }
 
-class OptionalIsaValidator<T> extends BaseIsaValidator<T | undefined> {
+export class OptionalIsaValidator<T> extends BaseIsaValidator<T | undefined> {
     readonly validator: IsaValidator<T>;
     constructor(validator: IsaValidator<T>) {
         super();
@@ -280,7 +280,7 @@ class UnionIsaValidator extends BaseIsaValidator<ExplicitAny> {
             expected: 'OneOfMatches',
             actual: value
         }))
-    };
+    }
 
     _toConvert(options: ConvertOptions) {
         return _convertOneOf(this.validators.map((v) => (isFunction(v) ? v() : v).toConvert(options)));

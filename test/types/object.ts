@@ -4,6 +4,7 @@ import * as assert from 'assert';
 import * as uuid from 'uuid';
 import { IsaValidator, isObjectMap } from '../../lib';
 import { stringify } from 'querystring';
+import { boolean } from 'yargs';
 
 interface Foo {
     foo: Date;
@@ -243,5 +244,35 @@ let isFooObjectMap : V.IsaValidator<{[key: string]: Foo}>;
     wontValidateBuffer() {
         const isNumberMap = isObjectMap(V.isNumber);
         assert.equal(isNumberMap.isa(Buffer.from('test buffer is not map')), false);
+    }
+
+    @test
+    canEnsureOptionalKeysArentFilledIn() {
+        interface Column {
+            readonly name: string;
+            readonly type: string;
+            readonly primary?: boolean;
+            readonly unique?: boolean;
+            readonly nullable?: boolean;
+            readonly default?: any;  
+        }
+
+        const isColumn = V.isObject<Column>({
+            name: V.isString,
+            type: V.isString,
+            primary: V.isBoolean.isOptional(),
+            unique: V.isBoolean.isOptional(),
+            nullable: V.isBoolean.isOptional(),
+            default: V.isAny.isOptional()
+        })
+
+        const c1: Column = { name: 'c1', type: 'int' }
+        const c2: Column = { name: 'c1', type: 'int', primary: true }
+        const c3: Column = { name: 'c1', type: 'int', unique: true }
+        const c4: Column = { name: 'c1', type: 'int', default: '' }
+        assert.deepEqual(isColumn.convert(c1), c1)
+        assert.deepEqual(isColumn.convert(c2), c2)
+        assert.deepEqual(isColumn.convert(c3), c3)
+        assert.deepEqual(isColumn.convert(c4), c4)
     }
 }

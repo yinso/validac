@@ -110,7 +110,11 @@ export class TaggedObjectFactoryIsaValidator<KEY extends string, T extends Tagge
     }
 
     _toConvert(options : ConvertOptions) : TaggedObjectFactoryConvertValidator<KEY, T> {
-        return new TaggedObjectFactoryConvertValidator(this.objectKey, {[this.objectKey]: isString.toConvert(options) } as ConvertValidatorKVMap<ExplicitAny, T>, this.inner.toConvert(options), this.registry, options);
+        return new TaggedObjectFactoryConvertValidator(this.objectKey,
+            {[this.objectKey]: isString.toConvert(options) } as ConvertValidatorKVMap<ExplicitAny, T>,
+            this.inner.toConvert(options),
+            this.registry,
+            options);
     }
 }
 
