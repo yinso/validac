@@ -12,11 +12,17 @@ export type ObjectDiff<U, T> = Pick<U, Exclude<keyof U, keyof T>>;
 
 export type ObjectIntersect<U, T> = Pick<U, Extract<keyof U, keyof T>>;
 
+export interface ObjectIsaValidatorOptions {
+    readonly rejectUndefinedParam?: boolean;
+}
+
 export class ObjectIsaValidator<T extends object> extends BaseIsaValidator<T> {
     readonly validatorMap: IsaValidatorKVMap<T>;
-    constructor(validatorMap: IsaValidatorKVMap<T>) {
+    readonly rejectUndefinedParam: boolean;
+    constructor(validatorMap: IsaValidatorKVMap<T>, options: ObjectIsaValidatorOptions = {}) {
         super();
         this.validatorMap = validatorMap;
+        this.rejectUndefinedParam = options.rejectUndefinedParam || false;
     }
 
     validate(value: any, path = '$'): ValidationResult<T> {
@@ -30,6 +36,14 @@ export class ObjectIsaValidator<T extends object> extends BaseIsaValidator<T> {
         }
         let errors = filterErrors(Object.keys(this.validatorMap).map((key) => {
             let validator: IsaValidatorCompat<T[keyof T]> = this.validatorMap[key as keyof T];
+            if (this.rejectUndefinedParam && value.hasOwnProperty(key) && value[key] === undefined) {
+                return reject({
+                    error: 'UndefinedParameter',
+                    path: path + '.' + key,
+                    expected: { hasValue: true },
+                    actual: { noValue: true }
+                })
+            }
             return (typeof(validator) === 'function' ? validator() : validator).validate(value[key], path + '.' + key);
         }))
         if (errors.length > 0) {
@@ -40,7 +54,9 @@ export class ObjectIsaValidator<T extends object> extends BaseIsaValidator<T> {
     }
 
     extends<U extends T>(validatorMap : IsaValidatorKVMap<ObjectDiff<U, T>>) : ObjectIsaValidator<U> {
-        return new ObjectIsaValidator<U>(_extend(this.validatorMap, validatorMap) as IsaValidatorKVMap<U>)
+        return new ObjectIsaValidator<U>(_extend(this.validatorMap, validatorMap) as IsaValidatorKVMap<U>, {
+            rejectUndefinedParam: this.rejectUndefinedParam
+        })
     }
 
     toConvert(options ?: ConvertOptions) : ObjectConvertValidator<T> {
@@ -53,7 +69,9 @@ export class ObjectIsaValidator<T extends object> extends BaseIsaValidator<T> {
             acc[key as keyof T] = (typeof(validator) === 'function' ? validator() : validator).toConvert(options);
             return acc
         }, {} as ConvertValidatorKVMap<ExplicitAny, T>);
-        return new ObjectConvertValidator(convertMap, options)
+        return new ObjectConvertValidator(convertMap, options, {
+            rejectUndefinedParam: this.rejectUndefinedParam
+        })
     }
 }
 
@@ -71,8 +89,8 @@ function _extend(...args: {[key: string]: any}[]) {
 }
 
 
-export function isObject<T extends object>(validatorMap : IsaValidatorKVMap<T>) : ObjectIsaValidator<T> {
-    return new ObjectIsaValidator(validatorMap);
+export function isObject<T extends object>(validatorMap : IsaValidatorKVMap<T>, options: ObjectIsaValidatorOptions = {}) : ObjectIsaValidator<T> {
+    return new ObjectIsaValidator(validatorMap, options);
 }
 
 // this is a very difficult thing to specify...!!! hmm...
@@ -82,9 +100,11 @@ export type ConvertValidatorKVMap<ExplicitAny, T> = {
 
 export class ObjectConvertValidator<T extends object> extends BaseConvertValidator<ExplicitAny, T> {
     readonly validatorMap: ConvertValidatorKVMap<ExplicitAny, T>;
-    constructor(validatorMap: ConvertValidatorKVMap<ExplicitAny, T>, convertOptions: ConvertOptions = {}) {
+    readonly rejectUndefinedParameter: boolean;
+    constructor(validatorMap: ConvertValidatorKVMap<ExplicitAny, T>, convertOptions: ConvertOptions = {}, objectOptions: ObjectIsaValidatorOptions = {}) {
         super(convertOptions);
         this.validatorMap = validatorMap;
+        this.rejectUndefinedParameter = objectOptions.rejectUndefinedParam || false;
     }
 
     validate(value: ExplicitAny, path: string = '$'): ValidationResult<T> {
@@ -103,6 +123,16 @@ export class ObjectConvertValidator<T extends object> extends BaseConvertValidat
             let validator: ConvertValidatorCompat<ExplicitAny, T[keyof T]> = this.validatorMap[key as keyof T];
             let objectKey = this._getKey(key);
             keyMap[objectKey] = key;
+            if (this.rejectUndefinedParameter && value.hasOwnProperty(objectKey) && value[objectKey] === undefined) {
+                const e = reject({
+                    error: 'UndefinedParameter',
+                    path: path + '.' + key,
+                    expected: { hasValue: true },
+                    actual: { noValue: true }
+                })
+                errors = errors.concat(e.errors)
+                return acc;
+            }
             let propValue = value[objectKey];
             const _validator = isFunction(validator) ? validator() : validator
             let result = _validator.validate(propValue, path + '.' + key)
@@ -123,7 +153,7 @@ export class ObjectConvertValidator<T extends object> extends BaseConvertValidat
                 return acc;
             })
         }, {} as {[key: string]: any});
-        // console.log(`******** ObjectValidator.validate`, value, results, keyMap);
+        // console.log(`******** ObjectValidator.validate`, { value, results, keyMap, errors });
         if (errors.length > 0) {
             return reject(errors);
         } else if (!changed) {

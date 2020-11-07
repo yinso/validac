@@ -6,21 +6,26 @@ export declare type IsaValidatorKVMap<T extends object> = {
 };
 export declare type ObjectDiff<U, T> = Pick<U, Exclude<keyof U, keyof T>>;
 export declare type ObjectIntersect<U, T> = Pick<U, Extract<keyof U, keyof T>>;
+export interface ObjectIsaValidatorOptions {
+    readonly rejectUndefinedParam?: boolean;
+}
 export declare class ObjectIsaValidator<T extends object> extends BaseIsaValidator<T> {
     readonly validatorMap: IsaValidatorKVMap<T>;
-    constructor(validatorMap: IsaValidatorKVMap<T>);
+    readonly rejectUndefinedParam: boolean;
+    constructor(validatorMap: IsaValidatorKVMap<T>, options?: ObjectIsaValidatorOptions);
     validate(value: any, path?: string): ValidationResult<T>;
     extends<U extends T>(validatorMap: IsaValidatorKVMap<ObjectDiff<U, T>>): ObjectIsaValidator<U>;
     toConvert(options?: ConvertOptions): ObjectConvertValidator<T>;
     _toConvert(options?: ConvertOptions): ObjectConvertValidator<T>;
 }
-export declare function isObject<T extends object>(validatorMap: IsaValidatorKVMap<T>): ObjectIsaValidator<T>;
+export declare function isObject<T extends object>(validatorMap: IsaValidatorKVMap<T>, options?: ObjectIsaValidatorOptions): ObjectIsaValidator<T>;
 export declare type ConvertValidatorKVMap<ExplicitAny, T> = {
     [P in keyof T]: ConvertValidatorCompat<ExplicitAny, T[P]>;
 };
 export declare class ObjectConvertValidator<T extends object> extends BaseConvertValidator<ExplicitAny, T> {
     readonly validatorMap: ConvertValidatorKVMap<ExplicitAny, T>;
-    constructor(validatorMap: ConvertValidatorKVMap<ExplicitAny, T>, convertOptions?: ConvertOptions);
+    readonly rejectUndefinedParameter: boolean;
+    constructor(validatorMap: ConvertValidatorKVMap<ExplicitAny, T>, convertOptions?: ConvertOptions, objectOptions?: ObjectIsaValidatorOptions);
     validate(value: ExplicitAny, path?: string): ValidationResult<T>;
     private _getKey;
     extends<U extends T>(validatorMap: ConvertValidatorKVMap<ExplicitAny, ObjectDiff<U, T>>): ObjectConvertValidator<U>;

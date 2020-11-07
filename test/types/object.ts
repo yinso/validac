@@ -2,7 +2,7 @@ import * as V from '../../lib'
 import { suite, test, slow, timeout , expectError } from '../../lib/util/test-util';
 import * as assert from 'assert';
 import * as uuid from 'uuid';
-import { IsaValidator, isObjectMap } from '../../lib';
+import { IsaValidator, isObjectMap, isObject } from '../../lib';
 import { stringify } from 'querystring';
 import { boolean } from 'yargs';
 
@@ -203,6 +203,45 @@ interface RecursiveFoo {
         assert.equal(true, V.isEmptyObject.isa({}));
         assert.equal(false, V.isEmptyObject.isa({ foo: 1 }));
     }
+
+    @test canHandleOptionalParams() {
+        interface Foo1 {
+            readonly foo: number;
+            readonly bar?: string;
+        }
+
+        const isFoo1 = V.isObject<Foo1>({
+            foo: V.isNumber,
+            bar: V.isString.isOptional()
+        })
+
+        assert.ok(isFoo1.isa({ foo: 10 }))
+        assert.ok(isFoo1.isa({ foo: 10, bar: 'test' }))
+        assert.ok(isFoo1.isa({ foo: 10, bar: undefined }))
+        assert.deepEqual(isFoo1.convert({ foo: 10 }), { foo: 10 })
+        assert.deepEqual(isFoo1.convert({ foo: 10, bar: 'test' }), { foo: 10, bar: 'test' })
+        assert.deepEqual(isFoo1.convert({ foo: 10, bar: undefined }), { foo: 10, bar: undefined })
+    }
+
+    @test canRejectUndefinedOptionalParams() {
+        interface Foo1 {
+            readonly foo: number;
+            readonly bar?: string;
+        }
+
+        const isFoo1 = V.isObject<Foo1>({
+            foo: V.isNumber,
+            bar: V.isString.isOptional()
+        }, { rejectUndefinedParam: true })
+
+        assert.ok(isFoo1.isa({ foo: 10 }))
+        assert.ok(isFoo1.isa({ foo: 10, bar: 'test' }))
+        assert.ok(!isFoo1.isa({ foo: 10, bar: undefined }))
+        assert.deepEqual(isFoo1.convert({ foo: 10 }), { foo: 10 })
+        assert.deepEqual(isFoo1.convert({ foo: 10, bar: 'test' }), { foo: 10, bar: 'test' })
+        assert.throws(() => isFoo1.convert({ foo: 10, bar: undefined }))
+    }
+
 }
 
 let isFooObjectMap : V.IsaValidator<{[key: string]: Foo}>;
