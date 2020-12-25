@@ -39,5 +39,13 @@ describe('CreditCardTest', () => {
                 assert.equal(c.type, type)
             }
         })
+
+        it(`canCreateScalar: ${card}`, () => {
+            if (valid) {
+                const cc = C.isCreditCardNumber.convert(card)
+                assert.equal(cc instanceof C.CreditCardNumber, true)
+                assert.equal(cc.type, type)
+            }
+        })
     })
 })

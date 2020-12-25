@@ -4,7 +4,7 @@
 import valid = require('card-validator')
 import { Scalar } from '../scalar'
 import { isString } from './string'
-import { isa } from '../isa'
+import { isa, isInstanceof } from '../isa'
 
 export const isCreditCardNumberString = isString
     .where((v) => {
@@ -25,7 +25,11 @@ export class CreditCardNumber extends Scalar<string> {
             throw new Error(`InvalidCreditCardNumber:${inner}`)
         }
     }
+
+    static convertCreditCardNuberString = isCreditCardNumberString
+        .transform((v) => new CreditCardNumber(v))
 }
 
-
+export const isCreditCardNumber = isInstanceof(CreditCardNumber, 'CreditCardNumber')
+isCreditCardNumber.appendConvert(CreditCardNumber.convertCreditCardNuberString)
 

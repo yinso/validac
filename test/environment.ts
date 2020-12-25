@@ -2,9 +2,10 @@ import { suite, test } from 'mocha-typescript'
 import * as E from '../lib/environment'
 import * as assert from 'assert'
 import * as uuid from 'uuid'
+import { Scalar, isString, match, isInstanceof } from '../lib'
 
 let baseEnv: E.Environment
-
+let childEnv: E.Environment
 @suite
 class EnvironmentTest {
     @test
@@ -109,4 +110,39 @@ class EnvironmentTest {
         assert.equal(isUndefined.isa(undefined), true) // this is not the expectation.
         assert.equal(isUndefined.isa(10), false)
     }
+
+    @test
+    canCreateNewEnvironment() {
+        childEnv = baseEnv.childScope()
+        assert.equal(childEnv instanceof E.Environment, true)
+    }
+
+    @test
+    canValidateViaParentEnv() {
+        assert.ok(baseEnv.has('Integer'))
+        assert.ok(baseEnv.has('boolean'))
+        assert.ok(baseEnv.has('CreditCardNumber'))
+    }
+
+    @test
+    canAddMoreType() {
+        const isFooString = isString
+            .where(match(/^foo$/i))
+        class Foo extends Scalar<string> {
+            static convertFooString = isFooString
+                .transform((v) => new Foo(v))
+        }
+
+        const isFoo = isInstanceof(Foo, 'Foo')
+        isFoo.appendConvert(Foo.convertFooString)
+
+        childEnv.define('Foo', isFoo)
+        assert.ok(childEnv.has('Foo'))
+        assert.ok(!baseEnv.has('Foo'))
+
+        let validator = childEnv.get('Foo')
+        let value = validator.convert('FOO')
+        assert.equal(value instanceof Foo, true)
+    }
+
 }

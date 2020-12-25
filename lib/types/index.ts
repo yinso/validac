@@ -3,6 +3,7 @@ export * from './buffer';
 export * from './array';
 export * from './boolean';
 export * from './cased-word';
+export * from './credit-card'
 export * from './date';
 export * from './domain-name';
 export * from './email-address';
