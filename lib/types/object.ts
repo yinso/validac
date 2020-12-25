@@ -192,7 +192,7 @@ export interface IsObjectFactory<T extends object, KEY extends keyof T> extends 
 export let isEmptyObject: IsaValidator<{}> = isObject({}).where((obj) => Object.keys(obj).length === 0)
 
 ////// OBJECT MAP
-class ObjectMapIsaValidator<T> extends BaseIsaValidator<{[key: string]: T}> {
+export class ObjectMapIsaValidator<T> extends BaseIsaValidator<{[key: string]: T}> {
     readonly inner: IsaValidatorCompat<T>;
     constructor(validator: IsaValidatorCompat<T>) {
         super();

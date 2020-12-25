@@ -55,20 +55,22 @@ export class Environment {
     }   
 }
 
-export function baseEnv(): Environment {
-    const env = new Environment()
-    env.define('boolean', isBoolean)
-    env.define('Buffer', isBuffer)
-    env.define('CreditCardNumber', isCreditCardNumberString)
-    env.define('Date', isDate)
-    env.define('DomainName', isDomainName)
-    env.define('EmailAddress', isEmailAddress)
-    env.define('Integer', isInteger) // the only scalar as lower case?
-    env.define('null', isNull)
-    env.define('number', isNumber)
-    env.define('string', isString)
-    env.define('Url', isUrl)
-    env.define('Uuid', isUuid)
-    env.define('undefined', isUndefined)
-    return env
+function _baseEnv() {
+    const _env = new Environment()
+    _env.define('boolean', isBoolean)
+    _env.define('Buffer', isBuffer)
+    _env.define('CreditCardNumber', isCreditCardNumberString)
+    _env.define('Date', isDate)
+    _env.define('DomainName', isDomainName)
+    _env.define('EmailAddress', isEmailAddress)
+    _env.define('Integer', isInteger) // the only scalar as lower case?
+    _env.define('null', isNull)
+    _env.define('number', isNumber)
+    _env.define('string', isString)
+    _env.define('Url', isUrl)
+    _env.define('Uuid', isUuid)
+    _env.define('undefined', isUndefined)
+    return _env
 }
+
+export const baseEnv = _baseEnv()

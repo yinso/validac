@@ -10,7 +10,7 @@ let childEnv: E.Environment
 class EnvironmentTest {
     @test
     canCreateEnvironment() {
-        baseEnv = E.baseEnv()
+        baseEnv = E.baseEnv
         assert.equal(baseEnv instanceof E.Environment, true)
     }
 

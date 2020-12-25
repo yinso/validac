@@ -34,7 +34,7 @@ export interface IsObjectFactory<T extends object, KEY extends keyof T> extends 
     readonly key: KEY;
 }
 export declare let isEmptyObject: IsaValidator<{}>;
-declare class ObjectMapIsaValidator<T> extends BaseIsaValidator<{
+export declare class ObjectMapIsaValidator<T> extends BaseIsaValidator<{
     [key: string]: T;
 }> {
     readonly inner: IsaValidatorCompat<T>;
