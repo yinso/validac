@@ -169,6 +169,7 @@ export class ValidationErrorResult<T> extends Error implements ValidationResult<
         Object.setPrototypeOf(this, ValidationErrorResult.prototype);
         this.name = 'ValidationError';
         this.errors = errors;
+        this.message = JSON.stringify(this.errors, null, 2)
     }
 
     cata<U>(onSuccess: SuccessDB<T, U>, onError ?: ErrorCB<T, U>) : U {

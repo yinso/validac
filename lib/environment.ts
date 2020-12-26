@@ -1,6 +1,6 @@
 import { IsaValidator, ExplicitAny } from "./base";
 import { isInteger, isNumber, isNull, isUndefined, isBoolean, isBuffer, isDate, isDomainName, isEmailAddress, isString, isUrl, isUuid } from "./types";
-import { isCreditCardNumberString } from "./types/credit-card";
+import { isCreditCardNumberString, isCreditCardNumber } from "./types/credit-card";
 
 // what is something that we'll use for comparisons of the types?
 export class Environment {
@@ -59,7 +59,7 @@ function _baseEnv() {
     const _env = new Environment()
     _env.define('boolean', isBoolean)
     _env.define('Buffer', isBuffer)
-    _env.define('CreditCardNumber', isCreditCardNumberString)
+    _env.define('CreditCardNumber', isCreditCardNumber)
     _env.define('Date', isDate)
     _env.define('DomainName', isDomainName)
     _env.define('EmailAddress', isEmailAddress)

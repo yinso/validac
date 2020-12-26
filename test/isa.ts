@@ -124,6 +124,15 @@ type RecursiveOneOf = string | { foo : RecursiveOneOf };
         assert.equal(true, isRecursiveOneOf.isa('a recursive oneof'))
         assert.equal(true, isRecursiveOneOf.isa({ foo: 'a recursive one of' }))
     }
+
+    @test canDefaultToNull() {
+        const validator = I.isOneOf(S.isString, _N.isNull).isOptional().defaultTo(() => null);
+        [null, undefined, 'hello'].forEach((element) => {
+            validator.assert(element)
+            const converted = validator.convert(element) 
+            console.log('******* value', element, converted)
+        })
+    }
 }
 
 type RecursiveAllOf = { bar : string } & { foo : RecursiveAllOf[] }

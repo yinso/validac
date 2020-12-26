@@ -1,6 +1,7 @@
 import { suite, test } from 'mocha-typescript'
 import * as C from '../../lib/types/credit-card'
 import * as assert from 'assert'
+import { isOneOf, isNull, isObject, baseEnv } from '../../lib'
 
 const cards = [
     {
@@ -45,6 +46,29 @@ describe('CreditCardTest', () => {
                 const cc = C.isCreditCardNumber.convert(card)
                 assert.equal(cc instanceof C.CreditCardNumber, true)
                 assert.equal(cc.type, type)
+            }
+        })
+
+        it(`canBeDefaulted, ${card}`, () => {
+            const ccValidator = baseEnv.get('CreditCardNumber')
+            const validator = isOneOf(ccValidator, isNull).isOptional().defaultTo(() => null)
+            const objValidator = isObject({
+                cc: validator
+            })
+            if (valid) {
+                const cc = ccValidator.convert(card)
+                assert.equal(validator.isa(cc), true)
+                assert.equal(cc instanceof C.CreditCardNumber, true)
+                assert.equal(validator.isa(null), true)
+                assert.equal(validator.isa(undefined), true)
+                assert.equal(objValidator.isa({
+                    cc
+                }), true)
+                assert.equal(objValidator.isa({
+                    cc: null
+                }), true)
+                assert.equal(objValidator.isa({ }), true)
+                assert.deepEqual(objValidator.convert({}), { cc: null })
             }
         })
     })
