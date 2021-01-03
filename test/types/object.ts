@@ -2,7 +2,7 @@ import * as V from '../../lib'
 import { suite, test, slow, timeout , expectError } from '../../lib/util/test-util';
 import * as assert from 'assert';
 import * as uuid from 'uuid';
-import { IsaValidator, isObjectMap, isObject } from '../../lib';
+import { IsaValidator, isObjectMap, isObject, isString, ObjectIsaValidator } from '../../lib';
 import { stringify } from 'querystring';
 import { boolean } from 'yargs';
 
@@ -314,4 +314,22 @@ let isFooObjectMap : V.IsaValidator<{[key: string]: Foo}>;
         assert.deepEqual(isColumn.convert(c3), c3)
         assert.deepEqual(isColumn.convert(c4), c4)
     }
+}
+
+interface OptionalObj {
+    readonly p1: string
+    readonly p2: string
+    readonly p3?: string
+}
+
+const isOptionalObj = isObject({})
+    .field({ key: 'p1', type: isString })
+    .field({ key: 'p2', type: isString })
+    .field({ key: 'p3', type: isString, optional: true })
+
+const isOptionalObj2: ObjectIsaValidator<OptionalObj> = isOptionalObj
+
+@suite
+class ObjectOptionalKeyTest {
+
 }

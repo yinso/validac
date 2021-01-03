@@ -9,12 +9,21 @@ export declare type ObjectIntersect<U, T> = Pick<U, Extract<keyof U, keyof T>>;
 export interface ObjectIsaValidatorOptions {
     readonly rejectUndefinedParam?: boolean;
 }
+export interface ObjectFieldOptions<K extends string, T> {
+    readonly key: K;
+    readonly type: IsaValidatorCompat<T>;
+}
+export interface OptionalObjectFieldOptions<K extends string, T> extends ObjectFieldOptions<K, T> {
+    readonly optional: true;
+}
 export declare class ObjectIsaValidator<T extends object> extends BaseIsaValidator<T> {
     readonly validatorMap: IsaValidatorKVMap<T>;
     readonly rejectUndefinedParam: boolean;
     constructor(validatorMap: IsaValidatorKVMap<T>, options?: ObjectIsaValidatorOptions);
     validate(value: any, path?: string): ValidationResult<T>;
     extends<U extends T>(validatorMap: IsaValidatorKVMap<ObjectDiff<U, T>>): ObjectIsaValidator<U>;
+    field<K extends string, U>(options: OptionalObjectFieldOptions<K, U>): ObjectIsaValidator<T & Partial<Record<K, U>>>;
+    field<K extends string, U>(options: ObjectFieldOptions<K, U>): ObjectIsaValidator<T & Record<K, U>>;
     toConvert(options?: ConvertOptions): ObjectConvertValidator<T>;
     _toConvert(options?: ConvertOptions): ObjectConvertValidator<T>;
 }

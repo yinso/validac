@@ -1,5 +1,5 @@
 import { ExplicitAny , Constraint, ConvertValidator , ConvertValidatorCompat, IsaValidator, ConvertOptions, IsaValidatorCompat, ValidationResult, reject, filterErrors, resolve } from '../base';
-import { BaseIsaValidator } from '../isa';
+import { BaseIsaValidator, OptionalIsaValidator } from '../isa';
 import { BaseConvertValidator, OptionalConvertValidator } from '../convert';
 import { CasedWord } from './cased-word';
 import { isFunction } from '../_isa';
@@ -14,6 +14,15 @@ export type ObjectIntersect<U, T> = Pick<U, Extract<keyof U, keyof T>>;
 
 export interface ObjectIsaValidatorOptions {
     readonly rejectUndefinedParam?: boolean;
+}
+
+export interface ObjectFieldOptions<K extends string, T> {
+    readonly key: K
+    readonly type: IsaValidatorCompat<T>
+}
+
+export interface OptionalObjectFieldOptions<K extends string, T> extends ObjectFieldOptions<K, T> {
+    readonly optional: true
 }
 
 export class ObjectIsaValidator<T extends object> extends BaseIsaValidator<T> {
@@ -57,6 +66,17 @@ export class ObjectIsaValidator<T extends object> extends BaseIsaValidator<T> {
         return new ObjectIsaValidator<U>(_extend(this.validatorMap, validatorMap) as IsaValidatorKVMap<U>, {
             rejectUndefinedParam: this.rejectUndefinedParam
         })
+    }
+
+    field<K extends string, U>(options: OptionalObjectFieldOptions<K, U>): ObjectIsaValidator<T & Partial<Record<K, U>>>
+    field<K extends string, U>(options: ObjectFieldOptions<K, U>): ObjectIsaValidator<T & Record<K, U>>
+    field<K extends string, U>(options: OptionalObjectFieldOptions<K, U> | ObjectFieldOptions<K, U>) {
+        let validator = typeof(options.type) === 'function' ? options.type() : options.type
+        if (options.hasOwnProperty('optional') && (options as any)['optional'] === true) {
+            return new ObjectIsaValidator({ ...this.validatorMap, [ options.key] :validator.isOptional() } as IsaValidatorKVMap<T & Partial<Record<K, U>>>)
+        } else {
+            return new ObjectIsaValidator({ ...this.validatorMap, [ options.key] :validator } as IsaValidatorKVMap<T & Record<K, U>>)
+        }
     }
 
     toConvert(options ?: ConvertOptions) : ObjectConvertValidator<T> {

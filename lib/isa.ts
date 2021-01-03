@@ -33,7 +33,7 @@ export abstract class BaseIsaValidator<T> extends BaseValidator<ExplicitAny, T> 
         return new TransformConvertValidator(this, transform, {});
     }
 
-    isOptional() : IsaValidator<T | undefined> {
+    isOptional() : OptionalIsaValidator<T | undefined> {
         return new OptionalIsaValidator(this);
     }
 
