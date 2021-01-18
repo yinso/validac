@@ -1,6 +1,8 @@
-export abstract class Scalar<T> {
+export abstract class Scalar<K extends string, T> {
+    readonly $type: K
     private _value : T;
-    protected constructor(value : T) {
+    protected constructor($type: K, value : T) {
+        this.$type = $type
         this._value = value;
     }
     valueOf() : T { return this._value }

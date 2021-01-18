@@ -25,11 +25,11 @@ export interface UrlOptions {
     //username? : string;
 }
 
-export class Url extends Scalar<string> {
+export class Url extends Scalar<'Url', string> {
     private _inner : url.URL;
     private _query : {[key: string]: ExplicitAny};
     protected constructor(v : string) {
-        super(v)
+        super('Url', v)
         this._inner = new url.URL(v)
         this._query = this._parseSearch();
     }

@@ -11,9 +11,9 @@ export let isDomainNameString = isOneOf(
     isString.where(match(_isDomainRegex))
 );
 
-export class DomainName extends Scalar<string> {
+export class DomainName extends Scalar<'DomainName', string> {
     constructor(inner : string) {
-        super(inner);
+        super('DomainName', inner);
     }
 
     static isDomainName(v : any) : v is DomainName {

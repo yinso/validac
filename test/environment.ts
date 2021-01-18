@@ -128,9 +128,9 @@ class EnvironmentTest {
     canAddMoreType() {
         const isFooString = isString
             .where(match(/^foo$/i))
-        class Foo extends Scalar<string> {
+        class Foo extends Scalar<'Foo', string> {
             static convertFooString = isFooString
-                .transform((v) => new Foo(v))
+                .transform((v) => new Foo('Foo', v))
         }
 
         const isFoo = isInstanceof(Foo, 'Foo')

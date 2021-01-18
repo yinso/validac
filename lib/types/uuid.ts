@@ -6,9 +6,9 @@ import * as uuid from 'uuid';
 export let isUuidString = isString
     .where(match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i))
 
-export class Uuid extends Scalar<string> {
+export class Uuid extends Scalar<'Uuid', string> {
     constructor(inner ?: string) {
-        super(isUuidString.convert(inner || uuid.v4()));
+        super('Uuid', isUuidString.convert(inner || uuid.v4()));
     }
 
     static isUuid(v : any) : v is Uuid {

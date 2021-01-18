@@ -12,11 +12,11 @@ export const isCreditCardNumberString = isString
         return isValid.isValid
     })
 
-export class CreditCardNumber extends Scalar<string> {
+export class CreditCardNumber extends Scalar<'CreditCard', string> {
     readonly type: string;
     readonly codeLength: number;
     constructor(inner: string) {
-        super(isCreditCardNumberString.convert(inner))
+        super('CreditCard', isCreditCardNumberString.convert(inner))
         const isValid = valid.number(inner)
         if (isValid.card) {
             this.type = isValid.card.type

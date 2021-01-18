@@ -329,7 +329,9 @@ const isOptionalObj = isObject({})
 
 const isOptionalObj2: ObjectIsaValidator<OptionalObj> = isOptionalObj
 
-@suite
-class ObjectOptionalKeyTest {
+type MinusOptionalP3 = Omit<OptionalObj, 'p3'>
 
-}
+const isMinusOptionalP3: ObjectIsaValidator<MinusOptionalP3> = isOptionalObj.delete('p3')
+
+const Minus2Props = isOptionalObj.subset(['p1'])
+

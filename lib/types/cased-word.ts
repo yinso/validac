@@ -82,10 +82,10 @@ registerCase({
     toCase: (words) => words.map((v) => v.toUpperCase()).join('_')
 })
 
-export class CasedWord extends Scalar<string> {
+export class CasedWord extends Scalar<'CasedWord', string> {
     readonly words : string[];
     constructor(word : string) {
-        super(word);
+        super('CasedWord', word);
         this.words = fromCase(word);
     }
 

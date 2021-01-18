@@ -6,6 +6,7 @@ export declare type IsaValidatorKVMap<T extends object> = {
 };
 export declare type ObjectDiff<U, T> = Pick<U, Exclude<keyof U, keyof T>>;
 export declare type ObjectIntersect<U, T> = Pick<U, Extract<keyof U, keyof T>>;
+export declare type ValueOf<T> = T[keyof T];
 export interface ObjectIsaValidatorOptions {
     readonly rejectUndefinedParam?: boolean;
 }
@@ -24,6 +25,17 @@ export declare class ObjectIsaValidator<T extends object> extends BaseIsaValidat
     extends<U extends T>(validatorMap: IsaValidatorKVMap<ObjectDiff<U, T>>): ObjectIsaValidator<U>;
     field<K extends string, U>(options: OptionalObjectFieldOptions<K, U>): ObjectIsaValidator<T & Partial<Record<K, U>>>;
     field<K extends string, U>(options: ObjectFieldOptions<K, U>): ObjectIsaValidator<T & Record<K, U>>;
+    delete<K extends keyof T>(key: K): ObjectIsaValidator<Omit<T, K>>;
+    subset<K1 extends keyof T>(keys: [K1]): ObjectIsaValidator<Pick<T, K1>>;
+    subset<K1 extends keyof T, K2 extends keyof T>(keys: [K1, K2]): ObjectIsaValidator<Pick<T, K1 | K2>>;
+    subset<K1 extends keyof T, K2 extends keyof T, K3 extends keyof T>(keys: [K1, K2, K3]): ObjectIsaValidator<Pick<T, K1 | K2 | K3>>;
+    subset<K1 extends keyof T, K2 extends keyof T, K3 extends keyof T, K4 extends keyof T>(keys: [K1, K2, K3, K4]): ObjectIsaValidator<Pick<T, K1 | K2 | K3 | K4>>;
+    subset<K1 extends keyof T, K2 extends keyof T, K3 extends keyof T, K4 extends keyof T, K5 extends keyof T>(keys: [K1, K2, K3, K4, K5]): ObjectIsaValidator<Pick<T, K1 | K2 | K3 | K4 | K5>>;
+    subset<K1 extends keyof T, K2 extends keyof T, K3 extends keyof T, K4 extends keyof T, K5 extends keyof T, K6 extends keyof T>(keys: [K1, K2, K3, K4, K5, K6]): ObjectIsaValidator<Pick<T, K1 | K2 | K3 | K4 | K5 | K6>>;
+    subset<K1 extends keyof T, K2 extends keyof T, K3 extends keyof T, K4 extends keyof T, K5 extends keyof T, K6 extends keyof T, K7 extends keyof T>(keys: [K1, K2, K3, K4, K5, K6, K7]): ObjectIsaValidator<Pick<T, K1 | K2 | K3 | K4 | K5 | K6 | K7>>;
+    subset<K1 extends keyof T, K2 extends keyof T, K3 extends keyof T, K4 extends keyof T, K5 extends keyof T, K6 extends keyof T, K7 extends keyof T, K8 extends keyof T>(keys: [K1, K2, K3, K4, K5, K6, K7, K8]): ObjectIsaValidator<Pick<T, K1 | K2 | K3 | K4 | K5 | K6 | K7 | K8>>;
+    subset<K1 extends keyof T, K2 extends keyof T, K3 extends keyof T, K4 extends keyof T, K5 extends keyof T, K6 extends keyof T, K7 extends keyof T, K8 extends keyof T, K9 extends keyof T>(keys: [K1, K2, K3, K4, K5, K6, K7, K8, K9]): ObjectIsaValidator<Pick<T, K1 | K2 | K3 | K4 | K5 | K6 | K7 | K8 | K9>>;
+    subset<K1 extends keyof T, K2 extends keyof T, K3 extends keyof T, K4 extends keyof T, K5 extends keyof T, K6 extends keyof T, K7 extends keyof T, K8 extends keyof T, K9 extends keyof T, K10 extends keyof T>(keys: [K1, K2, K3, K4, K5, K6, K7, K8, K9, K10]): ObjectIsaValidator<Pick<T, K1 | K2 | K3 | K4 | K5 | K6 | K7 | K8 | K9 | K10>>;
     toConvert(options?: ConvertOptions): ObjectConvertValidator<T>;
     _toConvert(options?: ConvertOptions): ObjectConvertValidator<T>;
 }

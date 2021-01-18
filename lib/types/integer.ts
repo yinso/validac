@@ -3,7 +3,7 @@ import { isa } from '../isa';
 import { isNumber } from './number';
 import { isString , match } from './string';
 
-export class Integer extends Scalar<number> {
+export class Integer extends Scalar<'Integer', number> {
     static isInteger(v : any) : v is Integer {
         return v instanceof Integer;
     }
@@ -14,11 +14,11 @@ export class Integer extends Scalar<number> {
 
     static convertIntegerString = isString
         .where(match(/^[+-]?\d+$/))
-        .transform((v) => new Integer(parseInt(v)))
+        .transform((v) => new Integer('Integer', parseInt(v)))
 
     static convertIntegerNumber = isNumber
             .where((v : number) => Math.floor(v) === v)
-            .transform((v) => new Integer(v))
+            .transform((v) => new Integer('Integer', v))
 }
 
 // the following are needed for scalar object.
