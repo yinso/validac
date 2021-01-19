@@ -4,6 +4,10 @@ export type Tagged<KEY extends string, T> = Record<KEY, T>;
 
 export type Omit<T extends {[key: string]: ExplicitAny; }, KEY extends keyof T> = Pick<T, Exclude<keyof T, KEY>>;
 
+export type Normalize<T extends object> = {
+    [P in keyof T]: T[P]
+}
+
 export interface Validator<T, U> {
     assert(v : T, path ?: string) : U;
     validate(v : T, path ?: string) : ValidationResult<U>;
