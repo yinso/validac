@@ -1,4 +1,4 @@
-import { IsaValidator , IsaValidatorCompat, BaseValidator, ExplicitAny, Constraint, ConstraintPredicate, ValidationResult, ConvertValidator, TransformProc, DefaultProc, Validator, IsaPredicate, ConvertOptions, ConvertValidatorCompat, resolve, reject } from './base';
+import { IsaValidator , IsaValidatorCompat, BaseValidator, ExplicitAny, Constraint, ConstraintPredicate, ValidationResult, ConvertValidator, TransformProc, DefaultProc, Validator, IsaPredicate, ConvertOptions, ConvertValidatorCompat, resolve, reject, TypeDef } from './base';
 import { TransformConvertValidator, convertOneOf, TypeofConvertValidator, ConstraintConvertValidator, convertAllOf, _convertOneOf, _convertAllOf } from './convert';
 import { isConvertValidator, isIsaValidator as _isIsaValidator, isIsaValidatorCompat as _isIsaValidatorCompat, isConstraint, isFunction } from './_isa';
 import { pass } from './constraint';
@@ -10,6 +10,8 @@ export abstract class BaseIsaValidator<T> extends BaseValidator<ExplicitAny, T> 
         super();
         this.converters = [];
     }
+
+    abstract $type: TypeDef
 
     abstract validate(value : ExplicitAny, path ?: string) : ValidationResult<T>;
 
@@ -70,6 +72,8 @@ export class OptionalIsaValidator<T> extends BaseIsaValidator<T | undefined> {
         this.validator = validator;
     }
 
+    get $type() { return { $optional: this.validator.$type } }
+
     validate(value: ExplicitAny, path?: string) {
         if (value === undefined) {
             return resolve(value);
@@ -92,6 +96,8 @@ class DefaultToIsaValidator<T> extends BaseIsaValidator<T> {
         this.defaultToProc = defaultToProc;
     }
 
+    get $type() { return this.validator.$type }
+
     validate(value: ExplicitAny, path?: string) {
         return this.validator.validate(value, path);
     }
@@ -109,6 +115,8 @@ export class TypeofIsaValidator<T> extends BaseIsaValidator<T> {
         this.isaProc = isa;
         this.typeName = typeName;
     }
+
+    get $type() { return this.typeName }
 
     validate(value : any, path ?: string) : ValidationResult<T> {
         if (this.isaProc(value)) {
@@ -158,6 +166,8 @@ export class ConstraintIsaValidator<T> extends BaseIsaValidator<T> {
             this.constraint = pass(constraint);
         }
     }
+
+    get $type() { return this.validator.$type } // might need to change this one.
  
     validate(value : ExplicitAny, path ?: string) : ValidationResult<T> {
         return this.validator.validate(value, path)
@@ -269,6 +279,8 @@ class UnionIsaValidator extends BaseIsaValidator<ExplicitAny> {
         this.validators = validators;
     }
 
+    get $type() { return { $or: this.validators.map((v) => isFunction(v) ? v().$type : v.$type) } }
+
     validate(value: ExplicitAny, path?: string): ValidationResult<ExplicitAny> {
         return this.validators.reduce((result: ValidationResult<ExplicitAny>, validator, i) => {
             return result.cata((v) => {
@@ -293,6 +305,9 @@ export class ChoiceValidator<T> extends BaseIsaValidator<T> {
         super();
         this.validators = validators;
     }
+
+    get $type() { return { $or: this.validators.map((v) => v.$type ) } }
+
     push<T1 extends T>(validator: IsaValidator<T1>) : void {
         this.validators.push(validator);
     }
@@ -414,6 +429,8 @@ class IntersectIsaVallidator extends BaseIsaValidator<ExplicitAny> {
         super();
         this.validators = validators.map((v) => _isIsaValidator(v) ? v : v());
     }
+
+    get $type() { return { $and: this.validators.map((v) => v.$type ) } }
 
     validate(value: ExplicitAny, path?:string): ValidationResult<ExplicitAny> {
         return this.validators.reduce((result: ValidationResult<ExplicitAny>, validator, i) => {

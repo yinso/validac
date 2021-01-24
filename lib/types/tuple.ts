@@ -1,4 +1,104 @@
-import { IsaValidatorCompat, IsaValidator } from '../base';
+import { IsaValidatorCompat, IsaValidator, reject, filterErrors, resolve, ConvertOptions, ConvertValidator, ExplicitAny, ValidationError, ValidationResult } from '../base';
+import { BaseIsaValidator } from '../isa';
+import { isFunction } from '../_isa'
+import { BaseConvertValidator } from '../convert';
+
+// const { resolve , reject , filterErrors } = require('../base');
+// const { BaseIsaValidator } = require('../isa');
+// const { BaseConvertValidator } = require('../convert');
+
+class IsaTupleValidator extends BaseIsaValidator<any[]> {
+    readonly validators: IsaValidatorCompat<any>[]
+    constructor(validators: IsaValidatorCompat<any>[]) {
+        super();
+        this.validators = validators;
+    }
+
+    get $type() { return { $tuple: this.validators.map((v) => (isFunction(v) ? v() : v).$type) } }
+
+    validate(tuple: unknown, path: string = '$'): ValidationResult<any[]> {
+        if (!(tuple instanceof Array)) {
+            return reject([{
+                error: 'TypeError',
+                path: path,
+                expected: 'tuple',
+                actual: tuple
+            }]);
+        }
+        if (tuple.length !== this.validators.length) {
+            return reject([{
+                error: 'InvalidTupleSize',
+                path: path,
+                expected: this.validators.length,
+                actual: tuple.length
+            }])
+        } else {
+            let errors = filterErrors(this.validators.map((validator, i) => {
+                return (typeof(validator) === 'function' ? validator() : validator).validate(tuple[i], path + '[' + i + ']')
+            }))
+            if (errors.length > 0) {
+                return reject(errors)
+            } else {
+                return resolve(tuple)
+            }
+        }
+    }
+
+    _toConvert(options: ConvertOptions) {
+        return new ConvertTupleValidator(this.validators.map((v) => (typeof(v) === 'function' ? v() : v).toConvert(options)), options)
+    }
+}
+
+
+class ConvertTupleValidator extends BaseConvertValidator<any[], any[]> {
+    readonly validators: ConvertValidator<any, any>[]
+    constructor(validators: ConvertValidator<any, any>[], convertOptions: ConvertOptions) {
+        super(convertOptions);
+        this.validators = validators;
+    }
+
+    validate(tuple: ExplicitAny, path = '$'): ValidationResult<any[]> {
+        if (!(tuple instanceof Array)) {
+            return reject([{
+                error: 'TypeError',
+                path: path,
+                expected: 'tuple',
+                actual: tuple
+            }]);
+        }
+        if (tuple.length !== this.validators.length) {
+            return reject([{
+                error: 'InvalidTupleSize',
+                path: path,
+                expected: this.validators.length,
+                actual: tuple
+            }])
+        } else {
+            let errors: ValidationError[] = [];
+            let changed = false;
+            let results: any[] = [];
+            this.validators.forEach((validator, i) => {
+                validator.validate(tuple[i], path + '[' + i + ']')
+                    .cata((v) => {
+                        if (v !== tuple[i]) {
+                            changed = true
+                        }
+                        results[i] = v
+                    }, (errs) => {
+                        errors = errors.concat(errs.errors)
+                    })
+            });
+            if (errors.length > 0) {
+                return reject(errors)
+            } else if (!changed) {
+                return resolve(tuple)
+            } else {
+                return resolve(results)
+            }
+        }
+    }
+}
+
 
 export function isTuple() : IsaValidator<[]>;
 export function isTuple<T1>(
@@ -151,3 +251,6 @@ export function isTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, 
     v14 : IsaValidatorCompat<T14>,
     v15 : IsaValidatorCompat<T15>,
 ) : IsaValidator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15]>;
+export function isTuple<T extends ExplicitAny>(...validators: IsaValidatorCompat<T>[]) {
+    return new IsaTupleValidator(validators) as ExplicitAny
+}

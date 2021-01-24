@@ -67,6 +67,8 @@ export class TaggedObjectFactoryIsaValidator<KEY extends string, T extends Tagge
         this.registry = registry;
     }
 
+    get $type() { return this.inner.$type }
+
     register<K extends string, U extends T>(key: K, map : IsaValidatorKVMap<ObjectDiff<U, T>>) : ObjectIsaValidator<U> {
         let isObj = isObject<T>(_extendsMap<Record<KEY, string>, Omit<T, KEY>, T>({
                 [this.objectKey]: isLiteral(key)

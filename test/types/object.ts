@@ -53,6 +53,8 @@ let isUser = V.isObject<User>({
     userName: V.isEmailAddress,
 })
 
+
+
 interface UserProfile extends User {
     phoneNumber: string;
 }
@@ -329,9 +331,7 @@ const isOptionalObj = isObject({})
 
 const isOptionalObj2: ObjectIsaValidator<OptionalObj> = isOptionalObj
 
-type MinusOptionalP3 = Omit<OptionalObj, 'p3'>
-
-const isMinusOptionalP3: ObjectIsaValidator<MinusOptionalP3> = isOptionalObj.delete('p3')
+const isMinusOptionalP3 = isOptionalObj.delete('p3')
 
 const Minus2Props = isOptionalObj.subset(['p1'])
 

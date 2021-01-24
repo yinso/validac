@@ -1,3 +1,5 @@
+import { ObjectMapIsaValidator } from "./types";
+
 export type ExplicitAny = any
 
 export type Tagged<KEY extends string, T> = Record<KEY, T>;
@@ -60,7 +62,7 @@ export interface ConvertOptions {
     fromKeyCasing ?: CaseNameKeys;
 }
 
-export interface IsaValidator<T> extends Validator<ExplicitAny, T> {
+export interface IsaValidator<T> extends Validator<ExplicitAny, T>, Type<T> {
     isa(v : ExplicitAny, path ?: string) : v is T;
     where(constraint : Constraint<T> | ConstraintPredicate<T>) : IsaValidator<T>;
     intersect<U>(validator : IsaValidator<U>) : IsaValidator<T & U>;
@@ -204,4 +206,74 @@ export function isValidationSuccess<T>(item : any) : item is SuccessResult<T> {
 
 export function isValidationError<T>(item : any) : item is ValidationErrorResult<T> {
     return item instanceof ValidationErrorResult;
+}
+
+// type definition.
+// a type definition is a "name" for the type.
+// we can think of this similar to JSON schema (though JSON schema isn't extensible so this isn't directly a JSON Schema)
+// it's either a string for simple types, or an object for complex types.
+// e.g. 'string' => isString, 'number' => isNumber, 'any' => isAny, 'boolean' => isBoolean.
+// composite types would be something like this:
+// Array { $array: <inner> }
+// Tuple { $tuple: [<first>, <second>, ...] }
+// Object { $object: { <key>: <value>, ... } }
+// ObjectMap { $objectMap: <inner> }
+// Union { $or: [<first>, <second>, ... ] }
+// Intersection { $and: [<first>, <second>, ... ]}
+
+// this is an new attribute for the type structure.
+export interface ArrayTypeDef {
+    readonly $array: TypeDef
+}
+
+export interface TupleTypeDef {
+    readonly $tuple: TypeDef[]
+}
+
+export interface ObjectTypeDef {
+    readonly $object: {
+        [key: string]: TypeDef
+    }
+}
+
+export interface ObjectMapTypeDef {
+    readonly $objectMap: TypeDef
+}
+
+export interface UnionTypeDef {
+    readonly $and: TypeDef[]
+}
+
+export interface IntersectionTypeDef {
+    readonly $or: TypeDef[]
+}
+
+export interface EnumTypeDef {
+    readonly $enum: TypeDef[]
+}
+
+export interface LiteralTypeDef {
+    readonly $lit: string | number | boolean | null
+}
+
+export interface OptionalTypeDef {
+    readonly $optional: TypeDef
+}
+
+export type TypeDef =
+    string |
+    ArrayTypeDef |
+    TupleTypeDef |
+    ObjectTypeDef |
+    ObjectMapTypeDef |
+    UnionTypeDef |
+    IntersectionTypeDef |
+    EnumTypeDef |
+    LiteralTypeDef |// more complex then the actual type.
+    OptionalTypeDef
+
+export interface Type<S> {
+    readonly $type: TypeDef
+    isa(v: unknown): v is S
+    convert(v: unknown): S
 }

@@ -1,7 +1,7 @@
 import { ValidationResult , ValidationError, resolve, reject, ExplicitAny , ConvertValidator , ConvertValidatorCompat, IsaValidator, IsaValidatorCompat, ConvertOptions } from '../base';
 import { BaseIsaValidator } from '../isa';
 import { BaseConvertValidator } from '../convert'
-import { isIsaValidator, isConvertValidator } from '../_isa';
+import { isIsaValidator, isConvertValidator, isFunction } from '../_isa';
 
 export class ArrayIsaValidator<T> extends BaseIsaValidator<T[]> {
     readonly inner : IsaValidatorCompat<T>;
@@ -9,6 +9,8 @@ export class ArrayIsaValidator<T> extends BaseIsaValidator<T[]> {
         super();
         this.inner = inner;
     }
+
+    get $type() { return { $array: (isFunction(this.inner) ? this.inner() : this.inner).$type } }
 
     validate(arg : ExplicitAny, path : string = '$') : ValidationResult<T[]> {
         if (!(arg instanceof Array)) {
