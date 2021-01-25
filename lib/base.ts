@@ -1,4 +1,4 @@
-import { ObjectMapIsaValidator } from "./types";
+import { isFunction, ObjectMapIsaValidator } from "./types";
 
 export type ExplicitAny = any
 
@@ -78,6 +78,14 @@ export interface IsaValidator<T> extends Validator<ExplicitAny, T>, Type<T> {
 export type IsaValidatorProc<T> = () => IsaValidator<T>;
 
 export type IsaValidatorCompat<T> = IsaValidator<T> | IsaValidatorProc<T>;
+
+export function isIsaValidatorProc<T>(v: IsaValidatorCompat<T>): v is IsaValidatorProc<T> {
+    return typeof(v) === 'function'
+}
+
+export function normalizeIsaValidator<T>(v: IsaValidatorCompat<T>): IsaValidator<T> {
+    return isIsaValidatorProc(v) ? v() : v
+}
 
 export type IsaPredicate<T> = (v : any) => v is T;
 

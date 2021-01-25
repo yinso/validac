@@ -10,10 +10,10 @@ export function expectError<T>(inner : ValidationResult<T>) {
     )
 }
 
-export function expectErrorAsync<T>(inner : Promise<T>) {
-    return new Promise<T>((resolve, reject) => {
+export function expectErrorAsync(inner : Promise<void>) {
+    return new Promise<void>((resolve, reject) => {
         inner.then((res) => reject(new Error(`UnexpectedSuccess`)))
-            .catch((e) => resolve());
+            .catch((e) => resolve())
     })
 }
 

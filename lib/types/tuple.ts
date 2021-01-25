@@ -1,22 +1,25 @@
-import { IsaValidatorCompat, IsaValidator, reject, filterErrors, resolve, ConvertOptions, ConvertValidator, ExplicitAny, ValidationError, ValidationResult } from '../base';
+import { IsaValidatorCompat, IsaValidator, reject, filterErrors, resolve, ConvertOptions, ConvertValidator, ExplicitAny, ValidationError, ValidationResult, isIsaValidatorProc, normalizeIsaValidator } from '../base';
 import { BaseIsaValidator } from '../isa';
 import { isFunction } from '../_isa'
 import { BaseConvertValidator } from '../convert';
 
-// const { resolve , reject , filterErrors } = require('../base');
-// const { BaseIsaValidator } = require('../isa');
-// const { BaseConvertValidator } = require('../convert');
 
-class IsaTupleValidator extends BaseIsaValidator<any[]> {
-    readonly validators: IsaValidatorCompat<any>[]
-    constructor(validators: IsaValidatorCompat<any>[]) {
+type MappedValidator<T extends object> = {
+    [P in keyof T]: IsaValidatorCompat<T[P]>
+}
+
+type ValidatorTuple<T extends unknown[]> = MappedValidator<[...T]>
+
+class TupleIsaValidator<T extends unknown[]> extends BaseIsaValidator<[...T]> {
+    readonly validators: ValidatorTuple<T>
+    constructor(validators: ValidatorTuple<T>) {
         super();
         this.validators = validators;
     }
 
-    get $type() { return { $tuple: this.validators.map((v) => (isFunction(v) ? v() : v).$type) } }
+    get $type() { return { $tuple: this.validators.map((v) => normalizeIsaValidator(v).$type) } }
 
-    validate(tuple: unknown, path: string = '$'): ValidationResult<any[]> {
+    validate(tuple: unknown, path: string = '$'): ValidationResult<[...T]> {
         if (!(tuple instanceof Array)) {
             return reject([{
                 error: 'TypeError',
@@ -34,30 +37,39 @@ class IsaTupleValidator extends BaseIsaValidator<any[]> {
             }])
         } else {
             let errors = filterErrors(this.validators.map((validator, i) => {
-                return (typeof(validator) === 'function' ? validator() : validator).validate(tuple[i], path + '[' + i + ']')
+                return normalizeIsaValidator(validator).validate(tuple[i], path + '[' + i + ']')
             }))
             if (errors.length > 0) {
                 return reject(errors)
             } else {
-                return resolve(tuple)
+                return resolve(tuple as [...T])
             }
         }
     }
 
     _toConvert(options: ConvertOptions) {
-        return new ConvertTupleValidator(this.validators.map((v) => (typeof(v) === 'function' ? v() : v).toConvert(options)), options)
+        return new ConvertTupleValidator<any, T>(this.validators.map((v) => normalizeIsaValidator(v).toConvert(options)), options)
     }
 }
 
+type MappedConvertValidator<T extends object, U extends object> = {
+    [P in keyof T]: {
+        [Q in keyof U]: ConvertValidator<T[P], U[Q]>
+    }
+}
 
-class ConvertTupleValidator extends BaseConvertValidator<any[], any[]> {
+type ConvertValidatorTuple<T extends unknown[], U extends unknown[]> = MappedConvertValidator<[...T], [...U]>
+
+type test = ConvertValidatorTuple<[number, number, number], [string, string, string]>
+
+class ConvertTupleValidator<T extends unknown[], U extends unknown[]> extends BaseConvertValidator<[...T], [...U]> {
     readonly validators: ConvertValidator<any, any>[]
     constructor(validators: ConvertValidator<any, any>[], convertOptions: ConvertOptions) {
         super(convertOptions);
         this.validators = validators;
     }
 
-    validate(tuple: ExplicitAny, path = '$'): ValidationResult<any[]> {
+    validate(tuple: ExplicitAny, path = '$'): ValidationResult<[...U]> {
         if (!(tuple instanceof Array)) {
             return reject([{
                 error: 'TypeError',
@@ -91,166 +103,14 @@ class ConvertTupleValidator extends BaseConvertValidator<any[], any[]> {
             if (errors.length > 0) {
                 return reject(errors)
             } else if (!changed) {
-                return resolve(tuple)
+                return resolve(tuple as [...U])
             } else {
-                return resolve(results)
+                return resolve(results as [...U])
             }
         }
     }
 }
 
-
-export function isTuple() : IsaValidator<[]>;
-export function isTuple<T1>(
-    v1 : IsaValidatorCompat<T1>,
-) : IsaValidator<[T1]>;
-export function isTuple<T1, T2>(
-    v1 : IsaValidatorCompat<T1>,
-    v2 : IsaValidatorCompat<T2>
-) : IsaValidator<[T1, T2]>;
-export function isTuple<T1, T2, T3>(
-    v1 : IsaValidatorCompat<T1>,
-    v2 : IsaValidatorCompat<T2>,
-    v3 : IsaValidatorCompat<T3>
-) : IsaValidator<[T1, T2, T3]>;
-export function isTuple<T1, T2, T3, T4>(
-    v1 : IsaValidatorCompat<T1>,
-    v2 : IsaValidatorCompat<T2>,
-    v3 : IsaValidatorCompat<T3>,
-    v4 : IsaValidatorCompat<T4>,
-) : IsaValidator<[T1, T2, T3, T4]>;
-export function isTuple<T1, T2, T3, T4, T5>(
-    v1 : IsaValidatorCompat<T1>,
-    v2 : IsaValidatorCompat<T2>,
-    v3 : IsaValidatorCompat<T3>,
-    v4 : IsaValidatorCompat<T4>,
-    v5 : IsaValidatorCompat<T5>,
-) : IsaValidator<[T1, T2, T3, T4, T5]>;
-export function isTuple<T1, T2, T3, T4, T5, T6>(
-    v1 : IsaValidatorCompat<T1>,
-    v2 : IsaValidatorCompat<T2>,
-    v3 : IsaValidatorCompat<T3>,
-    v4 : IsaValidatorCompat<T4>,
-    v5 : IsaValidatorCompat<T5>,
-    v6 : IsaValidatorCompat<T6>,
-) : IsaValidator<[T1, T2, T3, T4, T5, T6]>;
-export function isTuple<T1, T2, T3, T4, T5, T6, T7>(
-    v1 : IsaValidatorCompat<T1>,
-    v2 : IsaValidatorCompat<T2>,
-    v3 : IsaValidatorCompat<T3>,
-    v4 : IsaValidatorCompat<T4>,
-    v5 : IsaValidatorCompat<T5>,
-    v6 : IsaValidatorCompat<T6>,
-    v7 : IsaValidatorCompat<T7>,
-) : IsaValidator<[T1, T2, T3, T4, T5, T6, T7]>;
-export function isTuple<T1, T2, T3, T4, T5, T6, T7, T8>(
-    v1 : IsaValidatorCompat<T1>,
-    v2 : IsaValidatorCompat<T2>,
-    v3 : IsaValidatorCompat<T3>,
-    v4 : IsaValidatorCompat<T4>,
-    v5 : IsaValidatorCompat<T5>,
-    v6 : IsaValidatorCompat<T6>,
-    v7 : IsaValidatorCompat<T7>,
-    v8 : IsaValidatorCompat<T8>,
-) : IsaValidator<[T1, T2, T3, T4, T5, T6, T7, T8]>;
-export function isTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-    v1 : IsaValidatorCompat<T1>,
-    v2 : IsaValidatorCompat<T2>,
-    v3 : IsaValidatorCompat<T3>,
-    v4 : IsaValidatorCompat<T4>,
-    v5 : IsaValidatorCompat<T5>,
-    v6 : IsaValidatorCompat<T6>,
-    v7 : IsaValidatorCompat<T7>,
-    v8 : IsaValidatorCompat<T8>,
-    v9 : IsaValidatorCompat<T9>,
-) : IsaValidator<[T1, T2, T3, T4, T5, T6, T7, T8, T9]>;
-export function isTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
-    v1 : IsaValidatorCompat<T1>,
-    v2 : IsaValidatorCompat<T2>,
-    v3 : IsaValidatorCompat<T3>,
-    v4 : IsaValidatorCompat<T4>,
-    v5 : IsaValidatorCompat<T5>,
-    v6 : IsaValidatorCompat<T6>,
-    v7 : IsaValidatorCompat<T7>,
-    v8 : IsaValidatorCompat<T8>,
-    v9 : IsaValidatorCompat<T9>,
-    v10 : IsaValidatorCompat<T10>,
-) : IsaValidator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]>;
-export function isTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
-    v1 : IsaValidatorCompat<T1>,
-    v2 : IsaValidatorCompat<T2>,
-    v3 : IsaValidatorCompat<T3>,
-    v4 : IsaValidatorCompat<T4>,
-    v5 : IsaValidatorCompat<T5>,
-    v6 : IsaValidatorCompat<T6>,
-    v7 : IsaValidatorCompat<T7>,
-    v8 : IsaValidatorCompat<T8>,
-    v9 : IsaValidatorCompat<T9>,
-    v10 : IsaValidatorCompat<T10>,
-    v11 : IsaValidatorCompat<T11>,
-) : IsaValidator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11]>;
-export function isTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
-    v1 : IsaValidatorCompat<T1>,
-    v2 : IsaValidatorCompat<T2>,
-    v3 : IsaValidatorCompat<T3>,
-    v4 : IsaValidatorCompat<T4>,
-    v5 : IsaValidatorCompat<T5>,
-    v6 : IsaValidatorCompat<T6>,
-    v7 : IsaValidatorCompat<T7>,
-    v8 : IsaValidatorCompat<T8>,
-    v9 : IsaValidatorCompat<T9>,
-    v10 : IsaValidatorCompat<T10>,
-    v11 : IsaValidatorCompat<T11>,
-    v12 : IsaValidatorCompat<T12>,
-) : IsaValidator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12]>;
-export function isTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
-    v1 : IsaValidatorCompat<T1>,
-    v2 : IsaValidatorCompat<T2>,
-    v3 : IsaValidatorCompat<T3>,
-    v4 : IsaValidatorCompat<T4>,
-    v5 : IsaValidatorCompat<T5>,
-    v6 : IsaValidatorCompat<T6>,
-    v7 : IsaValidatorCompat<T7>,
-    v8 : IsaValidatorCompat<T8>,
-    v9 : IsaValidatorCompat<T9>,
-    v10 : IsaValidatorCompat<T10>,
-    v11 : IsaValidatorCompat<T11>,
-    v12 : IsaValidatorCompat<T12>,
-    v13 : IsaValidatorCompat<T13>,
-) : IsaValidator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13]>;
-export function isTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
-    v1 : IsaValidatorCompat<T1>,
-    v2 : IsaValidatorCompat<T2>,
-    v3 : IsaValidatorCompat<T3>,
-    v4 : IsaValidatorCompat<T4>,
-    v5 : IsaValidatorCompat<T5>,
-    v6 : IsaValidatorCompat<T6>,
-    v7 : IsaValidatorCompat<T7>,
-    v8 : IsaValidatorCompat<T8>,
-    v9 : IsaValidatorCompat<T9>,
-    v10 : IsaValidatorCompat<T10>,
-    v11 : IsaValidatorCompat<T11>,
-    v12 : IsaValidatorCompat<T12>,
-    v13 : IsaValidatorCompat<T13>,
-    v14 : IsaValidatorCompat<T14>,
-) : IsaValidator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14]>;
-export function isTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
-    v1 : IsaValidatorCompat<T1>,
-    v2 : IsaValidatorCompat<T2>,
-    v3 : IsaValidatorCompat<T3>,
-    v4 : IsaValidatorCompat<T4>,
-    v5 : IsaValidatorCompat<T5>,
-    v6 : IsaValidatorCompat<T6>,
-    v7 : IsaValidatorCompat<T7>,
-    v8 : IsaValidatorCompat<T8>,
-    v9 : IsaValidatorCompat<T9>,
-    v10 : IsaValidatorCompat<T10>,
-    v11 : IsaValidatorCompat<T11>,
-    v12 : IsaValidatorCompat<T12>,
-    v13 : IsaValidatorCompat<T13>,
-    v14 : IsaValidatorCompat<T14>,
-    v15 : IsaValidatorCompat<T15>,
-) : IsaValidator<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15]>;
-export function isTuple<T extends ExplicitAny>(...validators: IsaValidatorCompat<T>[]) {
-    return new IsaTupleValidator(validators) as ExplicitAny
+export function isTuple<T extends unknown[]>(...validators: ValidatorTuple<T>) {
+    return new TupleIsaValidator(validators) as ExplicitAny
 }
