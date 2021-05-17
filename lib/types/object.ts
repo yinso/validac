@@ -1,4 +1,4 @@
-import { ExplicitAny , Constraint, ConvertValidator , ConvertValidatorCompat, IsaValidator, ConvertOptions, IsaValidatorCompat, ValidationResult, reject, filterErrors, resolve, TypeDef } from '../base';
+import { ExplicitAny , Constraint, ConvertValidator , ConvertValidatorCompat, IsaValidator, ConvertOptions, IsaValidatorCompat, ValidationResult, reject, filterErrors, resolve, TypeDef, Omit2 } from '../base';
 import { BaseIsaValidator, OptionalIsaValidator } from '../isa';
 import { BaseConvertValidator, OptionalConvertValidator } from '../convert';
 import { CasedWord } from './cased-word';
@@ -12,14 +12,6 @@ export type ObjectDiff<U, T> = Pick<U, Exclude<keyof U, keyof T>>;
 
 export type ObjectIntersect<U, T> = Pick<U, Extract<keyof U, keyof T>>;
 
-// the built-in Omit doesn't reduce because its K isn't restricted to keyof T.
-export type Omit2<T, K extends keyof T> = {
-    [P in Exclude<keyof T, K>]: T[P]
-}
-
-// picks up the value types of an object, similar to the keyof types.
-// this allows for transformation from object to array.
-export type ValueOf<T> = T[keyof T];
 
 export interface ObjectIsaValidatorOptions {
     readonly rejectUndefinedParam?: boolean;

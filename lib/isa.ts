@@ -107,10 +107,10 @@ class DefaultToIsaValidator<T> extends BaseIsaValidator<T> {
     }
 }
 
-export class TypeofIsaValidator<T> extends BaseIsaValidator<T> {
+export class TypeofIsaValidator<K extends string, T> extends BaseIsaValidator<T> {
     readonly isaProc : IsaPredicate<T>;
-    readonly typeName : string; 
-    constructor(isa : IsaPredicate<T>, typeName : string) {
+    readonly typeName : K; 
+    constructor(isa : IsaPredicate<T>, typeName : K) {
         super();
         this.isaProc = isa;
         this.typeName = typeName;
@@ -136,7 +136,7 @@ export class TypeofIsaValidator<T> extends BaseIsaValidator<T> {
     }
 }
 
-export function isa<T>(test : IsaPredicate<T>, typeName : string) : IsaValidator<T> {
+export function isa<K extends string, T>(test : IsaPredicate<T>, typeName : K) : TypeofIsaValidator<K, T> {
     return new TypeofIsaValidator(test, typeName);
 }
 
@@ -147,11 +147,11 @@ export function isInstanceof<T>(obj : Constructor<T>, typeName : string) : IsaVa
 }
 
 export function isIsaValidator<T>() : IsaValidator<IsaValidator<T>> {
-    return isa<IsaValidator<T>>(_isIsaValidator, 'IsaValidator');
+    return isa<'IsaValidator', IsaValidator<T>>(_isIsaValidator, 'IsaValidator');
 }
 
 export function isIsaValidatorCompat<T>() : IsaValidator<IsaValidatorCompat<T>> {
-    return isa<IsaValidatorCompat<T>>(_isIsaValidatorCompat, 'IsaValidatorCompat');
+    return isa<'IsaValidatorCompat', IsaValidatorCompat<T>>(_isIsaValidatorCompat, 'IsaValidatorCompat');
 }
 
 export class ConstraintIsaValidator<T> extends BaseIsaValidator<T> {

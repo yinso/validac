@@ -78,7 +78,7 @@ export function minLength(minLength: number, inclusive: true) {
     return new MinLengthConstraint(minLength, inclusive);
 }
 
-class MaxLengthConstraint extends BaseConstraint<string> {
+export class MaxLengthConstraint extends BaseConstraint<string> {
     readonly maxLength: number;
     readonly inclusive : boolean;
     constructor(maxLength : number, inclusive : boolean = false) {

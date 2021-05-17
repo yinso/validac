@@ -1,5 +1,5 @@
-import { IsaValidator, ExplicitAny, IsaValidatorCompat, normalizeIsaValidator } from "./base";
-import { isIsaValidatorCompat } from "./isa";
+import { IsaValidator, ExplicitAny, IsaValidatorCompat, normalizeIsaValidator, KeysMatching, StringKeys, NotInKeyOf, Omit2 } from "./base";
+import { isIsaValidatorCompat, TypeofIsaValidator } from "./isa";
 import { isInteger, isNumber, isNull, isUndefined, isBoolean, isBuffer, isDate, isDomainName, isEmailAddress, isString, isUrl, isUuid } from "./types";
 import { isCreditCardNumberString, isCreditCardNumber } from "./types/credit-card";
 
@@ -22,6 +22,7 @@ export class Environment<T extends object> {
     }
 
     get<K extends keyof T>(key: K): IsaValidator<T[K]> {
+        // console.log(`********** Environment.get(${key})`, Object.keys(this.map))
         if (this.map.hasOwnProperty(key)) {
             return normalizeIsaValidator(this.map[key])
         } else {
@@ -29,7 +30,9 @@ export class Environment<T extends object> {
         }
     }
 
-    define<K extends string, T2>(key: K, validator: IsaValidator<T2>): NormalEnv<T & Record<K, T2>> {
+    define<K extends NotInKeyOf<T>, T2>(key: K, validator: TypeofIsaValidator<string, T2>): NormalEnv<T & Record<K, T2>>
+    define<K extends NotInKeyOf<T>, T2>(key: K, validator: IsaValidator<T2>): NormalEnv<T & Record<K, T2>>
+    define<K extends NotInKeyOf<T>, T2>(key: K, validator: IsaValidator<T2>): NormalEnv<T & Record<K, T2>> {
         if (this.map.hasOwnProperty(key)) {
             throw new Error(`DuplicateIdentifier:${key}`)
         } else {
@@ -56,3 +59,18 @@ function _baseEnv() {
 }
 
 export const baseEnv = _baseEnv()
+
+export type TypeOfEnvironment<T> = T extends Environment<infer U> ? U : never
+
+export type BaseEnvType = TypeOfEnvironment<typeof baseEnv>
+
+export type KeysMatching1<T extends object, V> = {
+    [K in StringKeys<T>]-?: K extends string ? V extends NonNullable<T[K]> ? K : never : never;
+}
+
+type test = KeysMatching1<BaseEnvType, boolean>
+
+type optionalBase = Partial<BaseEnvType>
+
+type omitBoolean = Omit2<optionalBase, 'boolean'>
+

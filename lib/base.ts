@@ -4,7 +4,37 @@ export type ExplicitAny = any
 
 export type Tagged<KEY extends string, T> = Record<KEY, T>;
 
-export type Omit<T extends {[key: string]: ExplicitAny; }, KEY extends keyof T> = Pick<T, Exclude<keyof T, KEY>>;
+// the built-in Omit doesn't reduce because its K isn't restricted to keyof T.
+// export type Omit2<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+export type Omit2<T, K extends keyof T> = Omit<T, K>
+
+// picks up the value types of an object, similar to the keyof types.
+// this allows for transformation from object to array.
+export type ValueOf<T> = T[keyof T];
+
+export declare type NotInKeyOf<T> = string;
+
+export declare type MappedValues<T, K extends (keyof T)[]> = {
+    [P in keyof K]: K[P] extends keyof T ? T[K[P]] : never;
+};
+
+export declare type TupleToUnion<T extends any[]> = T[number];
+
+export declare type PickByTuple<T, K extends (keyof T)[]> = Pick<T, TupleToUnion<K>>;
+
+export declare type PickByValue<T, V> = Pick<T, {
+    [K in keyof T]: T[K] extends V ? K : never;
+}[keyof T]>;
+
+export declare type StringKeys<T extends object> = keyof T & string;
+
+export declare type KeysMatching<T extends object, V> = {
+    [K in StringKeys<T>]: K extends string ? V extends NonNullable<T[K]> ? K : never : never;
+}[StringKeys<T>];
+
+export declare type KeysNotMatching<T extends object, V> = {
+    [K in StringKeys<T>]: K extends string ? V extends NonNullable<T[K]> ? never : K : never;
+}[StringKeys<T>];
 
 export type Normalize<T extends object> = {
     [P in keyof T]: T[P]

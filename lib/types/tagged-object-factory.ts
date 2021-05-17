@@ -1,5 +1,5 @@
-import { ExplicitAny, ValidationResult, resolve, reject, IsaValidator, Tagged, Omit, ConvertOptions } from '../base';
-import { BaseIsaValidator } from '../isa';
+import { ExplicitAny, ValidationResult, resolve, reject, IsaValidator, Tagged, ConvertOptions } from '../base';
+import { BaseIsaValidator, TypeofIsaValidator } from '../isa';
 import { BaseConvertValidator } from '../convert';
 import { ObjectIsaValidator , IsaValidatorKVMap , isObject, ObjectDiff , ObjectConvertValidator, ConvertValidatorKVMap } from './object';
 import { isString } from './string';
@@ -62,7 +62,7 @@ export class TaggedObjectFactoryIsaValidator<KEY extends string, T extends Tagge
         this.validatorMap = validatorMap;
         this.inner = isObject(_extendsMap<Record<KEY, string>, Omit<T, KEY>, T>({
                 [this.objectKey]: isString
-            } as Record<KEY, IsaValidator<string>>,
+            } as Record<KEY, typeof isString>,
             this.validatorMap));
         this.registry = registry;
     }

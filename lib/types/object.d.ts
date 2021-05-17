@@ -1,4 +1,4 @@
-import { ExplicitAny, ConvertValidatorCompat, IsaValidator, ConvertOptions, IsaValidatorCompat, ValidationResult, TypeDef } from '../base';
+import { ExplicitAny, ConvertValidatorCompat, IsaValidator, ConvertOptions, IsaValidatorCompat, ValidationResult, TypeDef, Omit2 } from '../base';
 import { BaseIsaValidator } from '../isa';
 import { BaseConvertValidator } from '../convert';
 export declare type IsaValidatorKVMap<T extends object> = {
@@ -6,10 +6,6 @@ export declare type IsaValidatorKVMap<T extends object> = {
 };
 export declare type ObjectDiff<U, T> = Pick<U, Exclude<keyof U, keyof T>>;
 export declare type ObjectIntersect<U, T> = Pick<U, Extract<keyof U, keyof T>>;
-export declare type Omit2<T, K extends keyof T> = {
-    [P in Exclude<keyof T, K>]: T[P];
-};
-export declare type ValueOf<T> = T[keyof T];
 export interface ObjectIsaValidatorOptions {
     readonly rejectUndefinedParam?: boolean;
 }
