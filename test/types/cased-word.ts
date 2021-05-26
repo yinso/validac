@@ -84,3 +84,20 @@ declare module '../../lib/base' { // for custom test below.
         assert.equal('Is$Cased$Word', c1.toCase('Custom'))
     }
 }
+
+@suite
+class ConvertObjectKeyCaseTest {
+    @test
+    canConvertObject() {
+        const input = {test_me: 1, OUT_SOMETHING: 2, 'hello-world': 3}
+        const expected = { testMe: 1, outSomething: 2, helloWorld: 3 }
+        assert.deepEqual(S.convertObjectKeyCase(input, 'Camel'), expected)
+    }
+
+    @test
+    canConvertObjectRecursively() {
+        const input = {test_me: 1, OUT_SOMETHING: 2, 'hello-world': { FooBar: 4 } }
+        const expected = { testMe: 1, outSomething: 2, helloWorld: { fooBar: 4 } }
+        assert.deepEqual(S.convertObjectKeyCase(input, 'Camel', true), expected)
+    }
+}

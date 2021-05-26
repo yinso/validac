@@ -127,3 +127,27 @@ isCasedWord.appendConvert(isSnakeCaseString
 
 isCasedWord.appendConvert(isMacroCaseString
     .transform((v) => new CasedWord(v)))
+
+export function convertObjectKeyCase(obj: {[key: string]: any}, casing: CaseNameKeys, isRecursive: boolean = false): {[key: string]: any} {
+    return _convertObjectKeyCase(obj, casing, isRecursive)
+}
+
+function _convertObjectKeyCase<T>(obj: T, casing: CaseNameKeys, isRecursive: boolean): T {
+    if (obj instanceof Object) {
+        if (obj instanceof Array) {
+            if (isRecursive) {
+                return obj.map((item) => _convertObjectKeyCase(item, casing, isRecursive)) as unknown as T
+            } else {
+                return obj
+            }
+        } else {
+            return Object.keys(obj).reduce((acc, key) => {
+                const val = (obj as {[key: string]: any})[key]
+                acc[isCasedWord.convert(key).toCase(casing)] = isRecursive ? _convertObjectKeyCase(val, casing, isRecursive) : val
+                return acc
+            }, {} as {[key: string]: any}) as T
+        }
+    } else {
+        return obj
+    }
+}
