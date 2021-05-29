@@ -3,7 +3,7 @@ import * as assert from 'assert';
 import * as N from '../../lib/types/number';
 import * as S from '../../lib/types/string';
 import { suite, test, slow, timeout , expectError } from '../../lib/util/test-util';
-import { ExplicitAny } from '../../lib';
+import type { ExplicitAny } from '../../lib';
 
 @suite class FunctionTest {
     @test canRunIsFunction() {

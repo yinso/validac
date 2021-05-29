@@ -1,4 +1,4 @@
-import { ValidationError } from '../base';
+import type { ValidationError } from '../base';
 import { BaseConstraint } from '../constraint';
 import { isa } from '../isa';
 import { isAny } from './any';

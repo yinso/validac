@@ -42,6 +42,24 @@ export class EmailAddress extends Scalar<'EmailAddress', string> {
         return this._parsed.domain;
     }
 
+    normalize(): string {
+        // the normalized has the following rule.
+        // all characters lower cased.
+        // if it's gmail.com, strip out the .
+        const domain = this.domain.toLowerCase()
+        const localPart = this._normalizedLocalPart(domain)
+        return localPart + '@' + domain
+    }
+
+    private _normalizedLocalPart(domain: string) {
+        let localPart = this.localPart.toLowerCase()
+        if (domain == 'gmail.com') {
+            return localPart.replace('.', '')
+        } else {
+            return localPart
+        }
+    }
+
     static isEmailAddress(v : any) : v is EmailAddress {
         return v instanceof EmailAddress;
     }

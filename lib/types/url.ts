@@ -2,7 +2,7 @@ import { Scalar } from '../scalar';
 import { isString } from './string';
 import * as url from 'whatwg-url';
 import { isa } from '../isa';
-import { ExplicitAny } from '../base';
+import type { ExplicitAny } from '../base';
 
 export let isUrlString = isString
     .where((str) => {

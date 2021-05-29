@@ -1,7 +1,7 @@
 import * as S from './string';
 import * as I from '../isa';
 import { Scalar } from '../scalar';
-import { ExplicitAny, CaseNames, CaseNameKeys } from '../base';
+import type { ExplicitAny, CaseNames, CaseNameKeys } from '../base';
 
 const camelCaseRegex = /^([a-z][a-z0-9]*)([A-Z][a-z0-9]+)*$/
 
@@ -128,22 +128,26 @@ isCasedWord.appendConvert(isSnakeCaseString
 isCasedWord.appendConvert(isMacroCaseString
     .transform((v) => new CasedWord(v)))
 
-export function convertObjectKeyCase(obj: {[key: string]: any}, casing: CaseNameKeys, isRecursive: boolean = false): {[key: string]: any} {
-    return _convertObjectKeyCase(obj, casing, isRecursive)
+export function convertCase(str: string, toCase: CaseNameKeys): string {
+    return isCasedWord.convert(str).toCase(toCase)
 }
 
-function _convertObjectKeyCase<T>(obj: T, casing: CaseNameKeys, isRecursive: boolean): T {
+export function convertObjectKeyCase(obj: {[key: string]: any}, toCase: CaseNameKeys, isRecursive: boolean = false): {[key: string]: any} {
+    return _convertObjectKeyCase(obj, toCase, isRecursive)
+}
+
+function _convertObjectKeyCase<T>(obj: T, toCase: CaseNameKeys, isRecursive: boolean): T {
     if (obj instanceof Object) {
         if (obj instanceof Array) {
             if (isRecursive) {
-                return obj.map((item) => _convertObjectKeyCase(item, casing, isRecursive)) as unknown as T
+                return obj.map((item) => _convertObjectKeyCase(item, toCase, isRecursive)) as unknown as T
             } else {
                 return obj
             }
         } else {
             return Object.keys(obj).reduce((acc, key) => {
                 const val = (obj as {[key: string]: any})[key]
-                acc[isCasedWord.convert(key).toCase(casing)] = isRecursive ? _convertObjectKeyCase(val, casing, isRecursive) : val
+                acc[convertCase(key, toCase)] = isRecursive ? _convertObjectKeyCase(val, toCase, isRecursive) : val
                 return acc
             }, {} as {[key: string]: any}) as T
         }

@@ -1,5 +1,5 @@
 import { IsaValidator, ExplicitAny, IsaValidatorCompat, normalizeIsaValidator, KeysMatching, StringKeys, NotInKeyOf, Omit2 } from "./base";
-import { isIsaValidatorCompat, TypeofIsaValidator } from "./isa";
+import type { isIsaValidatorCompat, TypeofIsaValidator } from "./isa";
 import { isInteger, isNumber, isNull, isUndefined, isBoolean, isBuffer, isDate, isDomainName, isEmailAddress, isString, isUrl, isUuid } from "./types";
 import { isCreditCardNumberString, isCreditCardNumber } from "./types/credit-card";
 

@@ -1,4 +1,4 @@
-import { ValidationError , BaseValidator, ExplicitAny, ValidationResult , Constraint, ConstraintPredicate } from './base';
+import type { ValidationError , BaseValidator, ExplicitAny, ValidationResult , Constraint, ConstraintPredicate } from './base';
 import { isConstraint } from './_isa'; 
 
 /**

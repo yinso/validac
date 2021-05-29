@@ -1,7 +1,7 @@
 /**
  * CreditCard
  */
-import valid = require('card-validator')
+import * as valid from 'card-validator'
 import { Scalar } from '../scalar'
 import { isString } from './string'
 import { isa, isInstanceof } from '../isa'

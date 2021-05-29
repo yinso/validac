@@ -7,6 +7,8 @@ import { ValidationResult } from '../../lib';
 let email1 = 'foo@bar.com';
 let email2 = 'John Smith <foo@bar.com>';
 let invalidEmail1 = 'not an email';
+let email3 = 'CaseSensitive@email.com'
+let email4 = 'Testa.Testing@Gmail.com'
 
 @suite class EmailAddressTest {
     @test isEmailAddress() {
@@ -27,5 +29,12 @@ let invalidEmail1 = 'not an email';
         assert.equal('foo@bar.com', result2.address);
         assert.equal('foo', result2.localPart);
         assert.equal('bar.com', result2.domain);
+    }
+
+    @test canNormalizeEmailAddress() {
+        let result1 = E.isEmailAddress.convert(email3)
+        assert.equal(result1.normalize(), email3.toLowerCase())
+        let result2 = E.isEmailAddress.convert(email4)
+        assert.equal(result2.normalize(), 'testatesting@gmail.com')
     }
 }
